@@ -3,6 +3,7 @@ import { FaTwitter } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer: React.FC = () => {
   return (
@@ -27,7 +28,12 @@ const Footer: React.FC = () => {
         </div>
         <div className=" pt-5 sm:pt-0 flex items-center justify-center gap-x-3">
           <h1 className="font-bold">پیتزا نوشا</h1>
-          <img className=" w-16 sm:w-24" src="logo_prev_ui.png" alt="logo" />
+          <Image
+            src="/logo_prev_ui.png"
+            width={100}
+            height={20}
+            alt="Picture of the author"
+          />{" "}
         </div>
       </div>
       <div className=" block sm:flex items-center justify-between pt-10">
