@@ -4,7 +4,6 @@ import Link from "next/link";
 import { productsLimit } from "@/utils/config";
 import { getProducts } from "@/apis/services/products";
 import { useQuery } from "@tanstack/react-query";
-import { log } from "console";
 
 export const ProductList: React.FC<{ page: number }> = ({ page }) => {
   const product = useQuery({
