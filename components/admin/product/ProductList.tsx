@@ -6,7 +6,6 @@ import { getProducts } from "@/apis/services/products";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { classNames } from "@/utils/classname";
-import { getcategories } from "@/apis/services/category";
 
 export const ProductList: React.FC<{ page: number }> = ({ page }) => {
   const product = useQuery({
