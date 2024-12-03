@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   ChevronRight,
   ChartCandlestick,
+  ScanBarcode
 } from "lucide-react";
  const SideNavbar: React.FC = () => {
 
@@ -37,8 +38,14 @@ import {
         isCollapsed={isCollapsed}
         links={[
           {
-            title: "کالاها",
+            title: "داشبورد",
             icon: LayoutDashboard,
+            variant: "default",
+            href:"/admin"
+          },
+          {
+            title: "کالاها",
+            icon:  ScanBarcode,
             variant: "default",
             href:"/admin/products"
           },

@@ -6,9 +6,9 @@ interface IAuthLayout {
 }
 const AdminLayout: React.FC<IAuthLayout> = ({ children }) => {
   return (
-    <div className="bg-second">
+    <div>
       <NavbarAdmin />
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen bg-second">
         <SideNavbar />
         <div className="pt-4 sm:p-8 w-full">{children}</div>
       </div>

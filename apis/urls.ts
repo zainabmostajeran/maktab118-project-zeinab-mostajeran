@@ -6,7 +6,7 @@ export const urls = {
   },
   products: {
     add: "/products",
-    list: "/products?page=1&limit=4&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8",
+    list: "/products",
     byId: (id: number) => `/products/${id}`,
     update: (id: number) => `/products/${id}`,
     delete: (id: number) => `/products/${id}`,

@@ -1,12 +1,12 @@
-import PageTitle from "@/components/admin/PageTitle";
 import ToggleGroup from "@/components/admin/order/ToggleGroup";
-const OrderdPage: React.FC = () => {
+import { Suspense } from "react";
+import { OrderList } from "@/components/admin/order/OrderList";
+const OrderdPage: React.FC<{ page: number }> = ({ page }) => {
   return (
     <section className="sm:px-6">
-      <div className=" block text-center sm:flex sm:justify-between sm:items-center">
-        <PageTitle title="سفارش ها" />
-        <ToggleGroup/>
-      </div>
+      <Suspense>
+        <OrderList page={page} />
+      </Suspense>
     </section>
   );
 };

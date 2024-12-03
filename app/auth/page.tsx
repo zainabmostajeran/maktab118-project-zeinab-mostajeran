@@ -1,5 +1,5 @@
-// const DashboardPage: React.FC = () => {
-//     return <p>Auth</p>;
-//   };
+const AuthPage: React.FC = () => {
+    return <p>Auth</p>;
+  };
   
-//   export default DashboardPage;
+  export default AuthPage;

@@ -1,99 +1,163 @@
 "use client";
+
 import React from "react";
 import Link from "next/link";
 import { productsLimit } from "@/utils/config";
 import { getProducts } from "@/apis/services/products";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import { classNames } from "@/utils/classname";
+
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  category: string;
+  thumbnail: string;
+}
+
+interface ProductsResponse {
+  status: string;
+  page: number | null;
+  per_page: number;
+  total: number;
+  total_pages: number;
+  data: {
+    products: Product[];
+  };
+}
 
 export const ProductList: React.FC<{ page: number }> = ({ page }) => {
-  const product = useQuery({
+  const {
+    data: productData,
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+  } = useQuery<ProductsResponse, Error>({
     queryKey: ["get-product", page],
     queryFn: () =>
       getProducts({
-        skip: String(page * productsLimit - productsLimit),
+        page: String(page),
+        limit: String(productsLimit),
       }),
-    // refetchOnWindowFocus: false,
   });
-  console.log(product.data);
+
+  const totalPages = productData
+    ? Math.ceil(productData.total / productsLimit)
+    : 1;
 
   React.useEffect(() => {
-    if (product.isSuccess && product.data) {
-      console.log("success");
+    if (isSuccess && productData) {
+      console.log("Fetch successful", productData);
     }
-  }, [product.isSuccess, product.data]);
+  }, [isSuccess, productData]);
 
   React.useEffect(() => {
-    if (!product.error || !product.isError) return;
-    console.log("Something went wrong");
-  }, [product.error, product.isError]);
-  //   const totalPages = Math.max(Number(product.total) / Number(productsLimit));
-  return !product.isLoading ? (
+    if (isError) {
+      console.error("Something went wrong", error);
+    }
+  }, [isError, error]);
+
+  return (
     <section className="flex flex-col items-center justify-center py-6">
-      <table className="w-full text-white border-collapse border-slate-300 shadow-md overflow-scroll">
-        <thead>
-          <th className=" bg-base"></th>
-          <th className=" bg-base">تصویر</th>
-          <th className=" bg-base">نام کالا</th>
-          <th className=" bg-base">دسته بندی</th>
-        </thead>
-        <tbody className="even:bg-white text-center text-gray-600 border-collapse border border-slate-300">
-          <tr>
-            <td>ojjj</td>
-            <td>jjj</td>
-            <td>jjj</td>
-            <td className="py-3">
-              <div className="flex gap-2  items-center justify-center">
-                <button className="bg-base text-white px-2 py-1 rounded-lg hover:bg-second hover:text-slate-800">
-                  ویرایش
-                </button>
-                <button className="bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-400 hover:text-slate-800">
-                  حذف
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {!isLoading ? (
+        <table className="w-full text-white border-collapse border-slate-300 shadow-md overflow-scroll">
+          <thead>
+            <tr>
+              <th className="bg-base">Actions</th>
+              <th className="bg-base">تصویر</th>
+              <th className="bg-base">نام کالا</th>
+              <th className="bg-base">دسته بندی</th>
+            </tr>
+          </thead>
+          <tbody className="even:bg-white text-center text-gray-600 border-collapse border border-slate-300">
+            {productData?.data?.products?.map((item: Product) => (
+              <tr key={item._id}>
+                <td>
+                  <div className="flex space-x-2">
+                    <button className="bg-base px-2 py-1 rounded">
+                      ویرایش
+                    </button>
+                    <button className="bg-red-500 px-2 py-1 rounded">
+                      حذف
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <Image
+                    src={`/images/${item.thumbnail}`}
+                    alt={item.name}
+                    width={100}
+                    height={100}
+                    className="object-cover"
+                  />
+                </td>
+                <td>{item.name}</td>
+                <td>{item.category}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p className="text-right">Loading...</p>
+      )}
+      <div className="w-full flex justify-center pt-10 gap-5">
+        {/* Previous Button */}
+        <Link
+          href={
+            `?` +
+            new URLSearchParams({
+              page: String(page > 1 ? page - 1 : 1),
+            })
+          }
+        >
+          <button
+            className={classNames(
+              "px-2 py-1 text-white disabled:bg-slate-500",
+              "bg-base hover:bg-white hover:text-gray-700 rounded-xl"
+            )}
+            disabled={page <= 1}
+          >
+            Previous
+          </button>
+        </Link>
+
+        {/* Page Numbers */}
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+          (el) => (
+            <Link
+              href={`/?page=${el}`}
+              key={el}
+              className={`cursor-pointer px-2 py-1 hover:bg-white ${
+                el === page ? "bg-gray-300" : ""
+              }`}
+            >
+              {el}
+            </Link>
+          )
+        )}
+
+        {/* Next Button */}
+        <Link
+          href={
+            `?` +
+            new URLSearchParams({
+              page: String(page < totalPages ? page + 1 : totalPages),
+            })
+          }
+        >
+          <button
+            className={classNames(
+              "px-2 py-1 text-white disabled:bg-slate-500",
+              "bg-base hover:bg-white hover:text-gray-700 rounded-xl"
+            )}
+            disabled={page >= totalPages}
+          >
+            Next
+          </button>
+        </Link>
+      </div>
     </section>
-  ) : (
-    <p>Is Loading...</p>
   );
-  //   <div className="w-full flex justify-center pt-10 gap-5">
-  //     <Link
-  //       href={
-  //         `?` +
-  //         new URLSearchParams({
-  //           page: String(page - 1 < 1 ? page : page - 1),
-  //         })
-  //       }
-  //     >
-  //       <button
-  //         className={classNames(
-  //           "px-4 py-2 text-white font-semibold disabled:bg-slate-500",
-  //           "bg-slate-800 hover:bg-slate-600 rounded-xl"
-  //         )}
-  //         disabled={page - 1 < 1}
-  //       >
-  //         Previous
-  //       </button>
-  //     </Link>
-  //     <Link
-  //       href={
-  //         `?` +
-  //         new URLSearchParams({
-  //           page: String(page + 1 > totalPages ? page : page + 1),
-  //         })
-  //       }
-  //     >
-  //       <button
-  //         className={classNames(
-  //           "px-4 py-2 text-white font-semibold disabled:bg-slate-500",
-  //           "bg-slate-800 hover:bg-slate-600 rounded-xl"
-  //         )}
-  //         disabled={page + 1 > totalPages}
-  //       >
-  //         Next
-  //       </button>
-  //     </Link>
-  //   </div>
 };

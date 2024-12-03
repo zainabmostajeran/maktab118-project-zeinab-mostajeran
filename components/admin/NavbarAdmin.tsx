@@ -5,9 +5,27 @@ import { ImExit } from "react-icons/im";
 import { IoMenu } from "react-icons/io5";
 import { useState } from "react";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { removeSessionToken } from "@/libs/session-manager";
+import { useRouter } from "next/router";
+import {logout} from "../../redux/slices/authSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+
 
 const NavbarAdmin: React.FC = () => {
+  // const { tokens} = useSelector(
+  //   (state: RootState) => state.auth
+  // );
   const [hiddenMenu, sethiddenMenu] = useState(true);
+  // const {push}=useRouter();
+  // const dispatch=useDispatch();
+  // const HandleLogout=()=>{
+  //   dispatch(logout());
+  //   if(tokens!==null)
+  //     removeSessionToken(tokens);
+  //     push("/");
+  // }
   return (
     <nav className="bg-base px-6 text-textColor">
       <div className="container mx-auto flex  justify-between max-w-[1400px]">
@@ -47,7 +65,7 @@ const NavbarAdmin: React.FC = () => {
             </div>
             <div className="flex items-center justify-start gap-x-2">
               <ImExit />
-              <Link className="hover:underline" href="/user">
+              <Link  className="hover:underline" href="/">
                 خروج
               </Link>
             </div>
