@@ -4,7 +4,7 @@ import { ProductList } from "@/components/admin/product/ProductList";
 const ProductPage: React.FC<{ page: number }> = ({ page }) => {
   return (
     <section className=" px-6">
-      <div className=" flex justify-between items-center">
+      <div className=" flex justify-between items-center px-4">
         <button className="bg-white px-3 py-1 sm:px-8 sm:py-2 rounded-md  font-bold">
           افزودن کالا
         </button>
