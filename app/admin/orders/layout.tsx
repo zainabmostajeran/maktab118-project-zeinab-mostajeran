@@ -10,7 +10,7 @@ const OrderLayout: React.FC<IAuthLayout> = ({ children }) => {
   return (
     <div>
       <div className="flex flex-col min-h-screen bg-second">
-        <div className="flex justify-between">
+        <div className="flex justify-between px-16">
           <ToggleGroup />
           <PageTitle title="سفارش ها" />
         </div>

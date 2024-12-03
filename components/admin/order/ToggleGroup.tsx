@@ -12,7 +12,7 @@ import {NavToggle} from "@/components/admin/order/NavToggle"
           {
             title: "همه",
             variant: "default",
-            href:"/admin/orders/all"
+            href:"/admin/orders"
           },
           {
             title: "درانتظار ارسال",

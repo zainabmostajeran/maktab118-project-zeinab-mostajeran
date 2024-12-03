@@ -2,59 +2,71 @@
 import React from "react";
 import Link from "next/link";
 import { productsLimit } from "@/utils/config";
-import { getProducts } from "@/apis/services/products";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { classNames } from "@/utils/classname";
+import { getOrders } from "@/apis/services/orders";
 
 export const OrderList: React.FC<{ page: number }> = ({ page }) => {
-  const product = useQuery({
-    queryKey: ["get-product", page],
-    queryFn: () =>
-      getProducts({
-        page: String(1),
-        limit: String(productsLimit),
-      }),
+  const order = useQuery({
+    queryKey: ["get-order"],
+    queryFn: () => getOrders({ page: String(1), limit: String(productsLimit) }),
   });
-  const totalPages = Math.max(Number(product.total) / Number(productsLimit));
+  console.log(order.data);
+
+  const totalPages = Math.max(
+    Number(order.data?.total) / Number(productsLimit)
+  );
 
   React.useEffect(() => {
-    if (product.isSuccess && product.data) {
-      console.log("Fetch successful", product.data);
+    if (order.isSuccess && order.data) {
+      console.log("Fetch successful", order.data);
     }
-  }, [product.isSuccess, product.data]);
+  }, [order.isSuccess, order.data]);
 
   React.useEffect(() => {
-    if (product.error || product.isError) {
-      console.error("Something went wrong", product.error);
+    if (order.error || order.isError) {
+      console.error("Something went wrong", order.error);
     }
-  }, [product.error, product.isError]);
+  }, [order.error, order.isError]);
 
   return (
-    <section className="flex flex-col items-center justify-center py-6">
-      {!product.isLoading ? (
+    <section className="flex flex-col items-center justify-center ">
+      {!order.isLoading ? (
         <table className="w-full text-white border-collapse border-slate-300 shadow-md overflow-scroll">
-          <thead>
-            <tr>
-            <th className="bg-base">#</th>
-              <th className="bg-base">زمان سفارش</th>
-              <th className="bg-base"> مجموع مبلغ</th>
-              <th className="bg-base">نام کاربر</th>
+          <thead className="h-6">
+            <tr className="bg-white text-center text-gray-800">
+              <th className="h-12"></th>
+              <th className="h-12">زمان سفارش</th>
+              <th className="h-12"> مجموع مبلغ</th>
+              <th className="h-12">نام کاربر</th>
             </tr>
           </thead>
-          <tbody className="even:bg-white text-center text-gray-600 border-collapse border border-slate-300">
-            {product.data?.products?.map((item: any, index: number) => (
-              <tr key={index}>
-                <td>بررسی سفارش</td>
-                <td>{item.createdAt}</td>
-                <td>{item.name}</td>
-                <td>{item.totalPrice}</td>
+          <tbody className="text-center bg-base text-gray-900 font-semibold">
+            {order.data?.data?.orders?.map((item: any, index: number) => (
+              <tr
+                className="even:bg-second hover:even:bg-white cursor-pointer text-center"
+                key={index}
+              >
+                <td className="h-12">بررسی سفارش</td>
+                <td className="h-12">{item.createdAt}</td>
+                <td className="h-12">{item.totalPrice}</td>
+                <td className="h-12">{item.user}</td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <p className="text-right">درحال بارگذاری</p>
+        <div className="w-10 flex item-center justify-center text-nowrap">
+          <Image
+            className="animate-spin"
+            src="/loading.svg"
+            width={100}
+            height={20}
+            alt="Picture of the author"
+          />
+          <p> درحال بارگذاری</p>
+        </div>
       )}
       <div className="w-full flex justify-center pt-10 gap-5">
         <Link
