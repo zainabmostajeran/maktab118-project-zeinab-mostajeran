@@ -38,15 +38,16 @@ import {
         isCollapsed={isCollapsed}
         links={[
           {
-            title: "داشبورد",
-            icon: LayoutDashboard,
+            title: "سفارش ها",
+            icon: ShoppingCart,
+
+            href:"/admin",
             variant: "default",
-            href:"/admin"
           },
           {
             title: "کالاها",
             icon:  ScanBarcode,
-            variant: "default",
+            variant: "ghost",
             href:"/admin/products"
           },
           {
@@ -56,11 +57,12 @@ import {
             href:"/admin/prices"
           },
           {
-            title: "سفارش ها",
-            icon: ShoppingCart,
+            title: "داشبورد",
+            icon: LayoutDashboard,
             variant: "ghost",
-            href:"/admin/orders"
+            href:"/admin/dashboard"
           },
+
         ]}
       />
       </div>

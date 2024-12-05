@@ -5,12 +5,6 @@ import { ImExit } from "react-icons/im";
 import { IoMenu } from "react-icons/io5";
 import { useState } from "react";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
-import { removeSessionToken } from "@/libs/session-manager";
-import { useRouter } from "next/router";
-import {logout} from "../../redux/slices/authSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 
 
 const NavbarAdmin: React.FC = () => {

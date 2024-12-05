@@ -8,9 +8,9 @@ interface IAuthLayout {
 }
 const OrderLayout: React.FC<IAuthLayout> = ({ children }) => {
   return (
-    <div>
-      <div className="flex flex-col min-h-screen bg-second">
-        <div className="flex justify-between px-16">
+    <div className="mx-auto px-5">
+      <div className="flex flex-col bg-second">
+        <div className="flex items-center justify-between px-16">
           <ToggleGroup />
           <PageTitle title="سفارش ها" />
         </div>

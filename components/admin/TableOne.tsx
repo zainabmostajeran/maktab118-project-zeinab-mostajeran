@@ -1,9 +1,9 @@
-// import { BRAND } from "@/types/brand";
+import { BRAND } from "@/types/brand";
 import Image from "next/image";
 
 const brandData: BRAND[] = [
   {
-    logo: "brand-01.svg",
+    logo: "/img/brand-01.svg",
     name: "Google",
     visitors: 3.5,
     revenues: "5,768",
@@ -11,7 +11,7 @@ const brandData: BRAND[] = [
     conversion: 4.8,
   },
   {
-    logo: "brand-02.svg",
+    logo: "/img/brand-02.svg",
     name: "X.com",
     visitors: 2.2,
     revenues: "4,635",
@@ -19,7 +19,7 @@ const brandData: BRAND[] = [
     conversion: 4.3,
   },
   {
-    logo: "brand-03.svg",
+    logo: "/img/brand-03.svg",
     name: "Github",
     visitors: 2.1,
     revenues: "4,290",
@@ -27,7 +27,7 @@ const brandData: BRAND[] = [
     conversion: 3.7,
   },
   {
-    logo: "brand-04.svg",
+    logo: "/img/brand-04.svg",
     name: "Vimeo",
     visitors: 1.5,
     revenues: "3,580",
@@ -35,7 +35,7 @@ const brandData: BRAND[] = [
     conversion: 2.5,
   },
   {
-    logo: "brand-05.svg",
+    logo: "/img/brand-05.svg",
     name: "Facebook",
     visitors: 1.2,
     revenues: "2,740",
@@ -47,8 +47,8 @@ const brandData: BRAND[] = [
 const TableOne = () => {
   return (
     <div className="rounded-[10px] bg-white px-8 pb-4 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card">
-      <h4 className="mb-5.5 text-2xl font-bold text-dark dark:text-white p-4 text-right">
-        کانال های برتر 
+      <h4 className="mb-5.5 text-xl font-bold text-dark dark:text-white p-4 ">
+        top chanell
       </h4>
 
       <div className="flex flex-col">

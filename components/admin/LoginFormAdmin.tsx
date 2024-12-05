@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 export const LoginFormAdmin: React.FC = () => {
   const {
@@ -33,6 +34,7 @@ export const LoginFormAdmin: React.FC = () => {
   React.useEffect(() => {
     if (isAuthenticated) {
       push("/admin");
+      toast.success("باموفقیت وارد شدید")
     }
   }, [isAuthenticated, push]);
 
