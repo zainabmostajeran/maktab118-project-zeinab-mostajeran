@@ -9,11 +9,12 @@ import { useQuery, useQueries } from "@tanstack/react-query";
 import Image from "next/image";
 import { classNames } from "@/utils/classname";
 import { IOrdersResponse, IOrder } from "@/types/orders";
+import Modal from "@/components/ui/Modal";
+import {DeliverModal} from "@/components/admin/order/DeliverModal";
 
 interface OrderListProps {
   page: number;
 }
-
 export const OrderList: React.FC<OrderListProps> = ({ page }) => {
   const {
     data: ordersData,
@@ -43,6 +44,9 @@ export const OrderList: React.FC<OrderListProps> = ({ page }) => {
       staleTime: 1000 * 60 * 60,
     })),
   });
+
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
 
   const usersMap: Record<string, IUser> = React.useMemo(() => {
     const map: Record<string, IUser> = {};
@@ -83,13 +87,12 @@ export const OrderList: React.FC<OrderListProps> = ({ page }) => {
       </div>
     );
   }
-
   if (isErrorState) {
     return <div className="text-red-500">خطا در بارگذاری داده‌ها</div>;
   }
 
   return (
-    <section className="flex flex-col items-center justify-center py-6">
+    <section className="flex flex-col items-center justify-center py-2 mx-auto">
       <table className="w-full text-white border-collapse border-slate-300 shadow-md overflow-scroll rounded-lg">
         <thead className="h-6">
           <tr className="bg-white text-center text-gray-800">
@@ -106,16 +109,14 @@ export const OrderList: React.FC<OrderListProps> = ({ page }) => {
               key={order._id}
             >
               <td className="h-12">
-                <Link href={`/admin/orders/${order._id}`}>
-                  <button className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+                  <button onClick={() => setIsModalOpen(true)} className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
                     بررسی سفارش
                   </button>
-                </Link>
               </td>
               <td className="h-12">
                 {new Date(order.createdAt).toLocaleString("fa-IR")}
               </td>
-              <td className="h-12"> {order.totalPrice}</td>
+              <td className="h-12">{(order.totalPrice).toLocaleString("ar-EG")}</td>
               <td className="h-12">
                 {usersMap[order.user]
                   ? `${usersMap[order.user].firstname} ${
@@ -182,6 +183,9 @@ export const OrderList: React.FC<OrderListProps> = ({ page }) => {
           </button>
         </Link>
       </div>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <DeliverModal onClose={() => setIsModalOpen(false)} />
+      </Modal>
     </section>
   );
 };

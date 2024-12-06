@@ -15,9 +15,9 @@ const ProductPage: React.FC = () => {
   }, [page]);
 
   return (
-    <section className="px-6">
+    <section className="mx-auto">
       <div className="flex justify-between items-center px-4">
-        <button className="bg-white px-3 py-1 sm:px-8 sm:py-2 rounded-md font-bold">
+        <button className="bg-white px-3 py-1 sm:px-8 sm:py-2 rounded-md font-bold hover:bg-slate-300">
           افزودن کالا
         </button>
         <PageTitle title="کالاها" />

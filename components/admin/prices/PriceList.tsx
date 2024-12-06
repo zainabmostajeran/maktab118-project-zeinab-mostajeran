@@ -45,11 +45,9 @@ export const PriceList: React.FC<{ page: number }> = ({ page }) => {
       </div>
     );
   }
-
   if (productsError) {
     return <div className="text-red-500">خطا در بارگذاری داده‌ها</div>;
   }
-
   return (
     <section className="flex flex-col items-center justify-center py-6">
       <table className="w-full text-white border-collapse border-slate-300 shadow-md overflow-scroll rounded-lg">

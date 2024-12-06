@@ -4,6 +4,7 @@ import React, { Suspense, useMemo } from "react";
 import PageTitle from "@/components/admin/PageTitle";
 import { OrderList } from "@/components/admin/order/OrderList";
 import { useSearchParams } from "next/navigation";
+import ToggleGroup from "@/components/admin/order/ToggleGroup";
 
 const OrdersPage: React.FC = () => {
   const searchParams = useSearchParams();
@@ -15,13 +16,11 @@ const OrdersPage: React.FC = () => {
   }, [pageParam]);
 
   return (
-    <section className="px-6">
-      <div className="flex justify-between items-center px-4">
-        <button className="bg-white px-3 py-1 sm:px-8 sm:py-2 rounded-md font-bold">
-          ذخیره
-        </button>
-        <PageTitle title="سفارش‌ها" />
-      </div>
+    <section className=" mx-auto">
+        <div className="flex items-center justify-between px-16">
+          <ToggleGroup />
+          <PageTitle title="سفارش ها" />
+        </div>
       <Suspense fallback={<div>در حال بارگذاری...</div>}>
         <OrderList page={currentPage} />
       </Suspense>

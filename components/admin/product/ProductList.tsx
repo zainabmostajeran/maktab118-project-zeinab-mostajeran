@@ -45,10 +45,6 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
     queryFn: getSubCategories,
   });
 
-  const isLoading =
-    productsLoading || categoriesLoading || subCategoriesLoading;
-  const isErrorState = productsError || categoriesError || subCategoriesError;
-
   const categoryMap = React.useMemo(() => {
     if (!categoriesData?.data?.categories) return {};
     const map: Record<string, string> = {};
@@ -68,9 +64,13 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
   }, [subCategoriesData]);
 
   const totalPages = React.useMemo(() => {
-    if (!productsData?.total || !productsLimit) return 1;
+    if (!productsData?.total || !productsData) return 1;
     return Math.ceil(Number(productsData.total) / Number(productsLimit));
   }, [productsData, productsLimit]);
+
+  const isLoading =
+    productsLoading || categoriesLoading || subCategoriesLoading;
+  const isErrorState = productsError || categoriesError || subCategoriesError;
 
   if (isLoading) {
     return (
@@ -88,14 +88,12 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
       </div>
     );
   }
-
   if (isErrorState) {
     return <div className="text-red-500">خطا در بارگذاری داده‌ها</div>;
   }
-
   return (
     <section className="flex flex-col items-center justify-center py-6">
-      <table className="w-full text-white shadow-lg overflow-scroll rounded-lg">
+      <table className="w-full text-white shadow-lg rounded-lg">
         <thead>
           <tr className="bg-white text-gray-800">
             <th className="h-12">عملیات</th>
@@ -112,8 +110,8 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
               key={item._id}
             >
               <td>
-                <div className="flex gap-x-2 items-center justify-center text-gray-800">
-                  <button className="px-2 py-1 bg-slate-300 hover:bg-slate-400 rounded-lg">
+                <div className="flex gap-x-2 items-center justify-center text-gray-800 ">
+                  <button className="px-2 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg">
                     ویرایش
                   </button>
                   <button className="bg-red-500 px-2 py-1 hover:bg-red-400 rounded-lg">
@@ -126,11 +124,11 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
               <td>{item.name}</td>
               <td className=" flex flex-col items-center p-3">
                 <Image
-                className="rounded-full"
+                  className="rounded-full object-cover"
                   src={`http://localhost:8000/images/products/images/${item.images[0]}`}
                   alt={item.name}
-                  width={100}
-                  height={100}
+                  width={80}
+                  height={80}
                 />
               </td>
             </tr>
