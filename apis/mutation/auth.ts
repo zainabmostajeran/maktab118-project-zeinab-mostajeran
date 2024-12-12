@@ -6,7 +6,6 @@ import {
   loginSuccess,
   loginFailure,
 } from "../../redux/slices/authSlice";
-import { setSessionToken } from "@/libs/session-manager";
 
 export const useLogin = () => {
   const dispatch = useDispatch();
@@ -18,9 +17,7 @@ export const useLogin = () => {
       dispatch(loginStart());
     },
     onSuccess: (data) => {
-      console.log(data);
-      dispatch(loginSuccess(data.token, data.data.user));
-      setSessionToken(data.token.accessToken);
+      dispatch(loginSuccess({ tokens: data.token, user: data.data.user }));
     },
     onError: (error: any) => {
       const errorMessage =
