@@ -41,7 +41,7 @@ export const LoginFormAdmin: React.FC = () => {
 
   React.useEffect(() => {
     if (error) {
-      toast.error("عدم موفقیت");
+      toast.error("عدم موفقیت ");
     }
   }, [error]);
 
