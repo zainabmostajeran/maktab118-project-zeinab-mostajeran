@@ -17,7 +17,8 @@ export const LoginFormAdmin: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<authSchemaType>({
-    resolver: zodResolver(authSchema),
+    mode: "all",
+    resolver: zodResolver(authSchema) ,
     defaultValues: {
       username: "",
       password: "",
@@ -40,7 +41,7 @@ export const LoginFormAdmin: React.FC = () => {
 
   React.useEffect(() => {
     if (error) {
-      console.error(error);
+      toast.error("عدم موفقیت");
     }
   }, [error]);
 
