@@ -1,1 +1,1 @@
-export const productsLimit = 10;
+export const productsLimit = 9;

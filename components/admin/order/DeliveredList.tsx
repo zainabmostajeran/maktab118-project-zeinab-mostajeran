@@ -8,16 +8,14 @@ import { getUser } from "@/apis/services/users";
 import { useQuery, useQueries } from "@tanstack/react-query";
 import Image from "next/image";
 import { classNames } from "@/utils/classname";
-import { IOrdersResponse, IOrder } from "@/types/orders";
 import Modal from "@/components/ui/Modal";
 import { DeliverModal } from "@/components/admin/order/DeliverModal";
-import { IUser } from "@/types/users";
 
 interface OrderListProps {
   page: number;
 }
 
-export const AwaitingList: React.FC<OrderListProps> = ({ page }) => {
+export const DeliveredList: React.FC<OrderListProps> = ({ page }) => {
   const {
     data: ordersData,
     isLoading: ordersLoading,
@@ -58,7 +56,7 @@ export const AwaitingList: React.FC<OrderListProps> = ({ page }) => {
   }, [usersQueries, userIds]);
 
   const filter = ordersData?.data?.orders.filter(
-    (order: IOrder) => !order.deliveryStatus
+    (order: IOrder) => order.deliveryStatus
   );
 
   const totalPages = React.useMemo(() => {
@@ -116,7 +114,7 @@ export const AwaitingList: React.FC<OrderListProps> = ({ page }) => {
         </thead>
         <tbody className="text-center bg-base text-gray-900 font-semibold">
           {ordersData?.data?.orders
-            .filter((order: IOrder) => !order.deliveryStatus)
+            .filter((order: IOrder) => order.deliveryStatus)
             .map((order: IOrder) => (
               <tr
                 className="even:bg-[#BCB88A] hover:even:bg-white cursor-pointer text-center"

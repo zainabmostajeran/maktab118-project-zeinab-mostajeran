@@ -10,12 +10,12 @@ import React, { useEffect, useState } from "react";
 
 const ProductPage: React.FC = () => {
   const searchParams = useSearchParams();
-  const page = searchParams.get("page");
+  const pageParam = searchParams.get("page");
 
   const currentPage = useMemo(() => {
-    const parsed = parseInt(Array.isArray(page) ? page[0] : page, 10);
+    const parsed = parseInt(pageParam || "1", 10);
     return isNaN(parsed) || parsed < 1 ? 1 : parsed;
-  }, [page]);
+  }, [pageParam]);
  
 
   return (

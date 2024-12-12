@@ -13,9 +13,112 @@ import Modal from "@/components/ui/Modal";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+
+const Pagination: React.FC<{
+  currentPage: number;
+  totalPages: number;
+}> = ({ currentPage, totalPages }) => {
+  const generatePageNumbers = () => {
+    const pages: (number | string)[] = [];
+
+    pages.push(1);
+
+    const start = Math.max(currentPage - 2, 2);
+    const end = Math.min(currentPage + 2, totalPages - 1);
+
+    if (start > 2) {
+      pages.push("...");
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < totalPages - 1) {
+      pages.push("...");
+    }
+
+    if (totalPages > 1) {
+      pages.push(totalPages);
+    }
+
+    return pages;
+  };
+
+  const pageNumbers = generatePageNumbers();
+
+  return (
+    <div className="w-full flex justify-center items-center pt-10 gap-3">
+      {/* Previous Button */}
+      <Link
+        href={`/admin/products?${new URLSearchParams({
+          page: String(currentPage - 1 < 1 ? 1 : currentPage - 1),
+        })}`}
+      >
+        <button
+          className={classNames(
+            "px-2 py-1 text-white disabled:bg-slate-500",
+            "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
+          )}
+          disabled={currentPage - 1 < 1}
+        >
+          صفحه قبل
+        </button>
+      </Link>
+
+      {/* Page Numbers */}
+      {pageNumbers.map((el, index) => {
+        if (el === "...") {
+          return (
+            <span key={`ellipsis-${index}`} className="px-2 py-1">
+              ...
+            </span>
+          );
+        }
+
+        return (
+          <Link
+            key={el}
+            href={`/admin/products?${new URLSearchParams({
+              page: String(el),
+            })}`}
+          >
+            <span
+              className={classNames(
+                "cursor-pointer px-2 py-1 hover:bg-white",
+                el === currentPage ? "bg-gray-300 font-bold" : ""
+              )}
+            >
+              {el.toLocaleString("ar-EG")}
+            </span>
+          </Link>
+        );
+      })}
+
+      {/* Next Button */}
+      <Link
+        href={`/admin/products?${new URLSearchParams({
+          page: String(
+            currentPage + 1 > totalPages ? currentPage : currentPage + 1
+          ),
+        })}`}
+      >
+        <button
+          className={classNames(
+            "px-2 py-1 text-white disabled:bg-slate-500",
+            "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
+          )}
+          disabled={currentPage + 1 > totalPages}
+        >
+          صفحه بعد
+        </button>
+      </Link>
+    </div>
+  );
+};
+
 export const ProductList: React.FC<{ page: number }> = ({ page }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [product, setProduct] = useState<IProducts[]>([]);
+
 
   const {
     data: productsData,
@@ -147,8 +250,8 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
       </table>
 
       {/* Pagination Controls */}
-      <div className="w-full flex justify-center items-center pt-10 gap-3">
-        {/* Previous Button */}
+      <Pagination currentPage={page} totalPages={totalPages} />
+      {/* <div className="w-full flex justify-center items-center pt-10 gap-3">
         <Link
           href={`/admin/products?${new URLSearchParams({
             page: String(page - 1 < 1 ? 1 : page - 1),
@@ -165,7 +268,6 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
           </button>
         </Link>
 
-        {/* Page Numbers */}
         {[1, 2, 3, 4].map((el) => (
           <Link
             key={el}
@@ -182,7 +284,6 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
             </span>
           </Link>
         ))}
-        {/* Next Button */}
         <Link
           href={`/admin/products?${new URLSearchParams({
             page: String(page + 1 > totalPages ? page : page + 1),
@@ -198,7 +299,7 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
             صفحه بعد
           </button>
         </Link>
-      </div>
+      </div> */}
     </section>
   );
 };
