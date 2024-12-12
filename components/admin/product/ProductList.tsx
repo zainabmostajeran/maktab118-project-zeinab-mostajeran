@@ -9,8 +9,14 @@ import { getSubCategories } from "@/apis/services/subcategories";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { classNames } from "@/utils/classname";
+import Modal from "@/components/ui/Modal";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export const ProductList: React.FC<{ page: number }> = ({ page }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [product, setProduct] = useState<IProducts[]>([]);
+
   const {
     data: productsData,
     isLoading: productsLoading,
@@ -95,33 +101,20 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
     <section className="flex flex-col items-center justify-center py-6">
       <table className="w-full text-white shadow-lg rounded-lg">
         <thead>
-          <tr className="bg-white text-gray-800">
-            <th className="h-12">عملیات</th>
+          <tr className="bg-textColor text-gray-800">
+            <th>تصویر</th>
+            <th>نام کالا</th>
             <th>دسته بندی</th>
             <th>زیر دسته بندی</th>
-            <th>نام کالا</th>
-            <th>تصویر</th>
+            <th className="h-12">عملیات</th>
           </tr>
         </thead>
         <tbody className="text-center bg-base text-gray-800 font-semibold shadow-md">
           {productsData?.data?.products?.map((item: any) => (
             <tr
-              className="even:bg-[#BCB88A] hover:even:bg-white cursor-pointer"
+              className="even:bg-[rgb(188,184,138)] hover:even:bg-white cursor-pointer"
               key={item._id}
             >
-              <td>
-                <div className="flex gap-x-2 items-center justify-center text-gray-800 ">
-                  <button className="px-2 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg">
-                    ویرایش
-                  </button>
-                  <button className="bg-red-500 px-2 py-1 hover:bg-red-400 rounded-lg">
-                    حذف
-                  </button>
-                </div>
-              </td>
-              <td>{categoryMap[item.category]}</td>
-              <td>{subCategoryMap[item.subcategory]}</td>
-              <td>{item.name}</td>
               <td className=" flex flex-col items-center p-3">
                 <Image
                   className="rounded-full object-cover"
@@ -130,6 +123,23 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
                   width={80}
                   height={80}
                 />
+              </td>
+              <td>{item.name}</td>
+              <td>{categoryMap[item.category]}</td>
+              <td>{subCategoryMap[item.subcategory]}</td>
+              <td>
+                <div className="flex gap-x-2 items-center justify-center text-gray-800 ">
+                  <button
+                    className="px-2 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg"
+                  >
+                    ویرایش
+                  </button>
+                  <button
+                    className="bg-red-500 px-2 py-1 hover:bg-red-400 rounded-lg"
+                  >
+                    حذف
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
@@ -147,16 +157,16 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
           <button
             className={classNames(
               "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base hover:bg-white hover:text-gray-700 rounded-xl"
+              "bg-base  hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
             )}
             disabled={page - 1 < 1}
           >
-            قبلی
+            صفحه قبل
           </button>
         </Link>
 
         {/* Page Numbers */}
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((el) => (
+        {[1, 2, 3, 4].map((el) => (
           <Link
             key={el}
             href={`/admin/products?${new URLSearchParams({
@@ -168,11 +178,10 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
                 el === page ? "bg-slate-300" : ""
               }`}
             >
-              {el}
+              {el.toLocaleString("ar-EG")}
             </span>
           </Link>
         ))}
-
         {/* Next Button */}
         <Link
           href={`/admin/products?${new URLSearchParams({
@@ -182,11 +191,11 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
           <button
             className={classNames(
               "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base hover:bg-white hover:text-gray-700 rounded-xl"
+              "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
             )}
             disabled={page + 1 > totalPages}
           >
-            بعدی
+            صفحه بعد
           </button>
         </Link>
       </div>

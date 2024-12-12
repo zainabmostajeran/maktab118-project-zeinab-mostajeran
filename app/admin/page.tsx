@@ -16,8 +16,8 @@ const OrdersPage: React.FC = () => {
   }, [pageParam]);
 
   return (
-    <section className=" mx-auto">
-        <div className="flex items-center justify-between px-16">
+    <section className="mx-auto">
+        <div className="text-center block sm:flex sm:items-center sm:justify-between">
         <PageTitle title="سفارش ها" />
           <ToggleGroup />
         </div>

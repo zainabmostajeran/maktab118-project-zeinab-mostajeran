@@ -24,6 +24,7 @@ export const PriceList: React.FC<{ page: number }> = ({ page }) => {
     keepPreviousData: true,
   });
 
+
   const totalPages = React.useMemo(() => {
     if (!productsData?.total || !productsLimit) return 1;
     return Math.ceil(Number(productsData.total) / Number(productsLimit));
@@ -50,35 +51,39 @@ export const PriceList: React.FC<{ page: number }> = ({ page }) => {
   }
   return (
     <section className="flex flex-col items-center justify-center py-6">
-      <table className="w-full text-white border-collapse border-slate-300 shadow-md overflow-scroll rounded-lg">
+      <table className="w-full text-white shadow-lg rounded-lg">
         <thead className="h-6">
-          <tr className="bg-white text-center text-gray-800">
-            <th className="h-10">موجودی</th>
-            <th className="h-10 text-center">قیمت</th>
-            <th className="h-10 text-center">کالا</th>
+          <tr className="bg-textColor text-center text-gray-800">
+            <th className="h-12 text-center">کالا</th>
+            <th className="h-12 text-center">قیمت</th>
+            <th className="h-12">موجودی</th>
           </tr>
         </thead>
         <tbody className="text-center bg-base text-gray-900 font-semibold">
           {productsData?.data?.products.map((item: any) => (
             <tr
-              className="even:bg-second hover:even:bg-white cursor-pointer text-center"
+              className="even:bg-[#BCB88A] hover:even:bg-white cursor-pointer text-center"
               key={item._id}
             >
-              <td className="h-12">
-                <input
-                  className="w-20 bg-transparent placeholder-slate-900 text-center"
-                  type="number"
-                  placeholder={item.quantity}
-                />
-              </td>
+              <td className="text-center">{item.name}</td>
               <td className="h-12">
                 <input
                   className="w-20 bg-transparent placeholder-slate-900 text-center"
                   type="number"
                   placeholder={item.price}
+                  min={0}
+                  defaultValue={item.price}
                 />
               </td>
-              <td className="text-center">{item.name}</td>
+              <td className="h-12">
+                <input 
+                  className="w-20 bg-transparent placeholder-slate-900 text-center"
+                  type="number"
+                  placeholder={item.quantity}
+                  min={0}
+                  defaultValue={item.quantity}
+                />
+              </td>
             </tr>
           ))}
         </tbody>
@@ -95,16 +100,16 @@ export const PriceList: React.FC<{ page: number }> = ({ page }) => {
           <button
             className={classNames(
               "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base hover:bg-white hover:text-gray-700 rounded-xl"
+              "bg-base  hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
             )}
             disabled={page - 1 < 1}
           >
-            قبلی
+            صفحه قبل
           </button>
         </Link>
 
         {/* Page Numbers */}
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((el) => (
+        {[1, 2, 3, 4].map((el) => (
           <Link
             key={el}
             href={`/admin/prices?${new URLSearchParams({
@@ -116,7 +121,7 @@ export const PriceList: React.FC<{ page: number }> = ({ page }) => {
                 el === page ? "bg-gray-300" : ""
               }`}
             >
-              {el}
+              {el.toLocaleString("ar-EG")}
             </span>
           </Link>
         ))}
@@ -130,11 +135,11 @@ export const PriceList: React.FC<{ page: number }> = ({ page }) => {
           <button
             className={classNames(
               "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base hover:bg-white hover:text-gray-700 rounded-xl"
+              "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
             )}
             disabled={page + 1 > totalPages}
           >
-            بعدی
+            صفحه بعد
           </button>
         </Link>
       </div>

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import {
   ShoppingCart,
   LayoutDashboard,
-  ChevronRight,
+  ChevronLeft,
   ChartCandlestick,
   ScanBarcode
 } from "lucide-react";
@@ -22,15 +22,15 @@ import {
     setIsCollapsed(!isCollapsed);
   }
     return(
-      <div className="relative min-w-[80px] border-r sm:px-6  pb-10 pt-24">
+      <div className="relative min-w-[80px] border-l sm:px-7  pb-10 pt-24">
       {!mobileWidth && (
-        <div className="absolute right-[-20px] top-7">
+        <div className="absolute left-[-20px] top-7">
           <Button
             onClick={toggleSidebar}
             variant="secondary"
             className="rounded-full p-2"
           >
-            <ChevronRight />
+            <ChevronLeft />
           </Button>
         </div>
       )}
@@ -40,7 +40,6 @@ import {
           {
             title: "سفارش ها",
             icon: ShoppingCart,
-
             href:"/admin",
             variant: "default",
           },
@@ -55,12 +54,6 @@ import {
             icon:ChartCandlestick,
             variant: "ghost",
             href:"/admin/prices"
-          },
-          {
-            title: "داشبورد",
-            icon: LayoutDashboard,
-            variant: "ghost",
-            href:"/admin/dashboard"
           },
 
         ]}

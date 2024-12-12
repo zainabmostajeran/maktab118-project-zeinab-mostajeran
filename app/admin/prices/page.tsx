@@ -15,7 +15,7 @@ const PricesPage: React.FC = () => {
   }, [pageParam]);
 
   return (
-    <section className="px-6">
+    <section className="mx-auto">
       <div className="flex justify-between items-center px-4">
       <PageTitle title="موجودی وقیمت ها" />
 

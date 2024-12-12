@@ -16,14 +16,13 @@ import {NavToggle} from "@/components/admin/order/NavToggle"
           },
           {
             title: "درانتظار ارسال",
-          
             variant: "ghost",
-            href:"/admin/orders/awaiting"
+            href:"/admin/awaiting"
           },
           {
             title: "تحویل شده",
             variant: "ghost",
-            href:"/admin/orders/delivered"
+            href:"/admin/delivared"
           },
         ]}
       />

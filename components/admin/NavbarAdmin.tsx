@@ -46,23 +46,24 @@ const NavbarAdmin: React.FC = () => {
           </div>
         </div>
         <div
-          className={`bg-second h-full absolute z-50 top-6 left-0 w-full ${
+          className={`bg-second h-full absolute z-50 top-16 left-0 pr-4 w-full text-slate-900 ${
             hiddenMenu ? "hidden" : ""
           }`}
         >
           <div className="flex flex-col  gap-y-4 pl-10 pb-6 pt-5 text-{16px} font-semibold">
+          <div className="flex items-center justify-start gap-x-2">
+              <Link className="hover:underline" href="/cart">
+                خانه
+              </Link>
+              <FaHome />
+            </div>
             <div className="flex items-center justify-start gap-x-2">
               <Link className="hover:underline" href="/">
                 خروج
               </Link>
               <ImExit />
             </div>
-            <div className="flex items-center justify-start gap-x-2">
-              <Link className="hover:underline" href="/cart">
-                خانه
-              </Link>
-              <FaHome />
-            </div>
+
           </div>
         </div>
       </div>

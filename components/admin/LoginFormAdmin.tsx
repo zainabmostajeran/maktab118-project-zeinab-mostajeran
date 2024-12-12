@@ -89,7 +89,7 @@ export const LoginFormAdmin: React.FC = () => {
       >
         {loading ? "در حال ورود..." : "ورود"}
       </button>
-      <div className="flex gap-x-6 items-center justify-between text-sm ">
+      <div className="flex flex-col gap-y-2 items-center justify-center text-sm ">
         <Link className="hover:underline text-white" href="/">
           بازگشت به سایت
         </Link>

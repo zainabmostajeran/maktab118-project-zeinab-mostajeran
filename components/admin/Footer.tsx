@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
       <div className=" block sm:flex items-center justify-between pt-10">
-      <p className="text-center pt-16 sm:p-0 text-xs">@2024 پیتزانوشا</p>
+      <p className="text-center pb-16 sm:p-0 text-xs">@2024 پیتزانوشا</p>
 
         <div className="flex gap-6 items-center justify-center text-3xl">
           <Link href="#">
