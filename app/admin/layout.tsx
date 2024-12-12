@@ -8,7 +8,7 @@ const AdminLayout: React.FC<IAuthLayout> = ({ children }) => {
   return (
     <div>
       <NavbarAdmin />
-      <div className="flex bg-second  mx-auto">
+      <div className="flex mx-auto bg-second">
         <SideNavbar />
         <div className="pt-4 sm:p-8 w-full">{children}</div>
       </div>

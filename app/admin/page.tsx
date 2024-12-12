@@ -18,8 +18,8 @@ const OrdersPage: React.FC = () => {
   return (
     <section className=" mx-auto">
         <div className="flex items-center justify-between px-16">
+        <PageTitle title="سفارش ها" />
           <ToggleGroup />
-          <PageTitle title="سفارش ها" />
         </div>
       <Suspense fallback={<div>در حال بارگذاری...</div>}>
         <OrderList page={currentPage} />
