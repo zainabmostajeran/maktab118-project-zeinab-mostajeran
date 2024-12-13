@@ -1,331 +1,340 @@
-// "use client";
+"use client";
 
-// import React, { useEffect } from "react";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
-// import { Input } from "@/components/admin/Input";
-// import { ProductSchema, ProductSchemaType } from "@/validation/product";
-// import WysiwygEditor from "@/components/admin/product/WysiwygEditor";
-// import { Thumbnail } from "@/components/admin/product/Thumbnail";
-// import { Images } from "@/components/admin/product/Images";
-// import { EditProducts } from "@/apis/services/products";
-// import { getCategories } from "@/apis/services/categories";
-// import { getSubCategories } from "@/apis/services/subcategories";
-// import { useQuery } from "@tanstack/react-query";
-// import { errorHandler } from "@/utils/error-handler";
-// import { toast } from "react-toastify";
-// import { AxiosError } from "axios";
+import React, { useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
+import { Input } from "@/components/admin/Input";
+import { ProductSchema, ProductSchemaType } from "@/validation/product";
+import WysiwygEditor from "@/components/admin/product/WysiwygEditor";
+import { Thumbnail } from "@/components/admin/product/Thumbnail";
+import { Images } from "@/components/admin/product/Images";
+import { EditProducts } from "@/apis/services/products";
+import { getCategories } from "@/apis/services/categories";
+import { getSubCategories } from "@/apis/services/subcategories";
+import { useQuery } from "@tanstack/react-query";
+import { errorHandler } from "@/utils/error-handler";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
-// interface EditProductFormProps {
-//   onClose: () => void;
-//   product: IProducts;
-// }
+interface EditProductFormProps {
+  onClose: () => void;
+  product: IProducts;
+}
 
-// const EditProductForm: React.FC<EditProductFormProps> = ({
-//   onClose,
-//   product,
-// }) => {
-//   const [isPending, setIsPending] = React.useState<boolean>(false);
+const EditProductForm: React.FC<EditProductFormProps> = ({
+  onClose,
+  product,
+}) => {
+  const [isPending, setIsPending] = React.useState<boolean>(false);
 
-//   const {
-//     control,
-//     handleSubmit,
-//     setValue,
-//     formState: { errors },
-//   } = useForm<ProductSchemaType>({
-//     mode: "all",
-//     resolver: zodResolver(ProductSchema),
-//     defaultValues: {
-//       name: product.name,
-//       price: product.price.toString(),
-//       quantity: product.quantity.toString(),
-//       category: product.category,
-//       subcategory: product.subcategory,
-//       brand: product.brand,
-//       description: product.description,
-//       thumbnail: null,
-//       images: [],
-//     },
-//   });
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<ProductSchemaType>({
+    mode: "all",
+    resolver: zodResolver(ProductSchema),
+    defaultValues: {
+      name: product.name,
+      price: product.price.toString(),
+      quantity: product.quantity.toString(),
+      category: product.category,
+      subcategory: product.subcategory,
+      brand: product.brand,
+      description: product.description,
+      thumbnail: null,
+      images: [],
+    },
+  });
 
+  // Fetch categories
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+    error: categoriesErrorData,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getCategories(),
+  });
 
-//   const {
-//     data: categoriesData,
-//     isLoading: categoriesLoading,
-//     isError: categoriesError,
-//     error: categoriesErrorData,
-//   } = useQuery({
-//     queryKey: ["categories"],
-//     queryFn: () => getCategories(),
-//   });
+  // Fetch subcategories
+  const {
+    data: subCategoriesData,
+    isLoading: subCategoriesLoading,
+    isError: subCategoriesError,
+    error: subCategoriesErrorData,
+  } = useQuery({
+    queryKey: ["subcategories"],
+    queryFn: () => getSubCategories(),
+  });
 
+  // Watch the selected category to filter subcategories
+  const selectedCategory = useWatch({
+    control,
+    name: "category",
+  });
 
-//   const {
-//     data: subCategoriesData,
-//     isLoading: subCategoriesLoading,
-//     isError: subCategoriesError,
-//     error: subCategoriesErrorData,
-//   } = useQuery({
-//     queryKey: ["subcategories"],
-//     queryFn: () => getSubCategories(),
-//   });
+  // Filter subcategories based on selected category
+  const filteredSubCategories = React.useMemo(() => {
+    if (!subCategoriesData?.data?.subcategories || !selectedCategory) return [];
 
-//   const selectedCategory = useWatch({
-//     control,
-//     name: "category",
-//   });
+    return subCategoriesData.data.subcategories.filter(
+      (subcat: ISubcategory) => subcat.category === selectedCategory
+    );
+  }, [subCategoriesData, selectedCategory]);
 
-//   const filteredSubCategories = React.useMemo(() => {
-//     if (!subCategoriesData?.data?.subcategories || !selectedCategory) return [];
+  const onSubmit: SubmitHandler<ProductSchemaType> = async (data) => {
+    const formData = new FormData();
+    formData.append("category", data.category);
+    formData.append("subcategory", data.subcategory);
+    formData.append("name", data.name);
+    formData.append("price", data.price);
+    formData.append("quantity", data.quantity);
+    formData.append("brand", data.brand);
+    formData.append("description", data.description);
 
-//     return subCategoriesData.data.subcategories.filter(
-//       (subcat: ISubcategory) => subcat.category === selectedCategory
-//     );
-//   }, [subCategoriesData, selectedCategory]);
+    if (data.thumbnail) {
+      formData.append("thumbnail", data.thumbnail);
+    }
 
-//   const onSubmit: SubmitHandler<ProductSchemaType> = async (data) => {
-//     const formData = new FormData();
-//     formData.append("category", data.category);
-//     formData.append("subcategory", data.subcategory);
-//     formData.append("name", data.name);
-//     formData.append("price", data.price);
-//     formData.append("quantity", data.quantity);
-//     formData.append("brand", data.brand);
-//     formData.append("description", data.description);
+    if (data.images && data.images.length > 0) {
+      data.images.forEach((image) => {
+        formData.append("images", image);
+      });
+    }
 
-//     if (data.thumbnail) {
-//       formData.append("thumbnail", data.thumbnail);
-//     }
+    setIsPending(true);
+    try {
+      await EditProducts(product._id, formData);
+      toast.success("کالا با موفقیت ویرایش شد");
+      onClose();
+    } catch (e) {
+      errorHandler(e as AxiosError);
+      toast.error("خطا در ویرایش کالا");
+    }
+    setIsPending(false);
+  };
 
-//     if (data.images && data.images.length > 0) {
-//       data.images.forEach((image) => {
-//         formData.append("images", image);
-//       });
-//     }
+  useEffect(() => {
+    setValue("name", product.name);
+    setValue("price", product.price.toString());
+    setValue("quantity", product.quantity.toString());
+    setValue("category", product.category);
+    setValue("subcategory", product.subcategory);
+    setValue("brand", product.brand);
+    setValue("description", product.description);
+    // Note: If you want to prepopulate thumbnail and images, handle accordingly
+  }, [product, setValue]);
 
-//     setIsPending(true);
-//     try {
-//       await EditProducts(product._id, formData);
-//       toast.success("کالا با موفقیت ویرایش شد");
-//       onClose();
-//     } catch (e) {
-//       errorHandler(e as AxiosError);
-//       toast.error("خطا در ویرایش کالا");
-//     }
-//     setIsPending(false);
-//   };
+  // Handle loading and error states
+  if (categoriesLoading || subCategoriesLoading) {
+    return (
+      <div className="flex justify-center items-center">
+        <p>در حال بارگذاری دسته‌بندی‌ها...</p>
+      </div>
+    );
+  }
 
-//   useEffect(() => {
-//     setValue("name", product.name);
-//     setValue("price", product.price.toString());
-//     setValue("quantity", product.quantity.toString());
-//     setValue("category", product.category);
-//     setValue("subcategory", product.subcategory);
-//     setValue("brand", product.brand);
-//     setValue("description", product.description);
-//   }, [product, setValue]);
+  if (categoriesError || subCategoriesError) {
+    return (
+      <div className="text-red-500">
+        خطا در بارگذاری دسته‌بندی‌ها. لطفاً دوباره تلاش کنید.
+      </div>
+    );
+  }
 
-//   if (categoriesLoading || subCategoriesLoading) {
-//     return (
-//       <div className="flex justify-center items-center">
-//         <p>در حال بارگذاری دسته‌بندی‌ها...</p>
-//       </div>
-//     );
-//   }
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col justify-center space-y-4 text-white pt-10 pb-6 overflow-hidden px-2"
+    >
+      {/* Category and Subcategory */}
+      <div className="flex justify-center gap-x-2">
+        <div className="flex flex-col w-full justify-center">
+          <label
+            htmlFor="categories"
+            className="block mb-2 text-right text-sm font-semibold text-textColor dark:text-white"
+          >
+            دسته بندی
+          </label>
+          <Controller
+            name="category"
+            control={control}
+            render={({ field }) => (
+              <select
+                {...field}
+                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">انتخاب دسته‌بندی</option>
+                {categoriesData?.data?.categories.map((category: ICategory) => (
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          />
+          {errors.category && (
+            <p className="text-red-500 text-xs font-semibold capitalize">
+              {errors.category.message}
+            </p>
+          )}
+        </div>
+        <div className="flex flex-col w-full justify-center">
+          <label
+            htmlFor="subcategory"
+            className="block mb-2 text-right text-sm text-textColor font-semibold dark:text-white"
+          >
+            زیردسته بندی
+          </label>
+          <Controller
+            name="subcategory"
+            control={control}
+            render={({ field }) => (
+              <select
+                {...field}
+                disabled={!selectedCategory}
+                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">انتخاب زیردسته‌بندی</option>
+                {filteredSubCategories.map((subcat: ISubcategory) => (
+                  <option key={subcat._id} value={subcat._id}>
+                    {subcat.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          />
+          {errors.subcategory && (
+            <p className="text-red-500 text-xs font-semibold capitalize">
+              {errors.subcategory.message}
+            </p>
+          )}
+        </div>
+      </div>
 
-//   if (categoriesError || subCategoriesError) {
-//     return (
-//       <div className="text-red-500">
-//         خطا در بارگذاری دسته‌بندی‌ها. لطفاً دوباره تلاش کنید.
-//       </div>
-//     );
-//   }
+      {/* Product Name and Price */}
+      <div className="flex text-right gap-x-2 justify-center px-2">
+        <div className="flex flex-col justify-center items-center">
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                error={errors.name?.message}
+                label="نام کالا"
+                placeholder="نام کالا"
+              />
+            )}
+          />
+        </div>
+        <div className="flex flex-col justify-center items-center">
+          <Controller
+            name="price"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="number"
+                error={errors.price?.message}
+                label="قیمت کالا"
+                placeholder="قیمت کالا"
+              />
+            )}
+          />
+        </div>
+      </div>
 
-//   return (
-//     <form
-//       onSubmit={handleSubmit(onSubmit)}
-//       className="flex flex-col justify-center space-y-4 text-white pt-10 pb-6 overflow-hidden px-2"
-//     >
+      {/* quantity and Brand */}
+      <div className="flex text-right gap-x-2 justify-center px-2">
+        <Controller
+          name="quantity"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              type="number"
+              error={errors.quantity?.message}
+              label="موجودیت کالا"
+              placeholder="تعداد"
+            />
+          )}
+        />
+        <Controller
+          name="brand"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              type="text"
+              error={errors.brand?.message}
+              label="برند کالا"
+              placeholder="برند"
+            />
+          )}
+        />
+      </div>
 
-//       <div className="flex justify-center gap-x-2">
-//         <div className="flex flex-col w-full justify-center">
-//           <label
-//             htmlFor="categories"
-//             className="block mb-2 text-right text-sm font-semibold text-textColor dark:text-white"
-//           >
-//             دسته بندی
-//           </label>
-//           <Controller
-//             name="category"
-//             control={control}
-//             render={({ field }) => (
-//               <select
-//                 {...field}
-//                 className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-//               >
-//                 <option value="">انتخاب دسته‌بندی</option>
-//                 {categoriesData?.data?.categories.map((category: ICategory) => (
-//                   <option key={category._id} value={category._id}>
-//                     {category.name}
-//                   </option>
-//                 ))}
-//               </select>
-//             )}
-//           />
-//           {errors.category && (
-//             <p className="text-red-500 text-xs font-semibold capitalize">
-//               {errors.category.message}
-//             </p>
-//           )}
-//         </div>
-//         <div className="flex flex-col w-full justify-center">
-//           <label
-//             htmlFor="subcategory"
-//             className="block mb-2 text-right text-sm text-textColor font-semibold dark:text-white"
-//           >
-//             زیردسته بندی
-//           </label>
-//           <Controller
-//             name="subcategory"
-//             control={control}
-//             render={({ field }) => (
-//               <select
-//                 {...field}
-//                 disabled={!selectedCategory}
-//                 className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-//               >
-//                 <option value="">انتخاب زیردسته‌بندی</option>
-//                 {filteredSubCategories.map((subcat: ISubcategory) => (
-//                   <option key={subcat._id} value={subcat._id}>
-//                     {subcat.name}
-//                   </option>
-//                 ))}
-//               </select>
-//             )}
-//           />
-//           {errors.subcategory && (
-//             <p className="text-red-500 text-xs font-semibold capitalize">
-//               {errors.subcategory.message}
-//             </p>
-//           )}
-//         </div>
-//       </div>
+      {/* Description */}
+      <div className="text-right">
+        <label className="text-textColor font-semibold text-sm">
+          توضیحات کالا
+        </label>
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <WysiwygEditor value={field.value} onChange={field.onChange} />
+          )}
+        />
+        {errors.description && (
+          <p className="text-red-500 text-xs capitalize font-semibold">
+            {errors.description.message}
+          </p>
+        )}
+      </div>
 
-//       <div className="flex text-right gap-x-2 justify-center px-2">
-//         <div className="flex flex-col justify-center items-center">
-//           <Controller
-//             name="name"
-//             control={control}
-//             render={({ field }) => (
-//               <Input
-//                 {...field}
-//                 type="text"
-//                 error={errors.name?.message}
-//                 label="نام کالا"
-//                 placeholder="نام کالا"
-//               />
-//             )}
-//           />
-//         </div>
-//         <div className="flex flex-col justify-center items-center">
-//           <Controller
-//             name="price"
-//             control={control}
-//             render={({ field }) => (
-//               <Input
-//                 {...field}
-//                 type="number"
-//                 error={errors.price?.message}
-//                 label="قیمت کالا"
-//                 placeholder="قیمت کالا"
-//               />
-//             )}
-//           />
-//         </div>
-//       </div>
+      {/* Thumbnail and Images */}
+      <div className="text-right">
+        <Controller
+          name="thumbnail"
+          control={control}
+          render={({ field, fieldState }) => (
+            <Thumbnail
+              value={field.value}
+              onChange={field.onChange}
+              error={fieldState.error}
+            />
+          )}
+        />
+        <Controller
+          name="images"
+          control={control}
+          render={({ field, fieldState }) => (
+            <Images
+              value={field.value}
+              onChange={field.onChange}
+              multiple
+              error={fieldState.error}
+            />
+          )}
+        />
+      </div>
 
-//       <div className="flex text-right gap-x-2 justify-center px-2">
-//         <Controller
-//           name="quantity"
-//           control={control}
-//           render={({ field }) => (
-//             <Input
-//               {...field}
-//               type="number"
-//               error={errors.quantity?.message}
-//               label="موجودیت کالا"
-//               placeholder="تعداد"
-//             />
-//           )}
-//         />
-//         <Controller
-//           name="brand"
-//           control={control}
-//           render={({ field }) => (
-//             <Input
-//               {...field}
-//               type="text"
-//               error={errors.brand?.message}
-//               label="برند کالا"
-//               placeholder="برند"
-//             />
-//           )}
-//         />
-//       </div>
+      {/* Submit Button */}
+      <button
+        type="submit"
+        disabled={isPending}
+        className="bg-textColor text-gray-900 font-bold p-2 rounded hover:bg-white hover:text-gray-900 transition"
+      >
+        {isPending ? "در حال ویرایش..." : "ویرایش"}
+      </button>
+    </form>
+  );
+};
 
-//       <div className="text-right">
-//         <label className="text-textColor font-semibold text-sm">
-//           توضیحات کالا
-//         </label>
-//         <Controller
-//           name="description"
-//           control={control}
-//           render={({ field }) => (
-//             <WysiwygEditor value={field.value} onChange={field.onChange} />
-//           )}
-//         />
-//         {errors.description && (
-//           <p className="text-red-500 text-xs capitalize font-semibold">
-//             {errors.description.message}
-//           </p>
-//         )}
-//       </div>
-
-//       <div className="text-right">
-//         <Controller
-//           name="thumbnail"
-//           control={control}
-//           render={({ field, fieldState }) => (
-//             <Thumbnail
-//               value={field.value}
-//               onChange={field.onChange}
-//               error={fieldState.error}
-//             />
-//           )}
-//         />
-//         <Controller
-//           name="images"
-//           control={control}
-//           render={({ field, fieldState }) => (
-//             <Images
-//               value={field.value}
-//               onChange={field.onChange}
-//               multiple
-//               error={fieldState.error}
-//             />
-//           )}
-//         />
-//       </div>
-
-//       <button
-//         type="submit"
-//         disabled={isPending}
-//         className="bg-textColor text-gray-900 font-bold p-2 rounded hover:bg-white hover:text-gray-900 transition"
-//       >
-//         {isPending ? "در حال ویرایش..." : "ویرایش"}
-//       </button>
-//     </form>
-//   );
-// };
-
-// export default EditProductForm;
+export default EditProductForm;

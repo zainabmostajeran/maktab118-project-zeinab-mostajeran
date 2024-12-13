@@ -242,10 +242,10 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
               <td>
                 <div className="flex gap-x-2 items-center justify-center text-gray-800 ">
                   <button
-                    // onClick={() => {
-                    //   setSelectedProduct(item);
-                    //   setIsModalOpen(true);
-                    // }}
+                    onClick={() => {
+                      setSelectedProduct(item);
+                      setIsModalOpen(true);
+                    }}
                     className="px-2 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg"
                   >
                     ویرایش
@@ -315,8 +315,7 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
         </Link>
       </div> */}
 
-      {/* Edit Modal */}
-      {/* <Modal
+      <Modal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
@@ -332,7 +331,7 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
             product={selectedProduct}
           />
         )}
-      </Modal> */}
+      </Modal>
     </section>
   );
 };
