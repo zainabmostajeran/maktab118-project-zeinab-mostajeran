@@ -7,7 +7,6 @@ import { useSearchParams } from "next/navigation";
 import ToggleGroup from "@/components/admin/order/ToggleGroup";
 import { withAuth } from "@/components/auth/WithAuth";
 
-
 const OrdersPage: React.FC = () => {
   const searchParams = useSearchParams();
   const pageParam = searchParams.get("page");
@@ -18,11 +17,11 @@ const OrdersPage: React.FC = () => {
   }, [pageParam]);
 
   return (
-    <section className="mx-auto">
-        <div className="text-center block sm:flex sm:items-center sm:justify-between">
+    <section className=" mx-auto">
+      <div className="flex items-center justify-between px-16">
         <PageTitle title="سفارش ها" />
-          <ToggleGroup />
-        </div>
+        <ToggleGroup />
+      </div>
       <Suspense fallback={<div>در حال بارگذاری...</div>}>
         <OrderList page={currentPage} />
       </Suspense>

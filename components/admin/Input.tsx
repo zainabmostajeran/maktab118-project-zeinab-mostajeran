@@ -26,7 +26,7 @@ export const Input: React.FC<IInput> = ({
       <input
         type="text"
         className={classNames(
-          "border  rounded-md py-1 px-2 hover:outline focus:outline","text-right",
+          "border  rounded-md py-1  hover:outline focus:outline","text-right",
           "placeholder:text-xs placeholder:font-medium",
           !!error ? "border-red-500" : "border-slate-300",
           !!error ? "outline-red-500" : "outline-slate-200",

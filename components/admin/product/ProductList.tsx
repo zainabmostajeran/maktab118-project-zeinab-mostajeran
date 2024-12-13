@@ -12,7 +12,8 @@ import { classNames } from "@/utils/classname";
 import Modal from "@/components/ui/Modal";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
+import EditProductForm from "@/components/admin/product/EditProductForm";
+import { useDeleteProduct } from "@/apis/mutation/useDeleteProduct";
 
 const Pagination: React.FC<{
   currentPage: number;
@@ -118,8 +119,10 @@ const Pagination: React.FC<{
 };
 
 export const ProductList: React.FC<{ page: number }> = ({ page }) => {
-
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<IProducts | null>(
+    null
+  );
   const {
     data: productsData,
     isLoading: productsLoading,
@@ -133,6 +136,12 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
         limit: String(productsLimit),
       }),
   });
+  // const deleteProductMutation = useDeleteProduct();
+
+  // const HandleDelete = async (id: string) => {
+  //   if (!confirm("آیا مطمئن هستید که می‌خواهید این کالا را حذف کنید؟")) return;
+  //   deleteProductMutation.mutate(id);
+  // };
 
   const {
     data: categoriesData,
@@ -233,11 +242,16 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
               <td>
                 <div className="flex gap-x-2 items-center justify-center text-gray-800 ">
                   <button
+                    // onClick={() => {
+                    //   setSelectedProduct(item);
+                    //   setIsModalOpen(true);
+                    // }}
                     className="px-2 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg"
                   >
                     ویرایش
                   </button>
                   <button
+                    // onClick={() => HandleDelete(item._id)}
                     className="bg-red-500 px-2 py-1 hover:bg-red-400 rounded-lg"
                   >
                     حذف
@@ -300,6 +314,25 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
           </button>
         </Link>
       </div> */}
+
+      {/* Edit Modal */}
+      {/* <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedProduct(null);
+        }}
+      >
+        {selectedProduct && (
+          <EditProductForm
+            onClose={() => {
+              setIsModalOpen(false);
+              setSelectedProduct(null);
+            }}
+            product={selectedProduct}
+          />
+        )}
+      </Modal> */}
     </section>
   );
 };
