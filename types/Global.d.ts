@@ -9,3 +9,5 @@ interface IReqGetData {
 interface IReqGetById {
   id: string;
 }
+
+

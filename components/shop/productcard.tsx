@@ -21,10 +21,11 @@ export const ProductCard: React.FC<IProducts> = ({
   images,
   name,
   price,
-  id
+  _id,
+
 }) => {
   return (
-    <Link href={`/shop/product/${id}`}>
+    <Link href={`/shop/product/${_id}`}>
       <section className="flex items-center justify-start gap-x-5 rounded-lg bg-base">
       <Image
           className="p-2"
