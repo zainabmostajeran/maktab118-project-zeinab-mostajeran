@@ -21,7 +21,7 @@ export const ProductCard: React.FC<IProducts> = ({
   images,
   name,
   price,
-  id,
+  id
 }) => {
   return (
     <Link href={`/shop/product/${id}`}>
