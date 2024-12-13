@@ -136,12 +136,12 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
         limit: String(productsLimit),
       }),
   });
-  // const deleteProductMutation = useDeleteProduct();
+  const deleteProductMutation = useDeleteProduct();
 
-  // const HandleDelete = async (id: string) => {
-  //   if (!confirm("آیا مطمئن هستید که می‌خواهید این کالا را حذف کنید؟")) return;
-  //   deleteProductMutation.mutate(id);
-  // };
+  const HandleDelete = async (id: string) => {
+    if (!confirm("آیا مطمئن هستید که می‌خواهید این کالا را حذف کنید؟")) return;
+    deleteProductMutation.mutate(id);
+  };
 
   const {
     data: categoriesData,
@@ -251,7 +251,7 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
                     ویرایش
                   </button>
                   <button
-                    // onClick={() => HandleDelete(item._id)}
+                    onClick={() => HandleDelete(item._id)}
                     className="bg-red-500 px-2 py-1 hover:bg-red-400 rounded-lg"
                   >
                     حذف
