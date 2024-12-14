@@ -73,7 +73,7 @@ export const Thumbnail: React.FC<IThumbnail> = ({ value, onChange, error }) => {
         />
       </div>
       {error && (
-        <p className="text-red-500 text-xs capitalize font-semibold">
+        <p className="text-red-500 text-xs capitalize font-semibold pt-1">
           {error.message}
         </p>
       )}

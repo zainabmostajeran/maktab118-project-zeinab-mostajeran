@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 import { Input } from "@/components/admin/Input";
 import { ProductSchema, ProductSchemaType } from "@/validation/product";
-import WysiwygEditor from "@/components/admin/product/WysiwygEditor";
+import TinyMce from "@/components/admin/product/TinyMce";
 import { Thumbnail } from "@/components/admin/product/Thumbnail";
 import { Images } from "@/components/admin/product/Images";
 import { EditProducts } from "@/apis/services/products";
@@ -42,13 +42,12 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       category: product.category,
       subcategory: product.subcategory,
       brand: product.brand,
-      description: product.description,
-      thumbnail: null,
+      description:product.description ,
+      thumbnail:null,
       images: [],
     },
   });
 
-  // Fetch categories
   const {
     data: categoriesData,
     isLoading: categoriesLoading,
@@ -59,7 +58,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     queryFn: () => getCategories(),
   });
 
-  // Fetch subcategories
   const {
     data: subCategoriesData,
     isLoading: subCategoriesLoading,
@@ -70,13 +68,11 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     queryFn: () => getSubCategories(),
   });
 
-  // Watch the selected category to filter subcategories
   const selectedCategory = useWatch({
     control,
     name: "category",
   });
 
-  // Filter subcategories based on selected category
   const filteredSubCategories = React.useMemo(() => {
     if (!subCategoriesData?.data?.subcategories || !selectedCategory) return [];
 
@@ -93,7 +89,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     formData.append("price", data.price);
     formData.append("quantity", data.quantity);
     formData.append("brand", data.brand);
-    formData.append("description", data.description);
+    formData.append("description",data.description);
 
     if (data.thumbnail) {
       formData.append("thumbnail", data.thumbnail);
@@ -118,17 +114,18 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
   };
 
   useEffect(() => {
-    setValue("name", product.name);
-    setValue("price", product.price.toString());
-    setValue("quantity", product.quantity.toString());
-    setValue("category", product.category);
-    setValue("subcategory", product.subcategory);
-    setValue("brand", product.brand);
-    setValue("description", product.description);
-    // Note: If you want to prepopulate thumbnail and images, handle accordingly
+    if(product){
+    setValue("name", product.name || "");
+    setValue("price", product.price.toString()|| "");
+    setValue("quantity", product.quantity.toString()|| "");
+    setValue("category", product.category|| "");
+    setValue("subcategory", product.subcategory || "");
+    setValue("brand", product.brand || "");
+    setValue("description",product.description );
+    }
   }, [product, setValue]);
 
-  // Handle loading and error states
+
   if (categoriesLoading || subCategoriesLoading) {
     return (
       <div className="flex justify-center items-center">
@@ -150,7 +147,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col justify-center space-y-4 text-white pt-10 pb-6 overflow-hidden px-2"
     >
-      {/* Category and Subcategory */}
       <div className="flex justify-center gap-x-2">
         <div className="flex flex-col w-full justify-center">
           <label
@@ -215,7 +211,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
         </div>
       </div>
 
-      {/* Product Name and Price */}
       <div className="flex text-right gap-x-2 justify-center px-2">
         <div className="flex flex-col justify-center items-center">
           <Controller
@@ -249,7 +244,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
         </div>
       </div>
 
-      {/* quantity and Brand */}
       <div className="flex text-right gap-x-2 justify-center px-2">
         <Controller
           name="quantity"
@@ -288,7 +282,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
           name="description"
           control={control}
           render={({ field }) => (
-            <WysiwygEditor value={field.value} onChange={field.onChange} />
+            <TinyMce initialValue={field.value} onChange={field.onChange} />
           )}
         />
         {errors.description && (
@@ -298,7 +292,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
         )}
       </div>
 
-      {/* Thumbnail and Images */}
       <div className="text-right">
         <Controller
           name="thumbnail"
@@ -325,7 +318,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
         />
       </div>
 
-      {/* Submit Button */}
       <button
         type="submit"
         disabled={isPending}

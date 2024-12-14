@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 import { Input } from "@/components/admin/Input";
 import { ProductSchema, ProductSchemaType } from "@/validation/product";
-import WysiwygEditor from "@/components/admin/product/WysiwygEditor";
+import TinyMce from "@/components/admin/product/TinyMce";
 import { Thumbnail } from "@/components/admin/product/Thumbnail";
 import { Images } from "@/components/admin/product/Images";
 import { AddProducts } from "@/apis/services/products";
@@ -25,6 +25,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
 
   const {
     control,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<ProductSchemaType>({
@@ -42,6 +43,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
       images: [],
     },
   });
+
 
   const {
     data: categoriesData,
@@ -156,7 +158,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
             )}
           />
           {errors.category && (
-            <p className="text-red-500 text-xs font-semibold capitalize">
+            <p className="text-red-500 text-xs font-semibold capitalize pt-1">
               {errors.category.message}
             </p>
           )}
@@ -187,7 +189,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
             )}
           />
           {errors.subcategory && (
-            <p className="text-red-500 text-xs font-semibold capitalize">
+            <p className="text-red-500 text-xs font-semibold capitalize pt-1">
               {errors.subcategory.message}
             </p>
           )}
@@ -195,7 +197,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
       </div>
 
       <div className="flex text-right gap-x-2 justify-center px-2">
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center text-gray-800">
           <Controller
             name="name"
             control={control}
@@ -210,7 +212,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
             )}
           />
         </div>
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center text-gray-800">
           <Controller
             name="price"
             control={control}
@@ -227,7 +229,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
         </div>
       </div>
 
-      <div className="flex text-right gap-x-2 justify-center px-2">
+      <div className="flex text-right gap-x-2 justify-center px-2 text-gray-800">
         <Controller
           name="quantity"
           control={control}
@@ -255,8 +257,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
           )}
         />
       </div>
-
-     
       <div className="text-right">
         <label className="text-textColor font-semibold text-sm">
           توضیحات کالا
@@ -265,11 +265,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
           name="description"
           control={control}
           render={({ field }) => (
-            <WysiwygEditor value={field.value} onChange={field.onChange} />
+            <TinyMce initialValue={field.value} onChange={field.onChange} />
           )}
         />
         {errors.description && (
-          <p className="text-red-500 text-xs capitalize font-semibold">
+          <p className="text-red-500 text-xs capitalize font-semibold pt-1">
             {errors.description.message}
           </p>
         )}
@@ -301,8 +301,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
           )}
         />
       </div>
-
-  
       <button
         type="submit"
         disabled={isPending}

@@ -1,5 +1,5 @@
 import { urls } from "../urls";
-import { generateClient } from "../client";
+import axiosInstance from "../client";
 
 type GetProductsType = (params: IReqGetProduct) => Promise<IProductsResponse>;
 type AddProductType = (data: FormData) => Promise<{ message: string }>;
@@ -15,26 +15,26 @@ export const getProducts: GetProductsType = async ({
   if (page) params.append("page", page);
   if (limit) params.append("limit", limit);
 
-  const response = await generateClient().get(
+  const response = await axiosInstance.get(
     `${urls.products.list}?${params.toString()}`
   );
   return response.data;
 };
 
 export const AddProducts: AddProductType = async (data) => {
-  const response = await generateClient().post(urls.products.add, data, {
+  const response = await axiosInstance.post(urls.products.add, data, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return response.data;
 };
 
 export const DeleteProducts: DeleteProductsType = async (id) => {
-  const response = await generateClient().delete(`${urls.products.byId(id)}`);
+  const response = await axiosInstance.delete(`${urls.products.byId(id)}`);
   return response.data;
 };
 
 export const EditProducts: EditProductsType = async (id, data) => {
-  const response = await generateClient().patch(
+  const response = await axiosInstance.patch(
     `${urls.products.byId(id)}`,
     data,
     {
@@ -45,6 +45,6 @@ export const EditProducts: EditProductsType = async (id, data) => {
 };
 
 export const fetchProductById: FetchProductByIdType = async (id) => {
-  const response = await generateClient().get(`${urls.products.byId(id)}`);
+  const response = await axiosInstance.get(`${urls.products.byId(id)}`);
   return response.data;
 };

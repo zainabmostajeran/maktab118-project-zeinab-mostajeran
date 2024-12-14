@@ -17,7 +17,7 @@ export default async function SingleProductPage({params,}: {params: { id: string
     notFound();
   }
   return (
-    <div className="flex justify-start items-start gap-x-10  py-10 px-4">
+    <div className="flex justify-start items-start gap-x-10  py-10 px-4  shadow-lg">
       <div>
         <Image
           src={`http://localhost:8000/images/products/images/${product.data.product.images[0]}`}

@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { classNames } from "@/utils/classname";
 
-
 const Pagination: React.FC<{
   currentPage: number;
   totalPages: number;
@@ -113,9 +112,17 @@ const Pagination: React.FC<{
 };
 
 
-
-
-export const PriceList: React.FC<{ page: number }> = ({ page }) => {
+export const PriceList: React.FC<{
+  page: number;
+  editedProducts: {
+    [key: string]: { price?: number; quantity?: number };
+  };
+  onInputChange: (
+    productId: string,
+    field: "price" | "quantity",
+    value: number
+  ) => void;
+}> = ({ page, editedProducts, onInputChange }) => {
   const {
     data: productsData,
     isLoading: productsLoading,
@@ -130,6 +137,7 @@ export const PriceList: React.FC<{ page: number }> = ({ page }) => {
       }),
     keepPreviousData: true,
   });
+
   const totalPages = React.useMemo(() => {
     if (!productsData?.total || !productsLimit) return 1;
     return Math.ceil(Number(productsData.total) / Number(productsLimit));
@@ -156,7 +164,7 @@ export const PriceList: React.FC<{ page: number }> = ({ page }) => {
   }
   return (
     <section className="flex flex-col items-center justify-center py-6">
-      <table className="w-full text-white shadow-lg rounded-lg">
+      <table className="w-full text-white border-collapse border-slate-300 shadow-md overflow-scroll rounded-lg">
         <thead className="h-6">
           <tr className="bg-textColor text-center text-gray-800">
             <th className="h-12 text-center">کالا</th>
@@ -177,76 +185,37 @@ export const PriceList: React.FC<{ page: number }> = ({ page }) => {
                   type="number"
                   placeholder={item.price}
                   min={0}
-                  defaultValue={item.price}
+                  value={
+                    editedProducts[item._id]?.price !== undefined
+                      ? editedProducts[item._id].price
+                      : item.price
+                  }
+                  onChange={(e) =>
+                    onInputChange(item._id, "price", Number(e.target.value))
+                  }
                 />
               </td>
               <td className="h-12">
-                <input 
+                <input
                   className="w-20 bg-transparent placeholder-slate-900 text-center"
                   type="number"
                   placeholder={item.quantity}
                   min={0}
-                  defaultValue={item.quantity}
+                  value={
+                    editedProducts[item._id]?.quantity !== undefined
+                      ? editedProducts[item._id].quantity
+                      : item.quantity
+                  }
+                  onChange={(e) =>
+                    onInputChange(item._id, "quantity", Number(e.target.value))
+                  }
                 />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* Pagination Controls */}
       <Pagination currentPage={page} totalPages={totalPages} />
-      {/* <div className="w-full flex justify-center items-center pt-10 gap-3">
-        <Link
-          href={`/admin/prices?${new URLSearchParams({
-            page: String(page - 1 < 1 ? 1 : page - 1),
-          })}`}
-        >
-          <button
-            className={classNames(
-              "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base  hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
-            )}
-            disabled={page - 1 < 1}
-          >
-            صفحه قبل
-          </button>
-        </Link>
-
-        {[1, 2, 3, 4].map((el) => (
-          <Link
-            key={el}
-            href={`/admin/prices?${new URLSearchParams({
-              page: String(el),
-            })}`}
-          >
-            <span
-              className={`cursor-pointer px-2 py-1 hover:bg-white ${
-                el === page ? "bg-gray-300" : ""
-              }`}
-            >
-              {el.toLocaleString("ar-EG")}
-            </span>
-          </Link>
-        ))}
-
-        
-        <Link
-          href={`/admin/prices?${new URLSearchParams({
-            page: String(page + 1 > totalPages ? page : page + 1),
-          })}`}
-        >
-          <button
-            className={classNames(
-              "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
-            )}
-            disabled={page + 1 > totalPages}
-          >
-            صفحه بعد
-          </button>
-        </Link>
-      </div> */}
     </section>
   );
 };

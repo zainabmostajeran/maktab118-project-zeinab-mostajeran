@@ -73,13 +73,13 @@ const SubcategoryPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-7">
+    <div className="container mx-auto px-7 ">
       <h2 className="text-2xl font-semibold mb-4">
         {subcategoryData?.name || "دسته‌بندی"}
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
         {productsData?.data?.products.map((product) => (
-          <ProductCard key={product._id} {...product} />
+          <ProductCard  key={product._id} {...product}  />
         ))}
       </div>
     </div>

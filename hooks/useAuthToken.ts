@@ -10,7 +10,7 @@ import {
   getTokenExpiration,
   removeTokens,
 } from "@/libs/session-manager";
-import { generateClient } from "@/apis/client";
+import axiosInstance from "@/apis/client";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/redux/store";
 
@@ -33,7 +33,7 @@ const useAuthToken = () => {
     }
 
     try {
-      const response = await generateClient().post("/auth/token", {
+      const response = await axiosInstance.post("/auth/token", {
         refreshToken,
       });
       const { accessToken, refreshToken: newRefreshToken } =
