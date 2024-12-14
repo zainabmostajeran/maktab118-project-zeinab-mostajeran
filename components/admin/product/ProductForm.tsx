@@ -146,7 +146,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
             render={({ field }) => (
               <select
                 {...field}
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className={`border  text-gray-900 text-sm rounded-lg  outline-none w-full p-2.5  ${errors.category?'border-red-500':'border-gray-300'}`}
               >
                 <option value="">انتخاب دسته‌بندی</option>
                 {categoriesData?.data?.categories.map((category: ICategory) => (
@@ -177,7 +177,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
               <select
                 {...field}
                 disabled={!selectedCategory}
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className={`border  text-gray-900 text-sm rounded-lg  outline-none w-full p-2.5  ${errors.category?'border-red-500':'border-gray-300'}`}
               >
                 <option value="">انتخاب زیردسته‌بندی</option>
                 {filteredSubCategories.map((subcat: ISubcategory) => (

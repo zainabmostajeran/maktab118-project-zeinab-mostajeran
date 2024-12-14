@@ -282,7 +282,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
           name="description"
           control={control}
           render={({ field }) => (
-            <TinyMce initialValue={field.value} onChange={field.onChange} />
+            <TinyMce initialValue={field.value} onChange={content=>field.onChange(content)} />
           )}
         />
         {errors.description && (

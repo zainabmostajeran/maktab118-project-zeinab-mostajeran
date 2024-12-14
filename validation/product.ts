@@ -27,6 +27,13 @@ export const ProductSchema = z.object({
     return validThumbnailTypes.includes(file?.type);
   }, ` عکس مربوط به محصول را حتما با تایپ ${validThumbnailTypes.join(", ")} وارد کنید `),
   description: z.string().nonempty("توضیحات الزامی است"),
-  images: z.array(z.any()).optional(),
+  images: z.array(
+    z.instanceof(File).refine((file) => file.size <= 2 * 1024 * 1024, {
+      message: "حجم فایل نباید بیشتر از 2 مگابایت باشد",
+    })
+    .refine((file) => ["image/jpeg", "image/png"].includes(file.type), {
+      message: "فرمت فایل باید jpg یا png باشد",
+    })
+  ).min(1, "حداقل یک تصویر باید آپلود شود").max(5, "حداکثر می‌توانید ۵ تصویر آپلود کنید")
 });
 export type ProductSchemaType = z.infer<typeof ProductSchema>;
