@@ -1,29 +1,23 @@
 "use client";
 
-import { classNames } from "@/utils/classname";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface IThumbnail {
   value: File | null;
   onChange: (file: File | null) => void;
   error?: any;
+  existingUrl?: string | null;
 }
 
-export const Thumbnail: React.FC<IThumbnail> = ({ value, onChange, error }) => {
-  const [url, setUrl] = React.useState<string | undefined>(undefined);
+export const Thumbnail: React.FC<IThumbnail> = ({
+  value,
+  onChange,
+  error,
+  existingUrl,
+}) => {
   const inputRef = React.useRef<HTMLInputElement | null>(null);
-
-  React.useEffect(() => {
-    if (value) {
-      const objectUrl = URL.createObjectURL(value);
-      setUrl(objectUrl);
-
-      return () => URL.revokeObjectURL(objectUrl);
-    } else {
-      setUrl(undefined);
-    }
-  }, [value]);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const handleClick = () => {
     inputRef.current?.click();
@@ -34,6 +28,17 @@ export const Thumbnail: React.FC<IThumbnail> = ({ value, onChange, error }) => {
     onChange(file);
   };
 
+  useEffect(() => {
+    if (value) {
+      const objectUrl = URL.createObjectURL(value);
+      setPreview(objectUrl);
+
+      return () => URL.revokeObjectURL(objectUrl);
+    } else {
+      setPreview(null);
+    }
+  }, [value]);
+
   return (
     <div>
       <label className="text-textColor text-sm capitalize font-semibold">
@@ -41,25 +46,29 @@ export const Thumbnail: React.FC<IThumbnail> = ({ value, onChange, error }) => {
       </label>
       <div
         onClick={handleClick}
-        className={classNames(
-          "relative border rounded-md flex",
-          "items-center justify-center h-16 hover:bg-slate-50 cursor-pointer",
+        className={`relative border rounded-md flex items-center justify-center h-16 hover:bg-slate-50 cursor-pointer ${
           error ? "border-red-700" : "border-slate-300"
-        )}
+        }`}
       >
-        {url ? (
+        {preview ? (
           <Image
-            src={url}
+            src={preview}
             fill={true}
             alt="Thumbnail Preview"
             className="object-cover object-center rounded-md"
           />
+        ) : existingUrl ? (
+          <Image
+            src={existingUrl}
+            fill={true}
+            alt="Existing Thumbnail"
+            className="object-cover object-center rounded-md"
+          />
         ) : (
           <p
-            className={classNames(
-              "text-xs font-bold",
+            className={`text-xs font-bold ${
               error ? "text-red-700" : "text-textColor"
-            )}
+            }`}
           >
             انتخاب عکس محصول
           </p>

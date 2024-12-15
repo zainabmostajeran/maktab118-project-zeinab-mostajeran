@@ -23,7 +23,7 @@ const SubcategoryPage: React.FC = () => {
   });
 
   const subcategoryId = subcategoryData?._id;
-  const productsLimit = 10;
+  const productsLimit = 20;
 
   const {
     data: productsData,
@@ -75,7 +75,7 @@ const SubcategoryPage: React.FC = () => {
   return (
     <div className="container mx-auto px-7 ">
       <h2 className="text-2xl font-semibold mb-4">
-        {subcategoryData?.name || "دسته‌بندی"}
+        {subcategoryData?.name}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
         {productsData?.data?.products.map((product) => (

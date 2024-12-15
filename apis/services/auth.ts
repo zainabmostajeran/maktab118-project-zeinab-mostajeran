@@ -8,3 +8,8 @@ export const login: loginType = async (body) => {
   const response = await axiosInstance.post(urls.auth.loginIn, body);
   return {data:response.data.data,token:response.data.token};
 };
+
+export const Logout = async () => {
+  const response = await axiosInstance.post(urls.auth.logout);
+  return response.data
+};

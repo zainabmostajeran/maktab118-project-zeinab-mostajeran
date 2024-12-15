@@ -2,7 +2,7 @@ export const urls = {
   auth: {
     signup: "auth/signup",
     loginIn: "/auth/login",
-    byTag: "auth/logout",
+    logout: "auth/logout",
   },
   products: {
     add: "/products",

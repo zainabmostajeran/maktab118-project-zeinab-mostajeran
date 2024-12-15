@@ -19,20 +19,20 @@ import {
             icon: Pizza ,
             title: "پیتزا",
             variant: "ghost",
-            href:"/shop/category/slugname",
+            href:"/shop/category/pyza",
           },
           {
             icon: Drumstick ,
             title: "فرنگی",
             variant: "ghost",
-            href:"/shop/category/slugname"
+            href:"/shop/category/frngy"
           },
 
           {
             icon:Salad  ,
             title: "پیش غذا",
             variant: "ghost",
-            href:"/shop/category/slugname"
+            href:"/shop/category/pysh-ghtha"
           },
 
         ]}

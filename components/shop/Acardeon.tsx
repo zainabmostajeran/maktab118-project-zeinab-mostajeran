@@ -3,7 +3,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
+import Link from "next/link";
 
 export function AccordionDemo() {
   return (
@@ -11,30 +12,22 @@ export function AccordionDemo() {
       <AccordionItem value="item-1">
         <AccordionTrigger>پیتزا</AccordionTrigger>
         <AccordionContent>
-          پیتزا دونفره
+          <Link href="/shop/category/pyza/pytzadw-nfrh">پیتزا دونفره</Link>
         </AccordionContent>
         <AccordionContent>
-          پیتزا تک نفره
+          <Link href="/shop/category/pyza/pytzatk-nfrh">پیتزا تک نفره</Link>
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
         <AccordionTrigger>فرنگی</AccordionTrigger>
-        <AccordionContent>
-          مرغ سوخاری
-        </AccordionContent>
-        <AccordionContent>
-         ساندویچ
-        </AccordionContent>
+        <AccordionContent></AccordionContent>
+        <AccordionContent>ساندویچ</AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-3">
         <AccordionTrigger>پیش غذا</AccordionTrigger>
-        <AccordionContent>
-          سالاد
-        </AccordionContent>
-        <AccordionContent>
-          سیب زمینی
-        </AccordionContent>
+        <AccordionContent>سالاد</AccordionContent>
+        <AccordionContent>سیب زمینی</AccordionContent>
       </AccordionItem>
     </Accordion>
-  )
+  );
 }

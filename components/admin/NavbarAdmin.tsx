@@ -4,10 +4,21 @@ import { FaHome } from "react-icons/fa";
 import { ImExit } from "react-icons/im";
 import { IoMenu } from "react-icons/io5";
 import { useState } from "react";
+import { removeTokens } from "@/libs/session-manager";
+import { useRouter } from "next/router";
 import Image from "next/image";
+import { useEffect } from "react";
+import { uselogout } from "@/apis/mutation/logout";
 
 const NavbarAdmin: React.FC = () => {
   const [hiddenMenu, sethiddenMenu] = useState(true);
+
+  // const logout = uselogout();
+  // const { push } = useRouter();
+  // const HandleExit = () => {
+  //   logout.mutate();
+  //   push("/auth/login/admin")
+  // };
 
   return (
     <nav className="bg-base px-6 text-textColor">
@@ -25,16 +36,17 @@ const NavbarAdmin: React.FC = () => {
         </div>
         <div className="flex items-center justify-center ">
           <div className="hidden sm:flex gap-x-2 md:flex md:gap-x-8 items-center justify-center">
-          <div className="flex items-center justify-start gap-x-1">
+            <div className="flex items-center justify-start gap-x-1">
               <Link className="hover:underline" href="/">
                 خانه
               </Link>
               <FaHome />
             </div>
-            <div className="flex items-center justify-start gap-x-1">
-              <Link className="hover:underline" href="/auth/login/admin">
-                خروج
-              </Link>
+            <div
+           
+              className="flex items-center justify-start gap-x-1"
+            >
+              خروج
               <ImExit />
             </div>
           </div>
@@ -51,19 +63,19 @@ const NavbarAdmin: React.FC = () => {
           }`}
         >
           <div className="flex flex-col  gap-y-4 pl-10 pb-6 pt-5 text-{16px} font-semibold">
-          <div className="flex items-center justify-start gap-x-2">
+            <div className="flex items-center justify-start gap-x-2">
               <Link className="hover:underline" href="/cart">
                 خانه
               </Link>
               <FaHome />
             </div>
-            <div className="flex items-center justify-start gap-x-2">
-              <Link className="hover:underline" href="/">
-                خروج
-              </Link>
+            <div
+        
+              className="flex items-center justify-start gap-x-2 hover:underline"
+            >
+              خروج
               <ImExit />
             </div>
-
           </div>
         </div>
       </div>

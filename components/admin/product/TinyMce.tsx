@@ -13,6 +13,7 @@ const TinyEditor: FC<TinyEditorProps> = ({ initialValue, onChange }) => {
 
   return (
     <Editor
+    apiKey="daerjr81ozjsh5dzwev7atd8vuchgesytt2smzw254uvp0z8"
       initialValue={initialValue}
       init={{
         height: 300,

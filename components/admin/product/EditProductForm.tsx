@@ -42,8 +42,8 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       category: product.category,
       subcategory: product.subcategory,
       brand: product.brand,
-      description:product.description ,
-      thumbnail:null,
+      description: product.description,
+      thumbnail: null,
       images: [],
     },
   });
@@ -89,7 +89,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     formData.append("price", data.price);
     formData.append("quantity", data.quantity);
     formData.append("brand", data.brand);
-    formData.append("description",data.description);
+    formData.append("description", data.description);
 
     if (data.thumbnail) {
       formData.append("thumbnail", data.thumbnail);
@@ -114,17 +114,16 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
   };
 
   useEffect(() => {
-    if(product){
-    setValue("name", product.name || "");
-    setValue("price", product.price.toString()|| "");
-    setValue("quantity", product.quantity.toString()|| "");
-    setValue("category", product.category|| "");
-    setValue("subcategory", product.subcategory || "");
-    setValue("brand", product.brand || "");
-    setValue("description",product.description );
+    if (product) {
+      setValue("name", product.name || "");
+      setValue("price", product.price.toString() || "");
+      setValue("quantity", product.quantity.toString() || "");
+      setValue("category", product.category || "");
+      setValue("subcategory", product.subcategory || "");
+      setValue("brand", product.brand || "");
+      setValue("description", product.description);
     }
   }, [product, setValue]);
-
 
   if (categoriesLoading || subCategoriesLoading) {
     return (
@@ -282,7 +281,10 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
           name="description"
           control={control}
           render={({ field }) => (
-            <TinyMce initialValue={field.value} onChange={content=>field.onChange(content)} />
+            <TinyMce
+              initialValue={field.value}
+              onChange={(content) => field.onChange(content)}
+            />
           )}
         />
         {errors.description && (
@@ -301,6 +303,11 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
               value={field.value}
               onChange={field.onChange}
               error={fieldState.error}
+              existingUrl={
+                product.thumbnail
+                  ? `http://localhost:8000/images/products/thumbnails/${product.thumbnail}`
+                  : null
+              }
             />
           )}
         />
@@ -313,6 +320,9 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
               onChange={field.onChange}
               multiple
               error={fieldState.error}
+              existingUrls={product.images.map(
+                (img) => `http://localhost:8000/images/products/images/${img}`
+              )}
             />
           )}
         />
