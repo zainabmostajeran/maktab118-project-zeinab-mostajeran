@@ -3,22 +3,31 @@ import Link from "next/link";
 import { FaHome } from "react-icons/fa";
 import { ImExit } from "react-icons/im";
 import { IoMenu } from "react-icons/io5";
-import { useState } from "react";
-import { removeTokens } from "@/libs/session-manager";
-import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useEffect } from "react";
-import { uselogout } from "@/apis/mutation/logout";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/redux/slices/authSlice";
+import { RootState } from "@/redux/store";
 
 const NavbarAdmin: React.FC = () => {
   const [hiddenMenu, sethiddenMenu] = useState(true);
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  // const logout = uselogout();
-  // const { push } = useRouter();
-  // const HandleExit = () => {
-  //   logout.mutate();
-  //   push("/auth/login/admin")
-  // };
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace("/auth/login");
+    }
+  }, [isAuthenticated, router]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <nav className="bg-base px-6 text-textColor">
@@ -43,8 +52,8 @@ const NavbarAdmin: React.FC = () => {
               <FaHome />
             </div>
             <div
-           
-              className="flex items-center justify-start gap-x-1"
+              onClick={handleLogout}
+              className="flex items-center justify-start gap-x-1 cursor-pointer hover:underline"
             >
               خروج
               <ImExit />
@@ -69,10 +78,7 @@ const NavbarAdmin: React.FC = () => {
               </Link>
               <FaHome />
             </div>
-            <div
-        
-              className="flex items-center justify-start gap-x-2 hover:underline"
-            >
+            <div className="flex items-center justify-start gap-x-2 hover:underline">
               خروج
               <ImExit />
             </div>

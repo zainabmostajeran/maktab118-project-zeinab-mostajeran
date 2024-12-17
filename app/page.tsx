@@ -9,7 +9,7 @@ import { MdOutlineArrowLeft } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { getCategories } from "@/apis/services/categories";
-import SubcategoryList from "@/components/shop/SubcategoryList";
+import ProductList from "@/components/shop/ProductList";
 
 const Home: React.FC = () => {
   const {
@@ -43,7 +43,7 @@ const Home: React.FC = () => {
         </div>
         <div className="flex justify-between items-center px-4 py-4 text-slate-900">
           {/* Toggle Category */}
-          <ToggleCategory />
+          <ToggleCategory categories={categoriesData.data.categories} />
           <div className="relative text-white">
             <input
               type="text"
@@ -64,12 +64,12 @@ const Home: React.FC = () => {
           {categoriesData?.data?.categories.map((category) => (
             <div key={category._id} className="text-right">
               <div className="flex items-center justify-start gap-x-2 mb-4">
-                <Link href={`/shop/category/${category.slugname}`}>
-                  <p className="font-bold text-2xl">{`گروه انواع ${category.name}`}</p>
+                <Link href={`/shop/group/${category.slugname}`}>
+                  <p className="font-bold text-2xl py-2">{`گروه انواع ${category.name}`}</p>
                 </Link>
                 <MdOutlineArrowLeft className="size-5 border border-textColor" />
               </div>
-              <SubcategoryList category={category} />
+              <ProductList key={category._id} category={category} limit={6}/>
             </div>
           ))}
         </div>

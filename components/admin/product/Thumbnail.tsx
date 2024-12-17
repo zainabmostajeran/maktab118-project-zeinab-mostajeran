@@ -46,7 +46,7 @@ export const Thumbnail: React.FC<IThumbnail> = ({
       </label>
       <div
         onClick={handleClick}
-        className={`relative border rounded-md flex items-center justify-center h-16 hover:bg-slate-50 cursor-pointer ${
+        className={`relative border rounded-md flex items-center  justify-center h-32 hover:bg-slate-50 cursor-pointer ${
           error ? "border-red-700" : "border-slate-300"
         }`}
       >
@@ -55,14 +55,15 @@ export const Thumbnail: React.FC<IThumbnail> = ({
             src={preview}
             fill={true}
             alt="Thumbnail Preview"
-            className="object-cover object-center rounded-md"
+            className="object-contain object-center rounded-md"
+            
           />
         ) : existingUrl ? (
           <Image
             src={existingUrl}
             fill={true}
             alt="Existing Thumbnail"
-            className="object-cover object-center rounded-md"
+            className="object-contain object-center rounded-md "
           />
         ) : (
           <p

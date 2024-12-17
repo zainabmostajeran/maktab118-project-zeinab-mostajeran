@@ -3,7 +3,6 @@ import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 
-
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -18,37 +17,37 @@ export function CarouselPlugin() {
   const plugin = React.useRef(
     Autoplay({ delay: 1800, stopOnInteraction: true })
   );
+  const images = ["/carousel1.jpg", "/carousel2.jpg"];
   return (
     <div dir="ltr">
-    <Carousel
-      plugins={[plugin.current]}
-      className="w-full"
-      onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
-    >
-      <CarouselContent>
-        {Array.from({ length: 3 }).map((_, index) => (
-          <CarouselItem key={index}>
-            <div>
-              <Card>
-                <CardContent className="flex">
-                  <span className="text-4xl font-semibold">
+      <Carousel
+        plugins={[plugin.current]}
+        className="w-full"
+        onMouseEnter={plugin.current.stop}
+        onMouseLeave={plugin.current.reset}
+      >
+        <CarouselContent>
+          {images.map((src, index) => (
+            <CarouselItem key={index}>
+              <div className="h-full">
+                <Card className="h-full">
+                  <CardContent className="flex h-full">
                     <Image
-                      src="/carousel2.jpg"
+                      className="object-fill"
+                      src={src}
                       width={1400}
-                      height={20}
-                      alt="Picture of the author"
+                      height={1200}
+                      alt={`carousel Image ${index + 1}`}
                     />
-                  </span>
-                </CardContent>
-              </Card>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
     </div>
   );
 }

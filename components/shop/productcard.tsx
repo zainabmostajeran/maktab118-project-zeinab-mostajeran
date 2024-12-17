@@ -22,23 +22,21 @@ export const ProductCard: React.FC<IProducts> = ({
   name,
   price,
   _id,
-
 }) => {
   return (
-    <Link className="hover:bg-white  shadow-md" href={`/shop/product/${_id}`}>
-      <section className="flex items-center justify-start gap-x-5 rounded-lg bg-base hover:bg-slate-500  ">
-      <Image
-          className="p-2"
+    <Link className="" href={`/shop/product/${_id}`}>
+      <section className=" flex items-center justify-start text-textColor shadow-lg hover:text-gray-800 gap-x-5 rounded-lg bg-base hover:bg-white h-48">
+        <Image
+          className="p-2 object-cover"
           src={`http://localhost:8000/images/products/images/${images[0]}`}
-          width={100}
-          height={20}
+          width={200}
+          height={200}
           alt="Picture of the author"
         />
-        <div className="flex flex-col items-centers justify-center  gap-y-2">
+        <div className="flex flex-col items-start justify-center  h-full p-4">
           <p className="font-semibold">{name}</p>
           <p>{price.toLocaleString("ar-EG")}</p>
         </div>
-
       </section>
     </Link>
   );

@@ -21,6 +21,11 @@ export const getProducts: GetProductsType = async ({
   return response.data;
 };
 
+export const getAllProducts: GetProductsType = async () => {
+  const response = await axiosInstance.get(`${urls.products.list}?limit=10000`);
+  return response.data;
+};
+
 export const AddProducts: AddProductType = async (data) => {
   const response = await axiosInstance.post(urls.products.add, data, {
     headers: { "Content-Type": "multipart/form-data" },

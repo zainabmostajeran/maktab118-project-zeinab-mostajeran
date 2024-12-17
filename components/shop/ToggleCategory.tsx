@@ -19,7 +19,7 @@ import {
             icon: Pizza ,
             title: "پیتزا",
             variant: "ghost",
-            href:"/shop/category/pyza",
+            href:"/shop/category/pytza",
           },
           {
             icon: Drumstick ,

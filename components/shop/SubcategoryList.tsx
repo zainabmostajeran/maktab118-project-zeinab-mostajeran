@@ -16,9 +16,8 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({ category }) => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["subcategories", category._id],
-    queryFn: () => getSubCategories(category._id),
-    enabled: !!category._id,
+    queryKey: ["subcategories"],
+    queryFn: getSubCategories,
   });
 
   if (isLoading) {
@@ -34,16 +33,19 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({ category }) => {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {subcategoriesData?.data?.subcategories.slice(0,4).map((subcategory) => (
-        <SubcategoryCard
-          key={subcategory._id}
-          categorySlugname={category.slugname}
-          subcategoryId={subcategory._id}
-          subcategoryName={subcategory.name}
-          subcategorySlugname={subcategory.slugname}
-        />
-      ))}
+    <div className="grid grid-cols-2 gap-4">
+      {subcategoriesData?.data?.subcategories
+        .filter((sub) => sub.category == category._id)
+        .map((subcategory) => (
+          <SubcategoryCard
+            key={subcategory._id}
+            subcategoryId={subcategory._id}
+            subcategoryName={subcategory.name}
+            subcategorySlugname={subcategory.slugname}
+            categorySlugname={category._id}
+            categoryIcon={category.icon}
+          />
+        ))}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCategoryBySlug } from "@/apis/services/categories";
 import SubcategoryList from "@/components/shop/SubcategoryList";
 import { MdOutlineArrowLeft } from "react-icons/md";
+import { SidebarCategory } from "@/components/shop/SidebarCategory";
 
 const CategoryPage: React.FC = () => {
   const params = useParams();
@@ -35,13 +36,20 @@ const CategoryPage: React.FC = () => {
   }
 
   return (
-    <section className="flex flex-col  gap-x-3 px-5 gap-y-3">
-      <div className="flex gap-x-2 items-center px-4">
-        <h1 className="text-3xl font-bold">{`گروه انواع ${categoryData.name}`}</h1>
-        <MdOutlineArrowLeft className="size-5 border border-textColor" />
-      </div>
-      <div className="container mx-auto max-w-[1400px] bg-second p-4">
-        <SubcategoryList category={categoryData} />
+    <section className="container mx-auto max-w-[1400px] bg-second">
+      <div className="flex flex-col gap-y-5 items-start justify-center">
+        <div className="flex gap-x-2 items-center px-4">
+          <h1 className="text-3xl font-bold">{`گروه انواع ${categoryData.name}`}</h1>
+          <MdOutlineArrowLeft className="size-5 border border-textColor" />
+        </div>
+        <div className="flex items-start justify-center gap-x-10">
+          <div>
+            <SidebarCategory />
+          </div>
+          <div>
+            <SubcategoryList category={categoryData} />
+          </div>
+        </div>
       </div>
     </section>
   );
