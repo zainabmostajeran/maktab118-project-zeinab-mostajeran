@@ -4,8 +4,8 @@ import React from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getSubCategoryBySlug } from "@/apis/services/subcategories";
-import { getProducts } from "@/apis/services/products";
-import { ProductCard } from "@/components/shop/ProductCard";
+import { getAllProducts } from "@/apis/services/products";
+import { ProductCard } from "@/components/shop/Productcard";
 import { SidebarCategory } from "@/components/shop/SidebarCategory";
 import { MdOutlineArrowLeft } from "react-icons/md";
 
@@ -25,7 +25,6 @@ const SubcategoryPage: React.FC = () => {
   });
 
   const subcategoryId = subcategoryData?._id;
-  const productsLimit = 20;
 
   const {
     data: productsData,
@@ -33,12 +32,8 @@ const SubcategoryPage: React.FC = () => {
     isError: isProductsError,
     error: productsError,
   } = useQuery<any>({
-    queryKey: ["products", subcategoryId],
-    queryFn: () =>
-      getProducts({
-        subcategory: subcategoryId!,
-        limit: String(productsLimit),
-      }),
+    queryKey: ["products"],
+    queryFn: getAllProducts,
     enabled: !!subcategoryId,
   });
 
@@ -78,19 +73,19 @@ const SubcategoryPage: React.FC = () => {
     <section className="container mx-auto max-w-[1400px] bg-second">
       <div className="flex flex-col gap-y-4 items-start justify-center">
         <div className="flex gap-x-2 items-center">
-          <h1 className="text-2xl font-semibold">
-            {subcategoryData?.name}
-          </h1>
+          <h1 className="text-2xl font-semibold">{subcategoryData?.name}</h1>
           <MdOutlineArrowLeft className="size-5 border border-textColor" />
         </div>
         <div className="flex items-start justify-center gap-x-10">
           <div>
             <SidebarCategory />
           </div>
-          <div className="bg-[rgb(188,184,138)] py-6 px-3 rounded-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3  gap-4">
-            {productsData?.data?.products.map((product) => (
-              <ProductCard key={product._id} {...product} />
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            {productsData?.data?.products
+              .filter((product) => product.subcategory == subcategoryId)
+              .map((product: any) => (
+                <ProductCard key={product._id} {...product} />
+              ))}
           </div>
         </div>
       </div>

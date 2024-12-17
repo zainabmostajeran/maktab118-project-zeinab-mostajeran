@@ -21,18 +21,18 @@ const SubcategoryCard: React.FC<SubcategoryCardProps> = ({
 }) => {
   return (
     <Link
-      className="rounded-md block bg-base text-textColor p-4 shadow-lg hover:bg-textColor hover:text-base "
+      className="rounded-md block bg-base text-textColor shadow-lg hover:bg-textColor hover:text-base "
       href={`/shop/category/${categorySlugname}/${subcategorySlugname}`}
     >
-      <div className=" border flex flex-col items-center">
+      <div className="p-10 border flex flex-col items-center">
+        <h3 className="text-xl font-semibold mb-4">{subcategoryName}</h3>
         <Image
-          className="object-cover"
+          className="p-2 object-cover"
           src={`http://localhost:8000/images/categories/icons/${categoryIcon}`}
           width={200}
           height={200}
           alt="Picture of the author"
         />
-        <h3 className="text-xl font-semibold py-3">{subcategoryName}</h3>
       </div>
     </Link>
   );
