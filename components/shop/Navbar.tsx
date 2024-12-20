@@ -6,9 +6,13 @@ import { RiAdminFill } from "react-icons/ri";
 import { IoMenu } from "react-icons/io5";
 import { useState } from "react";
 import Image from "next/image";
+import { useAppSelector } from "@/redux/Hook";
+
 
 const Navbar: React.FC = () => {
   const [hiddenMenu, sethiddenMenu] = useState(true);
+  const cartCount = useAppSelector((state) => state.cart.cart.length);
+
   return (
     <nav className="bg-base px-6 ">
       <div className="container mx-auto flex item-center justify-between max-w-[1400px]">
@@ -41,6 +45,11 @@ const Navbar: React.FC = () => {
                   سبد خرید
                 </Link>
                 <FaShoppingCart />
+                {cartCount > 0 && (
+                <span className="absolute top-[-10px] right-[-10px] inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                  {cartCount}
+                </span>
+              )}
               </div>
             </div>
             <div
@@ -100,6 +109,11 @@ const Navbar: React.FC = () => {
                   سبد خرید
                 </Link>
                 <FaShoppingCart />
+                {cartCount > 0 && (
+                <span className="absolute top-[-10px] right-[-10px] inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                  {cartCount}
+                </span>
+              )}
               </div>
             </div>
             <div
