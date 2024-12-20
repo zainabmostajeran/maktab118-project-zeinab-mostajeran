@@ -22,5 +22,7 @@ export const getSubCategoryBySlug: getSubcategoryBySlugType = async (slug) => {
   const response = await axiosInstance.get(
     `${urls.subCategories.list}?slugname=${slug}`
   );
+  console.log(response.data);
   return response.data.data.subcategories[0];
+  
 };

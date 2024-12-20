@@ -43,7 +43,7 @@ const Home: React.FC = () => {
         </div>
         <div className="flex justify-between items-center px-4 py-4 text-slate-900">
           {/* Toggle Category */}
-          <ToggleCategory categories={categoriesData.data.categories} />
+          <ToggleCategory/>
           <div className="relative text-white">
             <input
               type="text"

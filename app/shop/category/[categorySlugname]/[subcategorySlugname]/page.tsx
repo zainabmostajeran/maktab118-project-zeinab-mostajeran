@@ -76,11 +76,11 @@ const SubcategoryPage: React.FC = () => {
           <h1 className="text-2xl font-semibold">{subcategoryData?.name}</h1>
           <MdOutlineArrowLeft className="size-5 border border-textColor" />
         </div>
-        <div className="flex items-start justify-center gap-x-10">
+        <div className="block  sm:flex sm:items-start sm:justify-center sm:gap-x-10">
           <div>
             <SidebarCategory />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 border py-6 px-4 mb-4 rounded-md bg-[rgb(188,184,138)] mt-4 ">
             {productsData?.data?.products
               .filter((product) => product.subcategory == subcategoryId)
               .map((product: any) => (

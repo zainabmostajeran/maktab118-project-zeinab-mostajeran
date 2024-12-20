@@ -33,7 +33,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({ category }) => {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid gap-4 sm:grid sm:grid-cols-2 sm:gap-4">
       {subcategoriesData?.data?.subcategories
         .filter((sub) => sub.category == category._id)
         .map((subcategory) => (
