@@ -13,9 +13,10 @@ const ShoppingCart: React.FC = () => {
   }, 0);
 
   return (
-    <section className="flex flex-col py-4 px-4">
-      <div className="flex flex-col lg:flex-row p-4 items-center justify-center">
-        <div className="flex-grow">
+    <section className="px-20 py-4 ">
+    <div className="flex flex-col py-4 px-4 gap-y-6">
+      <div className="flex flex-col lg:flex-row items-center justify-center">
+        <div className="flex-grow bg-base rounded-lg p-7">
           {cartItems.length === 0 ? (
             <p>Your cart is empty.</p>
           ) : (
@@ -33,7 +34,7 @@ const ShoppingCart: React.FC = () => {
                 />
                 <div className="flex-grow">
                   <p className="font-semibold">{item.name}</p>
-                  <p>${item.price.toLocaleString("ar-EG")}</p>
+                  <p>{item.price.toLocaleString("ar-EG")} تومان</p>
                 </div>
                 <input
                   type="number"
@@ -51,7 +52,7 @@ const ShoppingCart: React.FC = () => {
                 />
                 <button
                   onClick={() => dispatch(CartActions.remove(item._id))}
-                  className="text-red-600"
+                  className="text-textColor"
                 >
                   <FaTrash />
                 </button>
@@ -63,14 +64,15 @@ const ShoppingCart: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex item-center">
           <p>جمع:</p>
-          <p>{total..toLocaleString("ar-EG")}تومان</p>
+          <p>{total.toLocaleString("ar-EG")}تومان</p>
         </div>
         <div>
-          <button className="rounded-lg px-6 py-1 bg-base">
+          <button className="rounded-lg px-6 py-1 bg-textColor">
             نهایی کردن سبد خرید
           </button>
         </div>
       </div>
+    </div>
     </section>
   );
 };

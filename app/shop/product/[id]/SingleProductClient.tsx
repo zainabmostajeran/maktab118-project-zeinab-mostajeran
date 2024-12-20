@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useAppDispatch } from "@/redux/Hook";
 import { CartActions } from "@/redux/slices/cartSlice";
+import { toast } from "react-toastify";
 
 interface Product {
   _id: string;
@@ -24,6 +25,7 @@ const SingleProductClient: React.FC<{ product: Product }> = ({ product }) => {
   const addToCart = () => {
     for (let i = 0; i < cartQuantity; i++) {
       dispatch(CartActions.add(product));
+      toast.error("بیش از یکی اضافه نمی شود")
     }
     setCartQuantity(1);
   };
