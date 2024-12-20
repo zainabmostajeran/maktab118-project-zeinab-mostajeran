@@ -21,24 +21,24 @@ const ShoppingCart: React.FC = () => {
           ) : (
             cartItems.map((item) => (
               <div
-                key={item.data.products._id}
+                key={item._id}
                 className="flex items-center gap-4 border-b py-4"
               >
                 <Image
                   className="p-2 object-cover"
-                  src={`http://localhost:8000/images/products/images/${item.data.products.images[0]}`}
+                  src={`http://localhost:8000/images/products/images/${item.images[0]}`}
                   width={200}
                   height={200}
                   alt="Picture of the author"
                 />
                 <div className="flex-grow">
-                  <p className="font-semibold">{item.data.products.name}</p>
-                  <p>${item.data.products.price}</p>
+                  <p className="font-semibold">{item.name}</p>
+                  <p>${item.price.toLocaleString("ar-EG")}</p>
                 </div>
                 <input
                   type="number"
                   min="1"
-                  value={item.data.products.quantity}
+                  value={item.cartQuantity}
                   onChange={(e) =>
                     dispatch(
                       CartActions.updateQuantity({
@@ -63,7 +63,7 @@ const ShoppingCart: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex item-center">
           <p>جمع:</p>
-          <p>{total.toFixed(2)}تومان</p>
+          <p>{total..toLocaleString("ar-EG")}تومان</p>
         </div>
         <div>
           <button className="rounded-lg px-6 py-1 bg-base">
