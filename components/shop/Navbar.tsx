@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
                       >
                         <p className="text-gray-800 text-nowrap">{item.name}</p>
                         <p className="text-red-600 text-nowrap">
-                          {item.cartQuantity} عدد
+                          {item.cartQuantity.toLocaleString("ar-EG")} عدد
                         </p>
                       </li>
                     ))}
