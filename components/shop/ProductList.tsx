@@ -35,11 +35,11 @@ const ProductList: React.FC<ProductListProps> = ({
     if (!productsData?.data.products) return [];
 
     const filtered = productsData.data.products.filter(
-      (product: Product) => product.category === category._id
+      (product: IProducts) => product.category === category._id
     );
 
     const sorted = filtered.sort(
-      (a: Product, b: Product) =>
+      (a: IProducts, b: IProducts) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 

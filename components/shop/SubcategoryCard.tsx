@@ -24,15 +24,15 @@ const SubcategoryCard: React.FC<SubcategoryCardProps> = ({
       className="rounded-md block bg-base text-textColor shadow-lg hover:bg-textColor hover:text-base "
       href={`/shop/category/${categorySlugname}/${subcategorySlugname}`}
     >
-      <div className="p-10 border flex flex-col items-center">
-        <h3 className="text-xl font-semibold mb-4">{subcategoryName}</h3>
+      <div className=" border flex flex-col items-center gap-y-2">
         <Image
-          className="p-2 object-cover"
+          className=" object-cover"
           src={`http://localhost:8000/images/categories/icons/${categoryIcon}`}
           width={200}
           height={200}
           alt="Picture of the author"
         />
+        <h3 className="text-xl font-semibold mb-4">{subcategoryName}</h3>
       </div>
     </Link>
   );

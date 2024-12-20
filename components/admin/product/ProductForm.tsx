@@ -148,7 +148,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
                 {...field}
                 className={`border  text-gray-900 text-sm rounded-lg  outline-none w-full p-2.5  ${errors.category?'border-red-500':'border-gray-300'}`}
               >
-                <option value="">انتخاب دسته‌بندی</option>
+                <option>انتخاب دسته‌بندی</option>
                 {categoriesData?.data?.categories.map((category: ICategory) => (
                   <option key={category._id} value={category._id}>
                     {category.name}
