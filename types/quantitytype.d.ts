@@ -1,0 +1,1 @@
+export type QuantityType = Record<number, number>;
