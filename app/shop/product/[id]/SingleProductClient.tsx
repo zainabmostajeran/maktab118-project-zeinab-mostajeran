@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAppDispatch } from "@/redux/Hook";
+import { useAppDispatch, useAppSelector } from "@/redux/Hook";
 import { CartActions } from "@/redux/slices/cartSlice";
 import { toast } from "react-toastify";
 
@@ -17,16 +17,20 @@ interface Product {
 
 const SingleProductClient: React.FC<{ product: Product }> = ({ product }) => {
   const dispatch = useAppDispatch();
+  const cart = useAppSelector((state) => state.cart.cart);
   const [cartQuantity, setCartQuantity] = useState<number>(1);
 
   const increment = () => setCartQuantity((q) => q + 1);
   const decrement = () => setCartQuantity((q) => (q > 1 ? q - 1 : 1));
 
   const addToCart = () => {
-    for (let i = 0; i < cartQuantity; i++) {
-      dispatch(CartActions.add(product));
-      toast.error("بیش از یکی اضافه نمی شود")
+    const productExists = cart.find((item) => item._id === product._id);
+    if (productExists) {
+      toast.error("این محصول قبلا به سبد خرید اضافه شده");
+      return;
     }
+    dispatch(CartActions.add(product));
+    toast.success("محصول با موفقیت به سبد خرید اضافه شد");
     setCartQuantity(1);
   };
 

@@ -8,18 +8,17 @@ import Image from "next/image";
 const Footer: React.FC = () => {
   return (
     <footer className="bg-base px-6 py-16 text-textColor">
-      <div className="block container mx-auto sm:flex items-start justify-between max-w-[1400px]">
-
-        <div className=" pt-5 sm:pt-0 flex items-center justify-center gap-x-3">
-          <h1 className="font-bold">پیتزا نوشا</h1>
-          <Image
-            src="/logo_prev_ui.png"
-            width={100}
-            height={20}
-            alt="Picture of the author"
-          />{" "}
+      <div className="block space-y-6  container mx-auto sm:flex items-start justify-between max-w-[1400px] gap-y-3">
+        <div className=" sm:pt-0 flex items-center justify-center gap-x-3">
+            <h1 className="font-bold">پیتزا نوشا</h1>
+            <Image
+              src="/logo_prev_ui.png"
+              width={100}
+              height={20}
+              alt="Picture of the author"
+            />
         </div>
-        <div className="flex gap-x-12 items-center justify-center pb-4">
+        <div className="flex gap-x-12  items-center justify-center pb-4">
           <div className="flex flex-col gap-4 items-center justify-center">
             <p>درباره ما</p>
             <p>تیم ما</p>
@@ -37,8 +36,8 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className=" block sm:flex items-center justify-between pt-10">
-      <p className="text-center pb-16 sm:p-0 text-xs">@2024 پیتزانوشا</p>
+      <div className=" block space-y-6 sm:flex items-center justify-between pt-10">
+        <p className="text-center  sm:p-0 text-xs">@2024 پیتزانوشا</p>
         <div className="flex gap-6 items-center justify-center text-3xl">
           <Link href="#">
             <FaFacebook />

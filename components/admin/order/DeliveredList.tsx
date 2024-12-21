@@ -140,7 +140,7 @@ export const DeliveredList: React.FC<OrderListProps> = ({ page }) => {
                     onClick={() => handleReviewOrder(order)}
                     className="px-2 py-1 bg-white hover:bg-textColor text-gray-900 rounded-lg"
                   >
-                    بررسی سفارش
+                     مشاهده شده
                   </button>
                 </td>
               </tr>

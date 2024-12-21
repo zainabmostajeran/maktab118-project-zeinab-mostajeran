@@ -25,7 +25,7 @@ export default async function SingleProductPage({
   const product = productRes.data.product;
 
   return (
-    <div className="flex justify-start items-start gap-x-10 py-10 px-4 shadow-lg">
+    <div className="block space-y-3 sm:flex justify-start items-start gap-x-10 py-10 px-4 shadow-lg">
       <div>
         <Image
           src={`http://localhost:8000/images/products/images/${product.images[0]}`}
@@ -41,8 +41,15 @@ export default async function SingleProductPage({
         </p>
         <p className="text-lg font-semibold">{product.description}</p>
 
-        {/* Client Component for Cart Actions */}
         <SingleProductClient product={product} />
+        <div className="flex">
+        <Image
+          src={`http://localhost:8000/images/products/images/${product.images[0]}`}
+          width={200}
+          height={20}
+          alt={product.name}
+        />
+        </div>
       </div>
     </div>
   );

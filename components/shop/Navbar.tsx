@@ -37,13 +37,13 @@ const Navbar: React.FC = () => {
               <FaUser />
             </div>
             <div className="flex items-center justify-start gap-x-1 relative">
-              <Link
-                href="/shop/checkout/cart"
+              <button
+                
                 className="hover:underline flex items-center"
                 onClick={() => setCartDropdown(!cartDropdown)}
               >
                 سبد خرید
-              </Link>
+              </button>
               <FaShoppingCart />
               {cartCount.length > 0 && (
                 <span className="absolute top-[-10px] right-[-10px] inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">

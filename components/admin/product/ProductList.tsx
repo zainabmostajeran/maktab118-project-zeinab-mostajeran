@@ -117,12 +117,16 @@ const Pagination: React.FC<{
     </div>
   );
 };
-
 export const ProductList: React.FC<{ page: number }> = ({ page }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProducts | null>(
     null
   );
+  const [productToDelete, setProductToDelete] = useState<IProducts | null>(
+    null
+  );
+
   const {
     data: productsData,
     isLoading: productsLoading,
@@ -136,11 +140,15 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
         limit: String(productsLimit),
       }),
   });
+
   const deleteProductMutation = useDeleteProduct();
 
-  const HandleDelete = async (id: string) => {
-    if (!confirm("آیا مطمئن هستید که می‌خواهید این کالا را حذف کنید؟")) return;
-    deleteProductMutation.mutate(id);
+  const confirmDelete = () => {
+    if (productToDelete) {
+      deleteProductMutation.mutate(productToDelete._id);
+      setIsDeleteModalOpen(false);
+      setProductToDelete(null);
+    }
   };
 
   const {
@@ -209,6 +217,7 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
   if (isErrorState) {
     return <div className="text-red-500">خطا در بارگذاری داده‌ها</div>;
   }
+
   return (
     <section className="flex flex-col items-center justify-center py-6">
       <table className="w-full text-white shadow-lg rounded-lg">
@@ -244,14 +253,17 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
                   <button
                     onClick={() => {
                       setSelectedProduct(item);
-                      setIsModalOpen(true);
+                      setIsEditModalOpen(true);
                     }}
                     className="px-2 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg"
                   >
                     ویرایش
                   </button>
                   <button
-                    onClick={() => HandleDelete(item._id)}
+                    onClick={() => {
+                      setProductToDelete(item);
+                      setIsDeleteModalOpen(true);
+                    }}
                     className="bg-red-500 px-2 py-1 hover:bg-red-400 rounded-lg"
                   >
                     حذف
@@ -263,74 +275,55 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
         </tbody>
       </table>
 
-      {/* Pagination Controls */}
       <Pagination currentPage={page} totalPages={totalPages} />
-      {/* <div className="w-full flex justify-center items-center pt-10 gap-3">
-        <Link
-          href={`/admin/products?${new URLSearchParams({
-            page: String(page - 1 < 1 ? 1 : page - 1),
-          })}`}
-        >
-          <button
-            className={classNames(
-              "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base  hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
-            )}
-            disabled={page - 1 < 1}
-          >
-            صفحه قبل
-          </button>
-        </Link>
 
-        {[1, 2, 3, 4].map((el) => (
-          <Link
-            key={el}
-            href={`/admin/products?${new URLSearchParams({
-              page: String(el),
-            })}`}
-          >
-            <span
-              className={`cursor-pointer px-2 py-1 hover:bg-white ${
-                el === page ? "bg-slate-300" : ""
-              }`}
-            >
-              {el.toLocaleString("ar-EG")}
-            </span>
-          </Link>
-        ))}
-        <Link
-          href={`/admin/products?${new URLSearchParams({
-            page: String(page + 1 > totalPages ? page : page + 1),
-          })}`}
-        >
-          <button
-            className={classNames(
-              "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
-            )}
-            disabled={page + 1 > totalPages}
-          >
-            صفحه بعد
-          </button>
-        </Link>
-      </div> */}
-
+      {/* مدال ویرایش */}
       <Modal
-        isOpen={isModalOpen}
+        isOpen={isEditModalOpen}
         onClose={() => {
-          setIsModalOpen(false);
+          setIsEditModalOpen(false);
           setSelectedProduct(null);
         }}
       >
         {selectedProduct && (
           <EditProductForm
             onClose={() => {
-              setIsModalOpen(false);
+              setIsEditModalOpen(false);
               setSelectedProduct(null);
             }}
             product={selectedProduct}
           />
         )}
+      </Modal>
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setProductToDelete(null);
+        }}
+      >
+        <div className="p-4">
+          <h2 className="text-lg font-semibold text-gray-800 px-3 py-6">
+            آیا مطمئن هستید که می‌خواهید این کالا را حذف کنید؟
+          </h2>
+          <div className="flex justify-center gap-4 mt-4">
+            <button
+              onClick={confirmDelete}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+            >
+              حذف
+            </button>
+            <button
+              onClick={() => {
+                setIsDeleteModalOpen(false);
+                setProductToDelete(null);
+              }}
+              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400"
+            >
+              انصراف
+            </button>
+          </div>
+        </div>
       </Modal>
     </section>
   );
