@@ -1,4 +1,4 @@
-import { LoginFormUser } from "@/components/admin/LoginFormUser";
+import { LoginFormUser } from "@/components/shop/LoginFormUser";
 const User: React.FC = () => {
   return (
       <LoginFormUser/>

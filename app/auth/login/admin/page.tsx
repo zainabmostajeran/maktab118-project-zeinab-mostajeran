@@ -1,4 +1,4 @@
-import {LoginFormAdmin} from "../../../../components/admin/LoginFormAdmin";
+import {LoginFormAdmin} from "@/components/admin/LoginFormAdmin";
 const Admin: React.FC = () => {
   return (
       <LoginFormAdmin />
