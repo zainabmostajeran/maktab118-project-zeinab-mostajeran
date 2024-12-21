@@ -69,7 +69,7 @@ const Home: React.FC = () => {
                 </Link>
                 <MdOutlineArrowLeft className="size-5 border border-textColor" />
               </div>
-              <ProductList key={category._id} category={category} limit={6}/>
+              <ProductList key={category._id} category={category} limit={8}/>
             </div>
           ))}
         </div>

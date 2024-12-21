@@ -13,7 +13,9 @@ const SubcategoryPage: React.FC = () => {
   const params = useParams();
   const { subcategorySlugname } = params;
 
-  const [sortOrder, setSortOrder] = useState<"lowToHigh" | "highToLow">("lowToHigh"); 
+  const [sortOrder, setSortOrder] = useState<"lowToHigh" | "highToLow">(
+    "lowToHigh"
+  );
 
   const {
     data: subcategoryData,
@@ -74,8 +76,8 @@ const SubcategoryPage: React.FC = () => {
   const sortedProducts = productsData?.data?.products
     .filter((product) => product.subcategory == subcategoryId)
     .sort((a: any, b: any) => {
-      if (sortOrder === "lowToHigh") return a.price - b.price; 
-      if (sortOrder === "highToLow") return b.price - a.price; 
+      if (sortOrder === "lowToHigh") return a.price - b.price;
+      if (sortOrder === "highToLow") return b.price - a.price;
       return 0;
     });
 
@@ -90,7 +92,9 @@ const SubcategoryPage: React.FC = () => {
           <button
             onClick={() => setSortOrder("lowToHigh")}
             className={`px-4 py-1 rounded-lg ${
-              sortOrder === "lowToHigh" ? "bg-textColor text-white" : "bg-gray-200"
+              sortOrder === "lowToHigh"
+                ? "bg-textColor text-white"
+                : "bg-gray-200"
             }`}
           >
             ارزان‌ترین
@@ -98,20 +102,25 @@ const SubcategoryPage: React.FC = () => {
           <button
             onClick={() => setSortOrder("highToLow")}
             className={`px-4 py-1 rounded-lg ${
-              sortOrder === "highToLow" ? "bg-textColor text-white" : "bg-gray-200"
+              sortOrder === "highToLow"
+                ? "bg-textColor text-white"
+                : "bg-gray-200"
             }`}
           >
             گران‌ترین
           </button>
         </div>
-        <div className="block sm:flex sm:items-start sm:justify-center sm:gap-x-10">
-          <div>
+
+        <div className="block sm:flex  sm:items-start sm:justify-end sm:gap-x-8">
+          <div className="grid sm:grid-cols-[1fr-2fr]  w-full">
             <SidebarCategory />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 border py-6 px-4 rounded-md bg-[rgb(188,184,138)] mt-4 ">
-            {sortedProducts.map((product: any) => (
-              <ProductCard key={product._id} {...product} />
-            ))}
+          <div className="grid sm:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 border py-6 px-4 rounded-md bg-[rgb(188,184,138)]">
+              {sortedProducts.map((product: any) => (
+                <ProductCard key={product._id} {...product} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
