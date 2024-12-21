@@ -16,6 +16,7 @@ export const useEditProduct = () => {
       toast.success("Products updated successfully!");
       queryClient.invalidateQueries(["get-product"]);
     },
+    
     onError: (error: any) => {
       const errorMessage =
         error.response?.data?.message || "An error occurred during update";

@@ -276,8 +276,6 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
       </table>
 
       <Pagination currentPage={page} totalPages={totalPages} />
-
-      {/* مدال ویرایش */}
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => {

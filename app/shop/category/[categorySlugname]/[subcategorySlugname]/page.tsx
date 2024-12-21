@@ -1,17 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getSubCategoryBySlug } from "@/apis/services/subcategories";
 import { getAllProducts } from "@/apis/services/products";
-import { ProductCard } from "@/components/shop/Productcard";
+import { ProductCard } from "@/components/shop/productcard";
 import { SidebarCategory } from "@/components/shop/SidebarCategory";
 import { MdOutlineArrowLeft } from "react-icons/md";
 
 const SubcategoryPage: React.FC = () => {
   const params = useParams();
   const { subcategorySlugname } = params;
+
+  const [sortOrder, setSortOrder] = useState<"lowToHigh" | "highToLow">("lowToHigh"); 
 
   const {
     data: subcategoryData,
@@ -69,6 +71,14 @@ const SubcategoryPage: React.FC = () => {
     );
   }
 
+  const sortedProducts = productsData?.data?.products
+    .filter((product) => product.subcategory == subcategoryId)
+    .sort((a: any, b: any) => {
+      if (sortOrder === "lowToHigh") return a.price - b.price; 
+      if (sortOrder === "highToLow") return b.price - a.price; 
+      return 0;
+    });
+
   return (
     <section className="container mx-auto max-w-[1400px] bg-second">
       <div className="flex flex-col gap-y-4 items-start justify-center">
@@ -76,16 +86,32 @@ const SubcategoryPage: React.FC = () => {
           <h1 className="text-2xl font-semibold">{subcategoryData?.name}</h1>
           <MdOutlineArrowLeft className="size-5 border border-textColor" />
         </div>
-        <div className="block  sm:flex sm:items-start sm:justify-center sm:gap-x-10">
+        <div className="flex gap-x-4 items-center">
+          <button
+            onClick={() => setSortOrder("lowToHigh")}
+            className={`px-4 py-1 rounded-lg ${
+              sortOrder === "lowToHigh" ? "bg-textColor text-white" : "bg-gray-200"
+            }`}
+          >
+            ارزان‌ترین
+          </button>
+          <button
+            onClick={() => setSortOrder("highToLow")}
+            className={`px-4 py-1 rounded-lg ${
+              sortOrder === "highToLow" ? "bg-textColor text-white" : "bg-gray-200"
+            }`}
+          >
+            گران‌ترین
+          </button>
+        </div>
+        <div className="block sm:flex sm:items-start sm:justify-center sm:gap-x-10">
           <div>
             <SidebarCategory />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 border py-6 px-4 mb-4 rounded-md bg-[rgb(188,184,138)] mt-4 ">
-            {productsData?.data?.products
-              .filter((product) => product.subcategory == subcategoryId)
-              .map((product: any) => (
-                <ProductCard key={product._id} {...product} />
-              ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 border py-6 px-4 rounded-md bg-[rgb(188,184,138)] mt-4 ">
+            {sortedProducts.map((product: any) => (
+              <ProductCard key={product._id} {...product} />
+            ))}
           </div>
         </div>
       </div>
