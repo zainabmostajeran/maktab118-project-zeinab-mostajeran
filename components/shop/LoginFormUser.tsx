@@ -8,6 +8,8 @@ import { useLogin } from "@/apis/mutation/auth";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import Link from "next/link";
+
 
 export const LoginFormUser: React.FC = () => {
   const {
@@ -76,6 +78,10 @@ export const LoginFormUser: React.FC = () => {
           />
         )}
       />
+      <div className="flex items-center justify-center">
+        <Link href="/auth/signup">عضویت</Link>
+        <p>فراموشی رمز عبور</p>
+      </div>
       <button
         type="submit"
         className="py-2 px-1 w-full bg-textColor text-slate-600 text-sm rounded-md font-semibold"

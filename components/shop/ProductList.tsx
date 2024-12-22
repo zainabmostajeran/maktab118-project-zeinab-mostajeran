@@ -50,7 +50,7 @@ const ProductList: React.FC<ProductListProps> = ({
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = isPaginationActive ? limit ?? 6 : sortedProducts.length;
+  const itemsPerPage = isPaginationActive ? limit ?? 8 : sortedProducts.length;
 
   const limitedItems = useMemo(() => {
     if (!isPaginationActive && typeof limit === "number") {
@@ -63,13 +63,13 @@ const ProductList: React.FC<ProductListProps> = ({
     ? sortedProducts.length
     : limitedItems.length;
   const totalPages = isPaginationActive
-    ? Math.ceil(totalItems / (limit ?? 6))
+    ? Math.ceil(totalItems / (limit ?? 8))
     : 1;
 
   const currentItems = useMemo(() => {
     if (isPaginationActive) {
-      const startIdx = (currentPage - 1) * (limit ?? 6);
-      const endIdx = startIdx + (limit ?? 6);
+      const startIdx = (currentPage - 1) * (limit ?? 8);
+      const endIdx = startIdx + (limit ?? 8);
       return sortedProducts.slice(startIdx, endIdx);
     } else {
       return limitedItems;
@@ -104,12 +104,11 @@ const ProductList: React.FC<ProductListProps> = ({
   return (
     <div>
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 border py-6 px-4 mb-4 rounded-md bg-[rgb(188,184,138)] ">
+      <div className="grid grid-cols-1 sm:items-center sm:justify-center sm:grid-cols-2 md:grid-cols-4 gap-4 border py-6 px-4 mb-4 rounded-md bg-[rgb(188,184,138)] ">
         {currentItems.map((product: any) => (
           <ProductCard key={product._id} {...product} />
         ))}
       </div>
-
       {/* Pagination Controls */}
       {isPaginationActive && totalPages > 1 && (
         <div className="flex justify-center gap-x-2 items-center space-x-2">
