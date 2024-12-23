@@ -19,8 +19,6 @@ export const useLogin = () => {
     },
     onSuccess: (data) => {
       setTokens(data.token.accessToken, data.token.refreshToken);
-      console.log(data);
-
       dispatch(loginSuccess({ tokens: data.token, user: data.data.user }));
     },
     onError: (error: any) => {

@@ -276,10 +276,6 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
       </table>
 
       <Pagination currentPage={page} totalPages={totalPages} />
-<<<<<<< HEAD
-
-=======
->>>>>>> 5a16ccdbe2bd6e03460f03de5a9e6ce67e94d4fd
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => {

@@ -7,13 +7,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "@/redux/slices/authSlice";
+import { uselogout } from "@/apis/mutation/logout";
 import { RootState } from "@/redux/store";
 
 const NavbarAdmin: React.FC = () => {
   const [hiddenMenu, sethiddenMenu] = useState(true);
   const dispatch = useDispatch();
   const router = useRouter();
+  const logout = uselogout();
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
@@ -26,7 +27,7 @@ const NavbarAdmin: React.FC = () => {
   }, [isAuthenticated, router]);
 
   const handleLogout = () => {
-    dispatch(logout());
+    logout.mutate()
   };
 
   return (

@@ -17,6 +17,7 @@ export const LoginFormUser: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<authSchemaType>({
+    mode: "all",
     resolver: zodResolver(authSchema),
     defaultValues: {
       username: '',
@@ -78,9 +79,9 @@ export const LoginFormUser: React.FC = () => {
           />
         )}
       />
-      <div className="flex items-center justify-center">
-        <Link href="/auth/signup">عضویت</Link>
-        <p>فراموشی رمز عبور</p>
+      <div className="flex items-center justify-between text-sm text-textColor ">
+        <Link className="hover:underline" href="/auth/signup">عضویت</Link>
+        <p className="hover:underline cursor-pointer">فراموشی رمز عبور</p>
       </div>
       <button
         type="submit"

@@ -10,18 +10,6 @@ import {
   updateTokens as updateTokensAction,
 } from "@/redux/slices/authSlice";
 
-let isRefreshing = false;
-let refreshSubscribers: ((token: string) => void)[] = [];
-
-function onRefreshed(token: string) {
-  refreshSubscribers.forEach((cb) => cb(token));
-  refreshSubscribers = [];
-}
-
-function subscribeTokenRefresh(cb: (token: string) => void) {
-  refreshSubscribers.push(cb);
-}
-
 const baseURL = "http://localhost:8000/api";
 
 const axiosInstance = axios.create({
@@ -41,60 +29,53 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    console.log(error.response.status);
-    if (error.response?.status === 401 || !originalRequest.sent) {
-      console.log("ok");
 
-      originalRequest.sent = true;
-
-      if (
-        originalRequest.url !== "/auth/login " ||
-        originalRequest.url !== "/auth/token"
-      ) {
-        const refreshToken = getRefreshToken();
-        if (!refreshToken) {
-          store.dispatch(logout());
-          return Promise.reject(error);
-        }
-        console.log("before try");
-
-        try {
-          const { data } = await axiosInstance.post("/auth/token", {
-            refreshToken,
-          });
-
-          const newAccessToken = data.token.accessToken;
-          const newRefreshToken = data.token.refreshToken;
-
-          store.dispatch(
-            updateTokensAction({
-              accessToken: newAccessToken,
-              refreshToken: newRefreshToken,
-            })
-          );
-
-          isRefreshing = false;
-          onRefreshed(newAccessToken);
-
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return axiosInstance(originalRequest);
-        } catch (refreshError) {
-          store.dispatch(logout());
-          isRefreshing = false;
-          removeTokens();
-          return Promise.reject(refreshError);
-        }
-      } else if (
-        originalRequest.url === "/auth/token" &&
-        originalRequest.url !== "/auth/login"
-      ) {
-        store.dispatch(logout());
-        isRefreshing = false;
-        removeTokens();
-        location.href = "/auth/login/admin";
-      }
+    if (!error.response || error.response.status !== 401) {
+      return Promise.reject(error);
     }
-    return error.response;
+
+    if (!originalRequest.sent) {
+      originalRequest.sent = true;
+    } else {
+      store.dispatch(logout());
+      return Promise.reject(error);
+    }
+
+    if (originalRequest.url === "/auth/token") {
+      store.dispatch(logout());
+      removeTokens();
+      return Promise.reject(error);
+    }
+
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) {
+      store.dispatch(logout());
+      return Promise.reject(error);
+    }
+
+    try {
+      const { data } = await axios.post(`${baseURL}/auth/token`, {
+        refreshToken,
+      });
+
+      const newAccessToken = data.token.accessToken;
+      const newRefreshToken = data.token.refreshToken;
+
+      store.dispatch(
+        updateTokensAction({
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken,
+        })
+      );
+
+      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+      return axiosInstance(originalRequest);
+    } catch (refreshError) {
+      store.dispatch(logout());
+      removeTokens();
+      return Promise.reject(refreshError);
+    }
   }
 );
 

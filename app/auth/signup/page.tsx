@@ -1,8 +1,7 @@
-// import { UserSignupForm } from "@/components/shop/UserSignupForm";
+import { UserSignupForm } from "@/components/shop/UserSignupForm";
 const SignupUser: React.FC = () => {
   return (
-    <p>signup</p>
-      // <UserSignupForm/>
+      <UserSignupForm/>
   );
 };
 export default SignupUser;
