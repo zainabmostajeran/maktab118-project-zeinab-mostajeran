@@ -18,7 +18,7 @@ const ShoppingCart: React.FC = () => {
       <div className="flex flex-col lg:flex-row items-center justify-center">
         <div className="flex-grow bg-base rounded-lg p-7">
           {cartItems.length === 0 ? (
-            <p>Your cart is empty.</p>
+            <p className="text-textColor">سبد خرید شما خالی است.</p>
           ) : (
             cartItems.map((item) => (
               <div
@@ -63,8 +63,8 @@ const ShoppingCart: React.FC = () => {
       </div>
       <div className="flex items-center justify-between">
         <div className="flex item-center">
-          <p>جمع:</p>
-          <p>{total.toLocaleString("ar-EG")}تومان</p>
+          <p> جمع : </p>
+          <p>{total.toLocaleString("ar-EG")} تومان</p>
         </div>
         <div>
           <button className="rounded-lg px-6 py-1 bg-textColor">

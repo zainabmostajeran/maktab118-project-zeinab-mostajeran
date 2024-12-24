@@ -25,7 +25,7 @@ export const ProductCard: React.FC<IProducts> = ({
 }) => {
   return (
     <Link href={`/shop/product/${_id}`}>
-      <div className="flex w-full p-2 gap-x-3 items-center justify-between text-textColor shadow-lg hover:text-gray-800 rounded-lg bg-base hover:bg-white hover:shadow-sm hover:shadow-slate-400 hover:border-slate-700  h-48">
+      <div className="flex w-full p-2 gap-x-7 sm:gap-x-3 items-center justify-between text-textColor shadow-lg hover:text-gray-800 rounded-lg bg-base hover:bg-white hover:shadow-sm hover:shadow-slate-400 hover:border-slate-700  h-48">
         <Image
           className="grid grid-cols-4 items-center justify-center rounded-lg  sm:object-cover object-contain"
           src={`http://localhost:8000/images/products/images/${images[0]}`}

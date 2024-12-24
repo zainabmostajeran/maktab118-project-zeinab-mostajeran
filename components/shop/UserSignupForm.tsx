@@ -11,7 +11,6 @@ import { RootState } from "../../redux/store";
 import Link from "next/link";
 import { toast } from "react-toastify";
 
-
 export const UserSignupForm: React.FC = () => {
   const {
     control,
@@ -26,7 +25,7 @@ export const UserSignupForm: React.FC = () => {
       phoneNumber: "",
       username: "",
       password: "",
-      email: "",
+      address: "",
       repeatPassword: "",
     },
   });
@@ -49,7 +48,7 @@ export const UserSignupForm: React.FC = () => {
       username: data.username,
       password: data.password,
       phoneNumber: data.phoneNumber,
-      address: data.email,
+      address: data.address,
     };
 
     signup.mutate(payload, {
@@ -58,7 +57,7 @@ export const UserSignupForm: React.FC = () => {
         push("/auth/login");
       },
       onError: (error: any) => {
-        console.error("Signup failed:", error);
+        toast.error("ثبت نام انجام نشد");
       },
     });
   };
@@ -66,104 +65,105 @@ export const UserSignupForm: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 py-8 px-5 bg-base text-right rounded-md"
+      className="space-y-6 py-10 px-5 bg-base text-right rounded-md"
     >
       <p className="text-2xl font-semibold text-textColor text-center">عضویت</p>
-      <div className="flex items-center justify-between gap-x-5">
-        <Controller
-          name="firstname"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              error={errors.firstname?.message}
-              label="نام"
-              placeholder="نام"
-            />
-          )}
-        />
-        <Controller
-          name="lastname"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              error={errors.lastname?.message}
-              label="نام خانوداگی"
-              placeholder="نام خانوداگی"
-            />
-          )}
-        />
-        <Controller
-          name="phoneNumber"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              type="phone"
-              error={errors.phoneNumber?.message}
-              label="شماره تماس"
-              placeholder="شماره تماس"
-            />
-          )}
-        />
+      <div className="flex items-center justify-center">
+        <div className="block space-y-2 sm:grid sm:grid-cols-4 sm:gap-4">
+          <Controller
+            name="firstname"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                error={errors.firstname?.message}
+                label="نام"
+                placeholder="نام"
+              />
+            )}
+          />
+          <Controller
+            name="lastname"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                error={errors.lastname?.message}
+                label="نام خانوداگی"
+                placeholder="نام خانوداگی"
+              />
+            )}
+          />
+          <Controller
+            name="phoneNumber"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="phone"
+                error={errors.phoneNumber?.message}
+                label="شماره تماس"
+                placeholder="شماره تماس"
+              />
+            )}
+          />
+          <Controller
+            name="address"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                error={errors.address?.message}
+                label=" آدرس"
+                placeholder=" آدرس"
+              />
+            )}
+          />
+        </div>
       </div>
-      <div className="flex items-center justify-center gap-x-5">
-        <Controller
-          name="username"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              type="text"
-              error={errors.username?.message}
-              label="نام کاربری"
-              placeholder="نام کاربری"
-            />
-          )}
-        />
-        <Controller
-          name="password"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              type="password"
-              error={errors.password?.message}
-              label="پسورد"
-              placeholder="پسورد"
-            />
-          )}
-        />
+      <div className="flex items-center justify-center">
+        <div className="block space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 ">
+          <Controller
+            name="username"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                error={errors.username?.message}
+                label="نام کاربری"
+                placeholder="نام کاربری"
+              />
+            )}
+          />
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="password"
+                error={errors.password?.message}
+                label="رمزعبور"
+                placeholder="رمز عبور"
+              />
+            )}
+          />
+          <Controller
+            name="repeatPassword"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="password"
+                error={errors.repeatPassword?.message}
+                label="تکرار رمز عبور"
+                placeholder="تکرار رمز عبور"
+              />
+            )}
+          />
+        </div>
       </div>
-      <div className="flex items-center justify-center gap-x-5">
-        <Controller
-          name="email"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              error={errors.email?.message}
-              label=" ایمیل"
-              placeholder=" ایمیل"
-            />
-          )}
-        />
-        <Controller
-          name="repeatPassword"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              type="password"
-              error={errors.repeatPassword?.message}
-              label="تکرار رمز عبور"
-              placeholder="تکرار رمز عبور"
-            />
-          )}
-        />
-      </div>
-
       <button
         type="submit"
         className="py-2 px-1 w-full bg-textColor text-slate-600 text-sm rounded-md font-semibold hover:bg-white"

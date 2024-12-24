@@ -104,7 +104,7 @@ const ProductList: React.FC<ProductListProps> = ({
   return (
     <div>
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:items-center sm:justify-center sm:grid-cols-2 md:grid-cols-4 gap-4 border py-6 px-4 mb-4 rounded-md bg-[rgb(188,184,138)] ">
+      <div className="grid grid-cols-1 sm:items-center sm:justify-center sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-4 border py-6 px-4 mb-4 rounded-md bg-[rgb(188,184,138)] ">
         {currentItems.map((product: any) => (
           <ProductCard key={product._id} {...product} />
         ))}

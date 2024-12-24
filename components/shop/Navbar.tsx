@@ -64,10 +64,11 @@ const Navbar: React.FC = () => {
                         </p>
                       </li>
                     ))}
+                    {cartCount.length===0 && (<p className="text-gray-800 text-sm">سبد خرید خالی است</p>)}
                     <li className="text-center">
                       <Link
                         href="/shop/checkout/cart"
-                        className="bg-textColor text-gray-800 hover:underline rounded-lg px-6 text-nowrap py-1"
+                        className="bg-textColor text-gray-800 hover:underline text-sm rounded-lg px-6 text-nowrap py-1"
                       >
                         مشاهده سبد خرید
                       </Link>

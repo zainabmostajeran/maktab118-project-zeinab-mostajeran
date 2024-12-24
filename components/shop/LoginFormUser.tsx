@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Link from "next/link";
 
-
 export const LoginFormUser: React.FC = () => {
   const {
     control,
@@ -20,8 +19,8 @@ export const LoginFormUser: React.FC = () => {
     mode: "all",
     resolver: zodResolver(authSchema),
     defaultValues: {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     },
   });
 
@@ -80,7 +79,9 @@ export const LoginFormUser: React.FC = () => {
         )}
       />
       <div className="flex items-center justify-between text-sm text-textColor ">
-        <Link className="hover:underline" href="/auth/signup">عضویت</Link>
+        <Link className="hover:underline" href="/auth/signup">
+          عضویت
+        </Link>
         <p className="hover:underline cursor-pointer">فراموشی رمز عبور</p>
       </div>
       <button

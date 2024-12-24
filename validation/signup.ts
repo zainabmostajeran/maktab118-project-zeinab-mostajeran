@@ -17,18 +17,18 @@ export const signupSchema = z
       .refine((value) => !/\d+/g.test(value), "نام کاربری نامعتبر"),
     password: z
       .string()
-      .min(8, "پسورد باید حداقل 8 کاراکتر باشد")
+      .min(8, "رمز عبور باید حداقل 8 کاراکتر باشد")
       .refine(
         (value) =>
           /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/g.test(value),
-        "پسورد نامعتبر"
+        "رمز عبور نامعتبر"
       ),
-    email: z
+    address: z
       .string()
-      .min(8, "ایمیل باید حداقل 8 کاراکتر باشد")
+      .min(10, "آدرس باید حداقل 10 کاراکتر باشد")
       .refine(
-        (value) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value),
-        "ایمیل نامعتبر"
+        (value) => /\d/.test(value),
+        "آدرس نامعتبر"
       ),
     repeatPassword: z
       .string()
