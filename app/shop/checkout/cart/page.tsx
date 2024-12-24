@@ -13,7 +13,7 @@ const ShoppingCart: React.FC = () => {
   }, 0);
 
   return (
-    <section className="px-20 py-4 ">
+    <section className="px-24 py-4 ">
     <div className="flex flex-col py-4 px-4 gap-y-6">
       <div className="flex flex-col lg:flex-row items-center justify-center">
         <div className="flex-grow bg-base rounded-lg p-7">
@@ -23,7 +23,7 @@ const ShoppingCart: React.FC = () => {
             cartItems.map((item) => (
               <div
                 key={item._id}
-                className="flex items-center gap-4 border-b py-4"
+                className="flex items-center gap-8 border-b py-4 justify-between"
               >
                 <Image
                   className="p-2 object-cover"
@@ -32,9 +32,9 @@ const ShoppingCart: React.FC = () => {
                   height={200}
                   alt="Picture of the author"
                 />
-                <div className="flex-grow">
-                  <p className="font-semibold">{item.name}</p>
-                  <p>{item.price.toLocaleString("ar-EG")} تومان</p>
+                <div className="flex-grow space-y-5 text-textColor">
+                  <p className="font-semibold ">{item.name}</p>
+                  <p >{item.price.toLocaleString("ar-EG")} تومان</p>
                 </div>
                 <input
                   type="number"
