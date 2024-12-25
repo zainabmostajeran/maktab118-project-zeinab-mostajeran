@@ -6,8 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getCategoryBySlug } from "@/apis/services/categories";
 import { MdOutlineArrowLeft } from "react-icons/md";
 import ProductList from "@/components/shop/ProductList";
+import { useUserGuard } from "@/hooks/useUserGuard";
 
 const GroupPage: React.FC = () => {
+  useUserGuard();
   const params = useParams();
   const { groupSlugname } = params;
 

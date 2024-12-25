@@ -7,14 +7,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { uselogout } from "@/apis/mutation/logout";
+// import { uselogout } from "@/apis/mutation/logout";
 import { RootState } from "@/redux/store";
 
 const NavbarAdmin: React.FC = () => {
   const [hiddenMenu, sethiddenMenu] = useState(true);
   const dispatch = useDispatch();
   const router = useRouter();
-  const logout = uselogout();
+  // const logout = uselogout();
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
@@ -26,9 +26,9 @@ const NavbarAdmin: React.FC = () => {
     }
   }, [isAuthenticated, router]);
 
-  const handleLogout = () => {
-    logout.mutate()
-  };
+  // const handleLogout = () => {
+  //   logout.mutate()
+  // };
 
   return (
     <nav className="bg-base px-6 text-textColor">
@@ -52,13 +52,13 @@ const NavbarAdmin: React.FC = () => {
               </Link>
               <FaHome />
             </div>
-            <div
+            {/* <div
               onClick={handleLogout}
               className="flex items-center justify-start gap-x-1 cursor-pointer hover:underline"
             >
               خروج
               <ImExit />
-            </div>
+            </div> */}
           </div>
           <div
             onClick={() => sethiddenMenu(!hiddenMenu)}
@@ -79,10 +79,10 @@ const NavbarAdmin: React.FC = () => {
               </Link>
               <FaHome />
             </div>
-            <div className="flex items-center justify-start gap-x-2 hover:underline">
+            {/* <div className="flex items-center justify-start gap-x-2 hover:underline">
               خروج
               <ImExit />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
