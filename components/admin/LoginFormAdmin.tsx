@@ -18,7 +18,7 @@ export const LoginFormAdmin: React.FC = () => {
     formState: { errors },
   } = useForm<authSchemaType>({
     mode: "all",
-    resolver: zodResolver(authSchema) ,
+    resolver: zodResolver(authSchema),
     defaultValues: {
       username: "",
       password: "",
@@ -28,20 +28,19 @@ export const LoginFormAdmin: React.FC = () => {
   const login = useLogin();
   const { push } = useRouter();
 
-  const { isAuthenticated, error, loading } = useSelector(
+  const { isAuthenticated, error, loading, user } = useSelector(
     (state: RootState) => state.auth
   );
-
   React.useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user?.role === "ADMIN") {
       push("/admin");
-      toast.success("باموفقیت وارد شدید")
+      toast.success("باموفقیت وارد شدید");
     }
   }, [isAuthenticated, push]);
 
   React.useEffect(() => {
     if (error) {
-      toast.error("عدم موفقیت ");
+      toast.error("عدم موفقیت");
     }
   }, [error]);
 

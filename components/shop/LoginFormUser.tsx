@@ -28,20 +28,24 @@ export const LoginFormUser: React.FC = () => {
   const login = useLogin();
   const { push } = useRouter();
 
-  const { isAuthenticated, error, loading } = useSelector(
+  const { isAuthenticated, error, loading,user } = useSelector(
     (state: RootState) => state.auth
   );
-
   React.useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user?.role === "ADMIN") {
       toast.success("ورود موفق")
+      push("/admin");
+
+    }
+    if (isAuthenticated && user?.role === "USER") {
+      toast.success("با موفقیت وارد شدید")
       push("/");
     }
   }, [isAuthenticated, push]);
 
   React.useEffect(() => {
     if (error) {
-      toast.error("ورود ناموفق")
+      toast.error(" عدم موفقیت")
     }
   }, [error]);
 
