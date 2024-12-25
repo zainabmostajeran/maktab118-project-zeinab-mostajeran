@@ -2,8 +2,10 @@
 import { Suspense,useMemo  } from "react";
 import { useSearchParams } from "next/navigation";
 import { AwaitingList } from "@/components/admin/order/Awaitinglist";
+import {useAdminGuard} from "@/hooks/useAdminGuard"
 
 const AwaitingPage: React.FC = () => {
+  useAdminGuard();
   const searchParams = useSearchParams();
   const pageParam = searchParams.get("page");
 

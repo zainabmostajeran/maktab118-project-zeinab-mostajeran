@@ -2,8 +2,11 @@
 import { Suspense,useMemo  } from "react";
 import { useSearchParams } from "next/navigation";
 import { DeliveredList } from "@/components/admin/order/DeliveredList";
+import {useAdminGuard} from "@/hooks/useAdminGuard"
+
 
 const DelivaredPage: React.FC = () => {
+  useAdminGuard();
   const searchParams = useSearchParams();
   const pageParam = searchParams.get("page");
 

@@ -7,9 +7,12 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import ProductForm from "@/components/admin/product/ProductForm";
 import Modal from "@/components/ui/Modal";
+import {useAdminGuard} from "@/hooks/useAdminGuard"
+
 
 
 const ProductPage: React.FC = () => {
+  useAdminGuard();
   const searchParams = useSearchParams();
   const pageParam = searchParams.get("page");
 

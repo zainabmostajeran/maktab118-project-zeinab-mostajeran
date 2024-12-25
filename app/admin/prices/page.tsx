@@ -5,8 +5,11 @@ import PageTitle from "@/components/admin/PageTitle";
 import { PriceList } from "@/components/admin/prices/PriceList";
 import { useSearchParams } from "next/navigation";
 import { useEditProduct } from "@/apis/mutation/useEditProduct";
+import {useAdminGuard} from "@/hooks/useAdminGuard"
+
 
 const PricesPage: React.FC = () => {
+  useAdminGuard();
   const searchParams = useSearchParams();
   const pageParam = searchParams.get("page");
 
