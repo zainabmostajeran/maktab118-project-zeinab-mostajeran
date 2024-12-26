@@ -113,7 +113,7 @@ const SubcategoryPage: React.FC = () => {
           </button>
         </div>
 
-        <div className="block sm:flex  sm:items-start sm:justify-end sm:gap-x-8">
+        <div className="block space-y-4 sm:flex  sm:items-start sm:justify-end sm:gap-x-8">
           <div className="grid sm:grid-cols-[1fr-2fr]  w-full">
             <SidebarCategory />
           </div>
