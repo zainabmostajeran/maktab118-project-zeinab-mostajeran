@@ -17,9 +17,9 @@ const OrdersPage: React.FC = () => {
   }, [pageParam]);
 
   return (
-    <section className=" mx-auto">
-      <div className="flex items-center justify-between px-16">
-        <PageTitle title="سفارش ها" />
+    <section className="mx-auto">
+      <div className="block px-2  mx-auto sm:flex sm:items-center sm:justify-between sm:px-16">
+        <PageTitle className="px-2" title="سفارش ها" />
         <ToggleGroup />
       </div>
       <Suspense fallback={<div>در حال بارگذاری...</div>}>

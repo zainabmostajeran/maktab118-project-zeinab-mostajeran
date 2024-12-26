@@ -56,21 +56,25 @@ export const Images: React.FC<IImages> = ({
           previews.map((preview, index) => (
             <div key={index} className="relative w-16 h-16 m-1">
               <Image
+              width={16}
+              height={30}
                 src={preview}
                 fill={true}
                 alt={`Selected Image ${index + 1}`}
-                className="object-cover object-center rounded-md"
+                className="object-cover"
               />
             </div>
           ))
         ) : existingUrls.length > 0 ? (
-          existingUrls.map((url, index) => (
-            <div key={index} className="relative w-16 h-16 m-1">
+          existingUrls.map((url,index) => (
+            <div key={index} className="relative  m-1">
               <Image
+                   width={16}
+                   height={30}
                 src={url}
                 fill={true}
                 alt={`Existing Image ${index + 1}`}
-                className="object-cover object-center rounded-md"
+                className="object-cover"
               />
             </div>
           ))

@@ -31,9 +31,9 @@ export function NavToggle({ links, isCollapsed }: NavProps) {
     <TooltipProvider>
       <div
         data-collapsed={isCollapsed}
-        className="group flex   gap-4 py-2 data-[collapsed=true]:py-2"
+        className="group flex gap-4 py-2 data-[collapsed=true]:py-2"
       >
-        <nav className="flex  gap-4 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+        <nav className=" block sm:flex  gap-4 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
           {links.map((link, index) =>
             isCollapsed ? (
               <Tooltip key={index} delayDuration={0}>

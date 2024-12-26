@@ -65,11 +65,11 @@ export const UserSignupForm: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 py-10 px-5 bg-base text-right rounded-md"
+      className="space-y-3 py-3 px-5 bg-base text-right rounded-md"
     >
       <p className="text-2xl font-semibold text-textColor text-center">عضویت</p>
-      <div className="flex items-center justify-center">
-        <div className="block space-y-2 sm:grid sm:grid-cols-4 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="space-y-4">
           <Controller
             name="firstname"
             control={control}
@@ -89,8 +89,8 @@ export const UserSignupForm: React.FC = () => {
               <Input
                 {...field}
                 error={errors.lastname?.message}
-                label="نام خانوداگی"
-                placeholder="نام خانوداگی"
+                label="نام خانوادگی"
+                placeholder="نام خانوادگی"
               />
             )}
           />
@@ -107,6 +107,8 @@ export const UserSignupForm: React.FC = () => {
               />
             )}
           />
+        </div>
+        <div className="space-y-4">
           <Controller
             name="address"
             control={control}
@@ -114,15 +116,11 @@ export const UserSignupForm: React.FC = () => {
               <Input
                 {...field}
                 error={errors.address?.message}
-                label=" آدرس"
-                placeholder=" آدرس"
+                label="آدرس"
+                placeholder="آدرس"
               />
             )}
           />
-        </div>
-      </div>
-      <div className="flex items-center justify-center">
-        <div className="block space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 ">
           <Controller
             name="username"
             control={control}
@@ -144,7 +142,7 @@ export const UserSignupForm: React.FC = () => {
                 {...field}
                 type="password"
                 error={errors.password?.message}
-                label="رمزعبور"
+                label="رمز عبور"
                 placeholder="رمز عبور"
               />
             )}

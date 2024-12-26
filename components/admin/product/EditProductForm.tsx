@@ -320,9 +320,14 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
               onChange={field.onChange}
               multiple
               error={fieldState.error}
-              existingUrls={product.images.map(
-                (img) => `http://localhost:8000/images/products/images/${img}`
-              )}
+              existingUrls={
+                product.images?.length
+                  ? product.images.map(
+                      (img) =>
+                        `http://localhost:8000/images/products/images/${img}`
+                    )
+                  : []
+              }
             />
           )}
         />

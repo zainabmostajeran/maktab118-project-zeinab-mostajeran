@@ -49,7 +49,7 @@ const Pagination: React.FC<{
   const pageNumbers = generatePageNumbers();
 
   return (
-    <div className="w-full flex justify-center items-center pt-10 gap-3">
+    <div className="w-full flex justify-center items-center py-10 gap-2">
       {/* Previous Button */}
       <Link
         href={`/admin/products?${new URLSearchParams({
@@ -58,7 +58,7 @@ const Pagination: React.FC<{
       >
         <button
           className={classNames(
-            "px-2 py-1 text-white disabled:bg-slate-500",
+            "px-2 py-1 text-white disabled:bg-slate-500 text-nowrap text-sm",
             "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
           )}
           disabled={currentPage - 1 < 1}
@@ -106,7 +106,7 @@ const Pagination: React.FC<{
       >
         <button
           className={classNames(
-            "px-2 py-1 text-white disabled:bg-slate-500",
+            "px-2 py-1 text-white disabled:bg-slate-500 text-nowrap text-sm",
             "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
           )}
           disabled={currentPage + 1 > totalPages}
@@ -220,109 +220,113 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
 
   return (
     <section className="flex flex-col items-center justify-center py-6">
-      <table className="w-full text-white shadow-lg rounded-lg">
-        <thead>
-          <tr className="bg-textColor text-gray-800">
-            <th>تصویر</th>
-            <th>نام کالا</th>
-            <th>دسته بندی</th>
-            <th>زیر دسته بندی</th>
-            <th className="h-12">عملیات</th>
-          </tr>
-        </thead>
-        <tbody className="text-center bg-base text-gray-800 font-semibold shadow-md">
-          {productsData?.data?.products?.map((item: any) => (
-            <tr
-              className="even:bg-[rgb(188,184,138)] hover:even:bg-white cursor-pointer"
-              key={item._id}
-            >
-              <td className=" flex flex-col items-center p-3">
-                <Image
-                  className="rounded-full object-cover"
-                  src={`http://localhost:8000/images/products/images/${item.images[0]}`}
-                  alt={item.name}
-                  width={80}
-                  height={80}
-                />
-              </td>
-              <td>{item.name}</td>
-              <td>{categoryMap[item.category]}</td>
-              <td>{subCategoryMap[item.subcategory]}</td>
-              <td>
-                <div className="flex gap-x-2 items-center justify-center text-gray-800 ">
-                  <button
-                    onClick={() => {
-                      setSelectedProduct(item);
-                      setIsEditModalOpen(true);
-                    }}
-                    className="px-2 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg"
-                  >
-                    ویرایش
-                  </button>
-                  <button
-                    onClick={() => {
-                      setProductToDelete(item);
-                      setIsDeleteModalOpen(true);
-                    }}
-                    className="bg-red-500 px-2 py-1 hover:bg-red-400 rounded-lg"
-                  >
-                    حذف
-                  </button>
-                </div>
-              </td>
+      <div className="w-full px-4 md:px-0">
+        <div className="overflow-x-auto">
+        <table className="w-full text-white shadow-lg rounded-lg">
+          <thead>
+            <tr className="bg-textColor text-gray-800">
+              <th>تصویر</th>
+              <th>نام کالا</th>
+              <th>دسته بندی</th>
+              <th>زیر دسته بندی</th>
+              <th className="h-12">عملیات</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="text-center bg-base text-gray-800 font-semibold shadow-md">
+            {productsData?.data?.products?.map((item: any) => (
+              <tr
+                className="even:bg-[rgb(188,184,138)] hover:even:bg-white cursor-pointer"
+                key={item._id}
+              >
+                <td className=" flex flex-col items-center p-3">
+                  <Image
+                    className="rounded-full object-cover"
+                    src={`http://localhost:8000/images/products/images/${item.images[0]}`}
+                    alt={item.name}
+                    width={80}
+                    height={80}
+                  />
+                </td>
+                <td>{item.name}</td>
+                <td>{categoryMap[item.category]}</td>
+                <td>{subCategoryMap[item.subcategory]}</td>
+                <td>
+                  <div className="block space-y-2 p-2 sm:p-0 sm:flex sm:gap-x-2 sm:items-center sm:justify-center text-gray-800">
+                    <button
+                      onClick={() => {
+                        setSelectedProduct(item);
+                        setIsEditModalOpen(true);
+                      }}
+                      className="px-2 py-1 bg-slate-200 hover:bg-slate-300 rounded-lg"
+                    >
+                      ویرایش
+                    </button>
+                    <button
+                      onClick={() => {
+                        setProductToDelete(item);
+                        setIsDeleteModalOpen(true);
+                      }}
+                      className="bg-red-500 px-2 py-1 hover:bg-red-400 rounded-lg"
+                    >
+                      حذف
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <Pagination currentPage={page} totalPages={totalPages} />
-      <Modal
-        isOpen={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false);
-          setSelectedProduct(null);
-        }}
-      >
-        {selectedProduct && (
-          <EditProductForm
-            onClose={() => {
-              setIsEditModalOpen(false);
-              setSelectedProduct(null);
-            }}
-            product={selectedProduct}
-          />
-        )}
-      </Modal>
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onClose={() => {
-          setIsDeleteModalOpen(false);
-          setProductToDelete(null);
-        }}
-      >
-        <div className="p-4">
-          <h2 className="text-lg font-semibold text-gray-800 px-3 py-6">
-            آیا مطمئن هستید که می‌خواهید این کالا را حذف کنید؟
-          </h2>
-          <div className="flex justify-center gap-4 mt-4">
-            <button
-              onClick={confirmDelete}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-            >
-              حذف
-            </button>
-            <button
-              onClick={() => {
-                setIsDeleteModalOpen(false);
-                setProductToDelete(null);
+        <Pagination currentPage={page} totalPages={totalPages} />
+        <Modal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setSelectedProduct(null);
+          }}
+        >
+          {selectedProduct && (
+            <EditProductForm
+              onClose={() => {
+                setIsEditModalOpen(false);
+                setSelectedProduct(null);
               }}
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400"
-            >
-              انصراف
-            </button>
+              product={selectedProduct}
+            />
+          )}
+        </Modal>
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onClose={() => {
+            setIsDeleteModalOpen(false);
+            setProductToDelete(null);
+          }}
+        >
+          <div className="p-4">
+            <h2 className="text-lg font-semibold text-gray-800 px-3 py-6">
+              آیا مطمئن هستید که می‌خواهید این کالا را حذف کنید؟
+            </h2>
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+              >
+                حذف
+              </button>
+              <button
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  setProductToDelete(null);
+                }}
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400"
+              >
+                انصراف
+              </button>
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
+      </div>
+      </div>
     </section>
   );
 };

@@ -55,15 +55,14 @@ export const Thumbnail: React.FC<IThumbnail> = ({
             src={preview}
             fill={true}
             alt="Thumbnail Preview"
-            className="object-contain object-center rounded-md"
-            
+            className="object-cover"
           />
         ) : existingUrl ? (
           <Image
             src={existingUrl}
             fill={true}
             alt="Existing Thumbnail"
-            className="object-contain object-center rounded-md "
+            className="object-cover"
           />
         ) : (
           <p

@@ -4,7 +4,7 @@ interface IAuthLayout {
 }
 const AuthLayout: React.FC<IAuthLayout> = ({ children }) => {
   return (
-    <div className="sm:py-8 flex flex-col justify-center items-center bg-second rounded-md w-full min-h-screen px-3">
+    <div className="flex flex-col justify-center items-center bg-second rounded-md w-full min-h-screen ">
       <Image
         src="/logo_prev_ui.png"
         width={100}

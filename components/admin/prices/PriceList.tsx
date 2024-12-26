@@ -42,7 +42,7 @@ const Pagination: React.FC<{
   const pageNumbers = generatePageNumbers();
 
   return (
-    <div className="w-full flex justify-center items-center pt-10 gap-3">
+    <div className="w-full flex justify-center items-center py-10 gap-2">
       {/* Previous Button */}
       <Link
         href={`/admin/prices?${new URLSearchParams({
@@ -51,7 +51,7 @@ const Pagination: React.FC<{
       >
         <button
           className={classNames(
-            "px-2 py-1 text-white disabled:bg-slate-500",
+            "px-2 py-1 text-white disabled:bg-slate-500 text-nowrap text-sm",
             "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
           )}
           disabled={currentPage - 1 < 1}
@@ -99,7 +99,7 @@ const Pagination: React.FC<{
       >
         <button
           className={classNames(
-            "px-2 py-1 text-white disabled:bg-slate-500",
+            "px-2 py-1 text-white disabled:bg-slate-500 text-nowrap text-sm",
             "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
           )}
           disabled={currentPage + 1 > totalPages}
@@ -164,7 +164,7 @@ export const PriceList: React.FC<{
   }
   return (
     <section className="flex flex-col items-center justify-center py-6">
-      <table className="w-full text-white border-collapse border-slate-300 shadow-md overflow-scroll rounded-lg">
+      <table className="w-full text-white shadow-lg rounded-lg">
         <thead className="h-6">
           <tr className="bg-textColor text-center text-gray-800">
             <th className="h-12 text-center">کالا</th>
