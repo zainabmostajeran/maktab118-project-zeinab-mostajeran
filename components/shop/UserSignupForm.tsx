@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
@@ -10,10 +11,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import axios, { AxiosError } from "axios";
+import { errorMapping } from "@/utils/error-mapping";
+import { extractErrorMessage } from "@/utils/extractErrorMessage";
 
 export const UserSignupForm: React.FC = () => {
-  const [showPassword,setShowPassword]=useState(false);
-  const [showRepeatPassword,setShowRepeatPassword]=useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const {
     control,
@@ -41,6 +45,7 @@ export const UserSignupForm: React.FC = () => {
   React.useEffect(() => {
     if (error) {
       console.error(error);
+      toast.error(error);
     }
   }, [error]);
 
@@ -62,27 +67,39 @@ export const UserSignupForm: React.FC = () => {
       onError: (error: unknown) => {
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError<any>;
-          const serverErrorMessage =
-            axiosError.response?.data?.message ||
-            axiosError.response?.data?.error ||
-            "خطای نامشخص سمت سرور";
+          let serverErrorMessage = "خطای نامشخص سمت سرور";
 
-          const finalMessage = Array.isArray(serverErrorMessage)
-            ? serverErrorMessage.join(" | ")
-            : serverErrorMessage;
+          const contentType =
+            axiosError.response?.headers["content-type"] || "";
 
-          toast.error(finalMessage);
+          if (contentType.includes("text/html")) {
+            const html = axiosError.response?.data;
+            if (typeof html === "string") {
+              serverErrorMessage = extractErrorMessage(html);
+            }
+          } else {
+            serverErrorMessage =
+              axiosError.response?.data?.message ||
+              axiosError.response?.data?.error ||
+              "خطای نامشخص سمت سرور";
+          }
+
+          const translatedMessage =
+            errorMapping[serverErrorMessage] || "خطای نامشخص رخ داد.";
+
+          toast.error(translatedMessage);
         } else {
           console.error("Unexpected error:", error);
           toast.error("یک خطای غیرمنتظره رخ داد.");
         }
       },
     });
-  }
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-3 py-6 px-5 bg-base text-right rounded-md"
+      className="space-y-3 py-3 px-5 bg-base text-right rounded-md"
     >
       <p className="text-2xl font-semibold text-textColor text-center">عضویت</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -165,7 +182,7 @@ export const UserSignupForm: React.FC = () => {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 top-5 left-3 flex  items-center text-gray-500"
+                  className="absolute inset-y-0 top-2 left-3 flex items-center text-gray-500"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? "🙈" : "👁"}
@@ -187,7 +204,7 @@ export const UserSignupForm: React.FC = () => {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 top-5 left-3 flex items-center text-gray-500"
+                  className="absolute inset-y-0 top-2 left-3 flex items-center text-gray-500"
                   onClick={() => setShowRepeatPassword(!showRepeatPassword)}
                 >
                   {showRepeatPassword ? "🙈" : "👁"}
