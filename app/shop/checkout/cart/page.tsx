@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "@/redux/Hook";
 import { CartActions } from "@/redux/slices/cartSlice";
 import { FaTrash } from "react-icons/fa";
 import Image from "next/image";
+import Link from "next/link";
 
 const ShoppingCart: React.FC = () => {
   const cartItems = useAppSelector((state) => state.cart.cart);
@@ -67,9 +68,9 @@ const ShoppingCart: React.FC = () => {
           <p>{total.toLocaleString("ar-EG")} تومان</p>
         </div>
         <div>
-          <button className="rounded-lg px-6 py-1 bg-textColor">
+          <Link href="/shop/cart" className="rounded-lg px-6 py-1 bg-textColor">
             نهایی کردن سبد خرید
-          </button>
+          </Link>
         </div>
       </div>
     </div>

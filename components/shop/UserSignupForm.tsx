@@ -82,7 +82,7 @@ export const UserSignupForm: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-3 py-3 px-5 bg-base text-right rounded-md"
+      className="space-y-3 py-6 px-5 bg-base text-right rounded-md"
     >
       <p className="text-2xl font-semibold text-textColor text-center">عضویت</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

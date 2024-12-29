@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { classNames } from "@/utils/classname";
 
 // export const ProductCardSkeleton: React.FC = () => {
 //   return (
