@@ -10,10 +10,9 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { getCategories } from "@/apis/services/categories";
 import ProductList from "@/components/shop/ProductList";
-import { useUserGuard } from "@/hooks/useUserGuard";
 
 const Home: React.FC = () => {
-  useUserGuard();
+  
   const {
     data: categoriesData,
     isLoading: categoriesLoading,

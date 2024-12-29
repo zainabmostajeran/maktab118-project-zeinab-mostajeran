@@ -90,7 +90,7 @@ const AuthInitializer: React.FC = () => {
       }
     };
 
-    void initializeAuth();
+     initializeAuth();
   }, [dispatch]);
 
   return null;

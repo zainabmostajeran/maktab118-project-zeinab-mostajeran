@@ -1,18 +1,22 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { updateOrderDeliveryStatus } from "@/apis/services/orders";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
-import { faIR } from "date-fns/locale";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Modal from "@/components/ui/Modal";
+import { getAllProducts } from "@/apis/services/products";
 
 interface DeliverModalProps {
   order: IOrders;
   user: IUser;
   onClose: () => void;
 }
+const toPersianDigits = (num: string | number): string => {
+  return num
+    .toString()
+    .replace(/\d/g, (digit) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(digit, 10)]);
+};
 
 export const DeliverModal: React.FC<DeliverModalProps> = ({
   order,
@@ -38,14 +42,45 @@ export const DeliverModal: React.FC<DeliverModalProps> = ({
     mutation.mutate();
   };
 
+  const {
+    data: productsData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: getAllProducts,
+  });
+  console.log(productsData?.data?.products);
+  const filterProduct = productsData?.data?.products?.filter(
+   (product: IProducts) => {
+    return product._id === order?.products?._id;
+    }
+  );
+  console.log(filterProduct);
+
   const formattedDeliveryDate = order.deliveryDate
-    ? format(new Date(order.deliveryDate), "yyyy-MM-dd HH:mm:ss", {
-        locale: faIR,
+    ? new Date(order.deliveryDate).toLocaleString("fa-IR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
       })
     : "نامشخص";
 
   const formattedCreatedAt = order.createdAt
-    ? format(new Date(order.createdAt), "yyyy-MM-dd HH:mm:ss", { locale: faIR })
+    ? new Date(order.createdAt).toLocaleString("fa-IR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      })
     : "نامشخص";
 
   return (
@@ -57,12 +92,14 @@ export const DeliverModal: React.FC<DeliverModalProps> = ({
             <p>{`${user?.firstname} ${user?.lastname}` || "نامشخص"}</p>
           </div>
           <div className="flex gap-1 items-start justify-center w-full">
-            <p className="font-bold"> آدرس:</p>
+            <p className="font-bold">آدرس:</p>
             <p>{user?.address || "نامشخص"}</p>
           </div>
           <div className="flex gap-1 items-start justify-center w-full">
             <p className="font-bold">تلفن:</p>
-            <p>{user?.phoneNumber || "نامشخص"}</p>
+            <p>
+              {user?.phoneNumber ? toPersianDigits(user.phoneNumber) : "نامشخص"}
+            </p>
           </div>
           <div className="flex gap-1 items-start justify-center w-full">
             <p className="font-bold">زمان تحویل:</p>
@@ -80,20 +117,23 @@ export const DeliverModal: React.FC<DeliverModalProps> = ({
               <th>کالا</th>
               <th>قیمت</th>
               <th>موجودی</th>
-              
             </tr>
           </thead>
           <tbody className="bg-gray-500 text-white">
             {order.products.map((item) => (
               <tr key={item._id}>
                 <td>{item.productName || "نامشخص"}</td>
-                <td>{item.price?.toLocaleString("ar-EG") || "نامشخص"}</td>
-                <td>{item.count}</td>
+                <td>
+                  {item.price !== undefined && item.price !== null
+                    ? item.price.toLocaleString("fa-IR")
+                    : "نامشخص"}
+                  {console.log(item.price)}
+                </td>
+                <td>{item.count || "نامشخص"}</td>
               </tr>
             ))}
           </tbody>
         </table>
-
         {!order.deliveryStatus && (
           <div className="flex justify-center w-full">
             <button

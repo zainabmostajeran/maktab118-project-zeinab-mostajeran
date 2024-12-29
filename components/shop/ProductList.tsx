@@ -103,16 +103,13 @@ const ProductList: React.FC<ProductListProps> = ({
 
   return (
     <div>
-      {/* Product Grid */}
       <div className="grid grid-cols-1 sm:items-center sm:justify-center sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-4 border py-6 px-4 mb-4 rounded-md bg-[rgb(188,184,138)] ">
         {currentItems.map((product: any) => (
           <ProductCard key={product._id} {...product} />
         ))}
       </div>
-      {/* Pagination Controls */}
       {isPaginationActive && totalPages > 1 && (
         <div className="flex justify-center gap-x-2 items-center space-x-2">
-          {/* Previous Button */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -125,7 +122,6 @@ const ProductList: React.FC<ProductListProps> = ({
             قبلی
           </button>
 
-          {/* Page Numbers */}
           {Array.from({ length: totalPages }, (_, index) => index + 1).map(
             (page) => (
               <button
@@ -141,8 +137,6 @@ const ProductList: React.FC<ProductListProps> = ({
               </button>
             )
           )}
-
-          {/* Next Button */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}

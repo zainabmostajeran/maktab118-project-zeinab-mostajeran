@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { signupSchema, signupSchemaType } from "@/validation/signup";
@@ -12,6 +12,9 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 
 export const UserSignupForm: React.FC = () => {
+  const [showPassword,setShowPassword]=useState(false);
+  const [showRepeatPassword,setShowRepeatPassword]=useState(false);
+
   const {
     control,
     handleSubmit,
@@ -57,11 +60,29 @@ export const UserSignupForm: React.FC = () => {
         push("/auth/login");
       },
       onError: (error: any) => {
-        toast.error("ثبت نام انجام نشد");
+        try {
+          if (error.response && error.response.data) {
+            const { data } = error.response;
+    
+            const serverErrorMessage =
+              data.message ||
+              data.error ||   
+              "خطای نامشخص سمت سرور";
+    
+            const finalMessage = Array.isArray(serverErrorMessage)
+              ? serverErrorMessage.join(" | ")
+              : serverErrorMessage;
+    
+            toast.error(finalMessage);
+          } else {
+            toast.error("خطا در ارسال درخواست. لطفاً دوباره تلاش کنید.");
+          }
+        } catch (err) {
+          toast.error("یک خطای غیرمنتظره رخ داد.");
+        }
       },
     });
-  };
-
+  }
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -138,26 +159,44 @@ export const UserSignupForm: React.FC = () => {
             name="password"
             control={control}
             render={({ field }) => (
-              <Input
-                {...field}
-                type="password"
-                error={errors.password?.message}
-                label="رمز عبور"
-                placeholder="رمز عبور"
-              />
+              <div className="relative">
+                <Input
+                  {...field}
+                  type={showPassword ? "text" : "password"}
+                  error={errors.password?.message}
+                  label="رمز عبور"
+                  placeholder="رمز عبور"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 top-2 left-3 flex  items-center text-gray-500"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "🙈" : "👁"}
+                </button>
+              </div>
             )}
           />
           <Controller
             name="repeatPassword"
             control={control}
             render={({ field }) => (
-              <Input
-                {...field}
-                type="password"
-                error={errors.repeatPassword?.message}
-                label="تکرار رمز عبور"
-                placeholder="تکرار رمز عبور"
-              />
+              <div className="relative">
+                <Input
+                  {...field}
+                  type={showRepeatPassword ? "text" : "password"}
+                  error={errors.repeatPassword?.message}
+                  label="تکرار رمز عبور"
+                  placeholder="تکرار رمز عبور"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 top-2 left-3 flex items-center text-gray-500"
+                  onClick={() => setShowRepeatPassword(!showRepeatPassword)}
+                >
+                  {showRepeatPassword ? "🙈" : "👁"}
+                </button>
+              </div>
             )}
           />
         </div>
