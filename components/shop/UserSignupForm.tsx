@@ -54,30 +54,26 @@ export const UserSignupForm: React.FC = () => {
       address: data.address,
     };
 
-    signup.mutate(payload, {
-      onSuccess: (data) => {
+    signup.mutate(payload as any, {
+      onSuccess: () => {
         toast.success("ثبت نام موفقیت آمیز بود.");
         push("/auth/login");
       },
-      onError: (error: any) => {
-        try {
-          if (error.response && error.response.data) {
-            const { data } = error.response;
-    
-            const serverErrorMessage =
-              data.message ||
-              data.error ||   
-              "خطای نامشخص سمت سرور";
-    
-            const finalMessage = Array.isArray(serverErrorMessage)
-              ? serverErrorMessage.join(" | ")
-              : serverErrorMessage;
-    
-            toast.error(finalMessage);
-          } else {
-            toast.error("خطا در ارسال درخواست. لطفاً دوباره تلاش کنید.");
-          }
-        } catch (err) {
+      onError: (error: unknown) => {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError<any>;
+          const serverErrorMessage =
+            axiosError.response?.data?.message ||
+            axiosError.response?.data?.error ||
+            "خطای نامشخص سمت سرور";
+
+          const finalMessage = Array.isArray(serverErrorMessage)
+            ? serverErrorMessage.join(" | ")
+            : serverErrorMessage;
+
+          toast.error(finalMessage);
+        } else {
+          console.error("Unexpected error:", error);
           toast.error("یک خطای غیرمنتظره رخ داد.");
         }
       },
