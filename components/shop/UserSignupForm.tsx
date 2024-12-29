@@ -165,7 +165,7 @@ export const UserSignupForm: React.FC = () => {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 top-2 left-3 flex  items-center text-gray-500"
+                  className="absolute inset-y-0 top-5 left-3 flex  items-center text-gray-500"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? "🙈" : "👁"}
@@ -187,7 +187,7 @@ export const UserSignupForm: React.FC = () => {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 top-2 left-3 flex items-center text-gray-500"
+                  className="absolute inset-y-0 top-5 left-3 flex items-center text-gray-500"
                   onClick={() => setShowRepeatPassword(!showRepeatPassword)}
                 >
                   {showRepeatPassword ? "🙈" : "👁"}

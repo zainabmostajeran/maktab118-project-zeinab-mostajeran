@@ -205,63 +205,61 @@ export const OrderList: React.FC<OrderListProps> = ({ page }) => {
   return (
     <section className="flex flex-col items-center justify-center py-2">
       <div className="w-full px-4 md:px-0">
-        <div className="overflow-x-auto">
-          <table className="w-full text-white shadow-lg rounded-lg">
-            <thead className=" h-6">
-              <tr className="bg-textColor text-center text-gray-800">
-                <th>نام کاربر</th>
-                <th>زمان سفارش</th>
-                <th>مجموع مبلغ</th>
-                <th className="h-12">عملیات</th>
+        <table className="w-full text-white shadow-lg rounded-lg">
+          <thead className=" h-6">
+            <tr className="bg-textColor text-center text-gray-800">
+              <th>نام کاربر</th>
+              <th>زمان سفارش</th>
+              <th>مجموع مبلغ</th>
+              <th className="h-12">عملیات</th>
+            </tr>
+          </thead>
+          <tbody className="text-center bg-base text-gray-900 font-semibold">
+            {ordersData?.data?.orders.map((order: IOrder) => (
+              <tr
+                className="even:bg-[#BCB88A] hover:even:bg-white cursor-pointer text-center"
+                key={order._id}
+              >
+                <td className="h-12 text-wrap sm:text-nowrap ">
+                  {usersMap[order.user]
+                    ? `${usersMap[order.user].firstname} ${
+                        usersMap[order.user].lastname
+                      }`
+                    : "نامشخص"}
+                </td>
+                <td className="h-12">
+                  {new Date(order.createdAt).toLocaleString("fa-IR")}
+                </td>
+                <td className="h-12">
+                  {order.totalPrice.toLocaleString("ar-EG")}
+                </td>
+                <td className="h-12 px-2">
+                  <button
+                    onClick={() => setSelectedOrder(order)}
+                    className="text-nowrap px-1 text-sm  sm:text-base sm:px-2 py-1 bg-white hover:bg-textColor text-gray-800 rounded-lg"
+                  >
+                    بررسی سفارش
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody className="text-center bg-base text-gray-900 font-semibold">
-              {ordersData?.data?.orders.map((order: IOrder) => (
-                <tr
-                  className="even:bg-[#BCB88A] hover:even:bg-white cursor-pointer text-center"
-                  key={order._id}
-                >
-                  <td className="h-12 text-wrap sm:text-nowrap ">
-                    {usersMap[order.user]
-                      ? `${usersMap[order.user].firstname} ${
-                          usersMap[order.user].lastname
-                        }`
-                      : "نامشخص"}
-                  </td>
-                  <td className="h-12">
-                    {new Date(order.createdAt).toLocaleString("fa-IR")}
-                  </td>
-                  <td className="h-12">
-                    {order.totalPrice.toLocaleString("ar-EG")}
-                  </td>
-                  <td className="h-12 px-2">
-                    <button
-                      onClick={() => setSelectedOrder(order)}
-                      className="text-nowrap px-1 text-sm  sm:text-base sm:px-2 py-1 bg-white hover:bg-textColor text-gray-800 rounded-lg"
-                    >
-                      بررسی سفارش
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))}
+          </tbody>
+        </table>
 
-          <Pagination currentPage={page} totalPages={totalPages} />
+        <Pagination currentPage={page} totalPages={totalPages} />
 
-          {selectedOrder && (
-            <Modal
-              isOpen={!!selectedOrder}
+        {selectedOrder && (
+          <Modal
+            isOpen={!!selectedOrder}
+            onClose={() => setSelectedOrder(null)}
+          >
+            <DeliverModal
+              order={selectedOrder}
+              user={usersMap[selectedOrder.user]}
               onClose={() => setSelectedOrder(null)}
-            >
-              <DeliverModal
-                order={selectedOrder}
-                user={usersMap[selectedOrder.user]}
-                onClose={() => setSelectedOrder(null)}
-              />
-            </Modal>
-          )}
-        </div>
+            />
+          </Modal>
+        )}
       </div>
     </section>
   );
