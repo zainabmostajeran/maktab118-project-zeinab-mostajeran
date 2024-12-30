@@ -2,16 +2,22 @@
 
 import React from "react";
 import { updateOrderDeliveryStatus } from "@/apis/services/orders";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchProductById } from "@/apis/services/products";
+import {
+  useMutation,
+  useQuery,
+  useQueries,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Modal from "@/components/ui/Modal";
-import { getAllProducts } from "@/apis/services/products";
 
 interface DeliverModalProps {
   order: IOrders;
   user: IUser;
   onClose: () => void;
 }
+
 const toPersianDigits = (num: string | number): string => {
   return num
     .toString()
@@ -24,6 +30,17 @@ export const DeliverModal: React.FC<DeliverModalProps> = ({
   onClose,
 }) => {
   const queryClient = useQueryClient();
+
+  const productQueries = useQueries({
+    queries: order.products.map((item) => ({
+      queryKey: ["product", item.product],
+      queryFn: () => fetchProductById(item.product),
+      staleTime: 1000 * 60 * 60, // 1 hour
+    })),
+  });
+
+  const isProductsLoading = productQueries.some((query) => query.isLoading);
+  const isProductsError = productQueries.some((query) => query.isError);
 
   const mutation = useMutation({
     mutationFn: () => updateOrderDeliveryStatus(order._id, true),
@@ -41,23 +58,6 @@ export const DeliverModal: React.FC<DeliverModalProps> = ({
   const handleMarkAsDelivered = () => {
     mutation.mutate();
   };
-
-  const {
-    data: productsData,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["products"],
-    queryFn: getAllProducts,
-  });
-  console.log(productsData?.data?.products);
-  const filterProduct = productsData?.data?.products?.filter(
-   (product: IProducts) => {
-    return product._id === order?.products?._id;
-    }
-  );
-  console.log(filterProduct);
 
   const formattedDeliveryDate = order.deliveryDate
     ? new Date(order.deliveryDate).toLocaleString("fa-IR", {
@@ -82,6 +82,26 @@ export const DeliverModal: React.FC<DeliverModalProps> = ({
         hour12: false,
       })
     : "نامشخص";
+
+  if (isProductsLoading) {
+    return (
+      <Modal isOpen={true} onClose={onClose}>
+        <div className="flex items-center justify-center p-4">
+          <p>در حال بارگذاری محصولات...</p>
+        </div>
+      </Modal>
+    );
+  }
+
+  if (isProductsError) {
+    return (
+      <Modal isOpen={true} onClose={onClose}>
+        <div className="flex items-center justify-center p-4">
+          <p>خطا در بارگذاری اطلاعات محصولات.</p>
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal isOpen={true} onClose={onClose}>
@@ -120,18 +140,22 @@ export const DeliverModal: React.FC<DeliverModalProps> = ({
             </tr>
           </thead>
           <tbody className="bg-gray-500 text-white">
-            {order.products.map((item) => (
-              <tr key={item._id}>
-                <td>{item.productName || "نامشخص"}</td>
-                <td>
-                  {item.price !== undefined && item.price !== null
-                    ? item.price.toLocaleString("fa-IR")
-                    : "نامشخص"}
-                  {console.log(item.price)}
-                </td>
-                <td>{item.count || "نامشخص"}</td>
-              </tr>
-            ))}
+            {order.products.map((item, index) => {
+              const productData = productQueries[index]?.data?.data?.product;
+
+              return (
+                <tr key={item._id}>
+                  <td>{productData?.name || "نامشخص"}</td>
+                  <td>
+                    {productData?.price !== undefined &&
+                    productData?.price !== null
+                      ? productData.price.toLocaleString("fa-IR")
+                      : "نامشخص"}
+                  </td>
+                  <td>{item.count || "نامشخص"}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         {!order.deliveryStatus && (
