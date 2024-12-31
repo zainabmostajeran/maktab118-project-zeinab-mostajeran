@@ -1,4 +1,4 @@
-import { PaymentForm } from "@/components/shop/paymentForm"
+import { PaymentForm } from "@/components/shop/PaymentForm"
 const Payment: React.FC = () => {
     return(
       <PaymentForm/>

@@ -68,7 +68,7 @@ const ShoppingCart: React.FC = () => {
           <p>{total.toLocaleString("ar-EG")} تومان</p>
         </div>
         <div>
-          <Link href="/shop/cart" className="rounded-lg px-6 py-1 bg-textColor">
+          <Link href="/shop/cart" className="rounded-lg px-6 py-1 bg-textColor hover:bg-slate-300">
             نهایی کردن سبد خرید
           </Link>
         </div>

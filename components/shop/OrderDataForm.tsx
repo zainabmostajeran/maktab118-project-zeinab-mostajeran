@@ -114,7 +114,7 @@ export const OrderDataForm: React.FC = () => {
                 {...field}
                 type="text"
                 error={errors.province?.message}
-                label="استان "
+                label="استان"
                 placeholder="استان"
               />
             )}
@@ -146,7 +146,7 @@ export const OrderDataForm: React.FC = () => {
       </div>
       <button
         type="submit"
-        className="py-2 px-1 w-full bg-textColor text-slate-600 text-sm rounded-md font-semibold hover:bg-white"
+        className="py-2 px-1 w-full bg-textColor text-slate-600 text-sm rounded-md font-semibold hover:bg-slate-300"
       >
         ثبت
       </button>

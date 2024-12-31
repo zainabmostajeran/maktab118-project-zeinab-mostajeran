@@ -38,7 +38,7 @@ const Home: React.FC = () => {
   return (
     <section>
       <Navbar />
-      <div className="container mx-auto max-w-[1400px] bg-second">
+      <div className="container mx-auto max-w-[1400px] bg-second pt-[80px]">
         <div className="flex flex-col items-center justify-center bg-slate-900 text-textColor text-md font-semibold w-full h-14">
           به فروشگاه پیتزا نوشا خوش آمدید
         </div>

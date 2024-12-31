@@ -20,7 +20,7 @@ const OrdersPage: React.FC = () => {
     <section className="mx-auto">
       <div className="block px-2  mx-auto sm:flex sm:items-center sm:justify-between sm:px-16">
         <PageTitle className="px-2" title="سفارش ها" />
-        <ToggleGroup />
+        <ToggleGroup/>
       </div>
       <Suspense fallback={<div>در حال بارگذاری...</div>}>
         <OrderList page={currentPage} />
