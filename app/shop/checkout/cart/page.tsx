@@ -8,6 +8,8 @@ import {
 } from "@/redux/slices/cartSlice";
 import { FaTrash } from "react-icons/fa";
 import Image from "next/image";
+import Link from "next/link";
+
 
 const ShoppingCart: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -81,14 +83,14 @@ const ShoppingCart: React.FC = () => {
         </div>
         <div className="flex items-center justify-between">
           <div className="flex item-center">
-            <p> جمع : </p>
-            <p>{total.toLocaleString("ar-EG")} تومان</p>
+            <p className="font-bold">  جمع کل : </p>
+            <p className="font-bold">{total.toLocaleString("ar-EG")} تومان</p>
           </div>
-          <div>
-            <button className="rounded-lg px-6 py-1 bg-textColor">
+          <Link href="/shop/cart">
+            <button className="rounded-lg px-6 py-1 bg-textColor font-bold">
               نهایی کردن سبد خرید
             </button>
-          </div>
+          </Link>
         </div>
       </div>
     </section>

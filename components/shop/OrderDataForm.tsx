@@ -15,7 +15,7 @@ export const OrderDataForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<OrderDataSchemaType>({
-    mode: "all",
+    mode:"all",
     resolver: zodResolver(OrderDataSchema),
     defaultValues: {
       firstName: "",
@@ -31,7 +31,6 @@ export const OrderDataForm: React.FC = () => {
     toast.success("اطلاعات با موفقیت ثبت شد!");
     console.log("Form Data:", data);
   };
-
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -144,12 +143,14 @@ export const OrderDataForm: React.FC = () => {
           />
         </div>
       </div>
+      {/* <Link href="/shop/Payment"> */}
       <button
         type="submit"
-        className="py-2 px-1 w-full bg-textColor text-slate-600 text-sm rounded-md font-semibold hover:bg-slate-300"
+        className="py-2 mt-3 px-1 w-full bg-textColor text-slate-600 text-sm rounded-md font-semibold hover:bg-slate-300"
       >
         ثبت
       </button>
+      {/* </Link> */}
     </form>
   );
 };

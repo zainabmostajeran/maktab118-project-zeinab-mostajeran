@@ -1,21 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// export const ProductCardSkeleton: React.FC = () => {
-//   return (
-//     <div
-//       className={classNames(
-//         "border border-slate-200 shadow-md space-y-2",
-//         "bg-white px-5 py-4 rounded-xl transition",
-//         "hover:scale-105 hover:cursor-pointer ease-in-out"
-//       )}
-//     >
-//       <div className="w-full max-w-[620px] h-5 rounded-lg bg-slate-300 animate-pulse"></div>
-//       <div className="w-full max-w-[120px] h-5 rounded-lg bg-slate-300 animate-pulse"></div>
-//     </div>
-//   );
-// };
-
 export const ProductCard: React.FC<IProducts> = ({
   images,
   name,

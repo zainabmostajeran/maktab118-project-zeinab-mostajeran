@@ -22,9 +22,7 @@ interface ICartState {
   error: string | null;
 }
 
-/**
- * Fetch the current user's cart
- */
+
 export const fetchCart = createAsyncThunk<
   CartItem[],
   void,
@@ -46,9 +44,7 @@ export const fetchCart = createAsyncThunk<
   return data as CartItem[];
 });
 
-/**
- * Add product to the current user's cart
- */
+
 export const addProductToCart = createAsyncThunk<
   Product,
   Product,
@@ -73,9 +69,7 @@ export const addProductToCart = createAsyncThunk<
   return product;
 });
 
-/**
- * Update item quantity in the current user's cart
- */
+
 export const updateItemQuantity = createAsyncThunk<
   { productId: string; newQuantity: number },
   { productId: string; newQuantity: number },
@@ -104,9 +98,7 @@ export const updateItemQuantity = createAsyncThunk<
   }
 );
 
-/**
- * Remove one item from the current user's cart
- */
+
 export const removeItemFromCart = createAsyncThunk<
   string,
   string,
@@ -133,9 +125,7 @@ export const removeItemFromCart = createAsyncThunk<
   }
 );
 
-/**
- * Clear the current user's entire cart
- */
+
 export const clearCart = createAsyncThunk<boolean, void, { state: RootState }>(
   "cart/clearCart",
   async (_, { getState, rejectWithValue }) => {

@@ -4,9 +4,6 @@ import path from "path";
 
 const cartDbPath = path.join(process.cwd(), "data", "cartDb.json");
 
-/**
- * Helper to read cartDb.json
- */
 async function readCartDb() {
   try {
     const data = await fsPromises.readFile(cartDbPath, "utf-8");
@@ -17,9 +14,6 @@ async function readCartDb() {
   }
 }
 
-/**
- * Helper to write to cartDb.json
- */
 async function writeCartDb(data: any) {
   try {
     await fsPromises.writeFile(cartDbPath, JSON.stringify(data, null, 2));
@@ -28,18 +22,7 @@ async function writeCartDb(data: any) {
   }
 }
 
-/**
- * GET /api/cart?userId=...
- *   -> Return the full cart for a specific user
- *
- * POST /api/cart?userId=...
- *   -> Add a product to the user’s cart
- *
- * DELETE /api/cart?userId=...
- *   -> Clear the user’s entire cart
- */
 export async function GET(request: Request) {
-  // Parse userId from query param
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
 
@@ -48,11 +31,9 @@ export async function GET(request: Request) {
   }
 
   const dbData = await readCartDb();
-  // Find the user’s cart
   const user = dbData.users.find((u: any) => u.userId === userId);
 
   if (!user) {
-    // If not found, return an empty array or 404
     return NextResponse.json([], { status: 200 });
   }
 
@@ -73,7 +54,6 @@ export async function POST(request: Request) {
   const dbData = await readCartDb();
   let user = dbData.users.find((u: any) => u.userId === userId);
 
-  // If user not found, add them
   if (!user) {
     user = {
       userId,
@@ -85,10 +65,8 @@ export async function POST(request: Request) {
   const existingItem = user.cartItems.find((item: any) => item._id === _id);
 
   if (existingItem) {
-    // Increment the cartQuantity
     existingItem.cartQuantity += 1;
   } else {
-    // Add new item with cartQuantity=1
     user.cartItems.push({
       _id,
       name,
@@ -101,7 +79,6 @@ export async function POST(request: Request) {
     });
   }
 
-  // Save
   await writeCartDb(dbData);
 
   return NextResponse.json(
@@ -122,14 +99,12 @@ export async function DELETE(request: Request) {
   const userIndex = dbData.users.findIndex((u: any) => u.userId === userId);
 
   if (userIndex === -1) {
-    // No user found, nothing to clear
     return NextResponse.json(
       { message: "Cart already empty" },
       { status: 200 }
     );
   }
 
-  // Clear the cart
   dbData.users[userIndex].cartItems = [];
   await writeCartDb(dbData);
 

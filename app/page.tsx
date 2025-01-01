@@ -12,7 +12,6 @@ import { getCategories } from "@/apis/services/categories";
 import ProductList from "@/components/shop/ProductList";
 
 const Home: React.FC = () => {
-  
   const {
     data: categoriesData,
     isLoading: categoriesLoading,
@@ -44,7 +43,7 @@ const Home: React.FC = () => {
         </div>
         <div className="flex justify-between items-center px-4 py-4 text-slate-900">
           {/* Toggle Category */}
-          <ToggleCategory/>
+          <ToggleCategory />
           <div className="relative text-white">
             <input
               type="text"
@@ -70,7 +69,7 @@ const Home: React.FC = () => {
                 </Link>
                 <MdOutlineArrowLeft className="size-5 border border-textColor" />
               </div>
-              <ProductList key={category._id} category={category} limit={8}/>
+              <ProductList key={category._id} category={category} limit={8} />
             </div>
           ))}
         </div>
