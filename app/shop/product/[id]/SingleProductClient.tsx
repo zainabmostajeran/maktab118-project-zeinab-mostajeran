@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/Hook";
-import { CartActions } from "@/redux/slices/cartSlice";
+import { addProductToCart } from "@/redux/slices/cartSlice";
 import { toast } from "react-toastify";
 
 interface Product {
@@ -23,15 +23,23 @@ const SingleProductClient: React.FC<{ product: Product }> = ({ product }) => {
   const increment = () => setCartQuantity((q) => q + 1);
   const decrement = () => setCartQuantity((q) => (q > 1 ? q - 1 : 1));
 
-  const addToCart = () => {
+  const addToCartHandler = () => {
     const productExists = cart.find((item) => item._id === product._id);
     if (productExists) {
-      toast.error("این محصول قبلا به سبد خرید اضافه شده");
+      toast.error(
+        "این محصول قبلا در سبد خرید شما موجود است، مقدار افزایش می‌یابد."
+      );
       return;
     }
-    dispatch(CartActions.add(product));
-    toast.success("محصول با موفقیت به سبد خرید اضافه شد");
-    setCartQuantity(1);
+    dispatch(addProductToCart(product))
+      .unwrap()
+      .then(() => {
+        toast.success("محصول با موفقیت به سبد خرید اضافه شد");
+        setCartQuantity(1);
+      })
+      .catch(() => {
+        toast.error("خطا در افزودن محصول");
+      });
   };
 
   return (
@@ -46,7 +54,7 @@ const SingleProductClient: React.FC<{ product: Product }> = ({ product }) => {
         </p>
       </div>
       <button
-        onClick={addToCart}
+        onClick={addToCartHandler}
         className="bg-base px-4 py-1 text-white rounded-lg"
       >
         افزودن به سبد خرید

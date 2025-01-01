@@ -3,17 +3,25 @@ import Link from "next/link";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { RiAdminFill } from "react-icons/ri";
 import { IoMenu } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useAppSelector } from "@/redux/Hook";
+import { useAppDispatch, useAppSelector } from "@/redux/Hook";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useLogout } from "@/apis/mutation/logout";
+import { fetchCart } from "@/redux/slices/cartSlice";
 
 const Navbar: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [hiddenMenu, setHiddenMenu] = useState(true);
   const [cartDropdown, setCartDropdown] = useState(false);
-  const cartCount = useAppSelector((state) => state.cart.cart);
+  const { cart, status } = useAppSelector((state) => state.cart);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchCart());
+    }
+  }, [status, dispatch]);
 
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth
@@ -26,7 +34,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-base px-6 fixed top-0 left-0 w-full z-50 shadow-md">
+    <nav className="bg-base px-6 ">
       <div className="container mx-auto flex items-center justify-between max-w-[1400px]">
         <div className="flex flex-col items-center">
           <Image src="/logo_prev_ui.png" width={80} height={18} alt="Logo" />
@@ -77,15 +85,15 @@ const Navbar: React.FC = () => {
                 سبد خرید
               </button>
               <FaShoppingCart />
-              {cartCount.length > 0 && (
+              {cart.length > 0 && (
                 <span className="absolute top-[-10px] right-[-10px] inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                  {cartCount.length}
+                  {cart.length}
                 </span>
               )}
               {cartDropdown && (
                 <div className="absolute top-10 left-0 bg-white shadow-lg rounded-md z-50">
                   <ul className="px-10 py-8 space-y-4 w-full">
-                    {cartCount.map((item) => (
+                    {cart.map((item) => (
                       <li
                         key={item._id}
                         className="flex justify-between items-center gap-x-6 py-2 w-full"

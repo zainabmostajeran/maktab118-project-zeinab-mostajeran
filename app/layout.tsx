@@ -32,15 +32,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          <ReduxProvider>
         <ToastifyProvider>
           <TanstackProvider>
-           
-            {children}
-            
+            <ReduxProvider>{children}</ReduxProvider>
           </TanstackProvider>
         </ToastifyProvider>
-        </ReduxProvider>
       </body>
     </html>
   );
