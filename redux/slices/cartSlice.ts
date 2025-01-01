@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../store";
+import { logout } from "./authSlice";
 
 interface Product {
   _id: string;
@@ -16,42 +18,208 @@ interface CartItem extends Product {
 
 interface ICartState {
   cart: CartItem[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
 }
+
+/**
+ * Fetch the current user's cart
+ */
+export const fetchCart = createAsyncThunk<
+  CartItem[],
+  void,
+  { state: RootState }
+>("cart/fetchCart", async (_, { getState, rejectWithValue }) => {
+  const state = getState();
+  const userId = state.auth.user?._id;
+
+  if (!userId) {
+    return rejectWithValue("No user ID found; user not logged in.");
+  }
+
+  const response = await fetch(`/api/cart?userId=${userId}`, { method: "GET" });
+  if (!response.ok) {
+    throw new Error("Failed to fetch cart");
+  }
+
+  const data = await response.json();
+  return data as CartItem[];
+});
+
+/**
+ * Add product to the current user's cart
+ */
+export const addProductToCart = createAsyncThunk<
+  Product,
+  Product,
+  { state: RootState }
+>("cart/addProductToCart", async (product, { getState, rejectWithValue }) => {
+  const state = getState();
+  const userId = state.auth.user?._id;
+
+  if (!userId) {
+    return rejectWithValue("No user ID found; user not logged in.");
+  }
+
+  const response = await fetch(`/api/cart?userId=${userId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(product),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add product");
+  }
+  return product;
+});
+
+/**
+ * Update item quantity in the current user's cart
+ */
+export const updateItemQuantity = createAsyncThunk<
+  { productId: string; newQuantity: number },
+  { productId: string; newQuantity: number },
+  { state: RootState }
+>(
+  "cart/updateItemQuantity",
+  async ({ productId, newQuantity }, { getState, rejectWithValue }) => {
+    const state = getState();
+    const userId = state.auth.user?._id;
+
+    if (!userId) {
+      return rejectWithValue("No user ID found; user not logged in.");
+    }
+
+    const response = await fetch(`/api/cart/${productId}?userId=${userId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cartQuantity: newQuantity }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update item quantity");
+    }
+
+    return { productId, newQuantity };
+  }
+);
+
+/**
+ * Remove one item from the current user's cart
+ */
+export const removeItemFromCart = createAsyncThunk<
+  string,
+  string,
+  { state: RootState }
+>(
+  "cart/removeItemFromCart",
+  async (productId, { getState, rejectWithValue }) => {
+    const state = getState();
+    const userId = state.auth.user?._id;
+
+    if (!userId) {
+      return rejectWithValue("No user ID found; user not logged in.");
+    }
+
+    const response = await fetch(`/api/cart/${productId}?userId=${userId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to remove item");
+    }
+
+    return productId;
+  }
+);
+
+/**
+ * Clear the current user's entire cart
+ */
+export const clearCart = createAsyncThunk<boolean, void, { state: RootState }>(
+  "cart/clearCart",
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState();
+    const userId = state.auth.user?._id;
+
+    if (!userId) {
+      return rejectWithValue("No user ID found; user not logged in.");
+    }
+
+    const response = await fetch(`/api/cart?userId=${userId}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to clear cart");
+    }
+
+    return true;
+  }
+);
 
 const initialState: ICartState = {
   cart: [],
+  status: "idle",
+  error: null,
 };
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {
-    add: (state, action: PayloadAction<Product>) => {
+  reducers: {},
+  extraReducers: (builder) => {
+    // fetchCart
+    builder.addCase(fetchCart.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(fetchCart.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.cart = action.payload;
+    });
+    builder.addCase(fetchCart.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message || "Failed to fetch cart";
+    });
+
+    // addProductToCart
+    builder.addCase(addProductToCart.fulfilled, (state, action) => {
       const product = action.payload;
-      const existingItem = state.cart.find((item) => item._id === product._id);
+      const existingItem = state.cart.find((i) => i._id === product._id);
       if (existingItem) {
         existingItem.cartQuantity += 1;
       } else {
         state.cart.push({ ...product, cartQuantity: 1 });
       }
-    },
-    remove: (state, action: PayloadAction<string>) => {
-      state.cart = state.cart.filter((item) => item._id !== action.payload);
-    },
-    updateQuantity: (
-      state,
-      action: PayloadAction<{ id: string; quantity: number }>
-    ) => {
-      const { id, quantity } = action.payload;
-      const item = state.cart.find((item) => item._id === id);
-      if (item && quantity > 0) {
-        item.cartQuantity = quantity;
-      } else {
-        state.cart = state.cart.filter((item) => item._id !== id);
+    });
+
+    // updateItemQuantity
+    builder.addCase(updateItemQuantity.fulfilled, (state, action) => {
+      const { productId, newQuantity } = action.payload;
+      const item = state.cart.find((i) => i._id === productId);
+      if (item) {
+        if (newQuantity <= 0) {
+          // remove from cart if quantity <= 0
+          state.cart = state.cart.filter((i) => i._id !== productId);
+        } else {
+          item.cartQuantity = newQuantity;
+        }
       }
-    },
+    });
+
+    // removeItemFromCart
+    builder.addCase(removeItemFromCart.fulfilled, (state, action) => {
+      const productId = action.payload;
+      state.cart = state.cart.filter((i) => i._id !== productId);
+    });
+
+    // clearCart
+    builder.addCase(clearCart.fulfilled, (state) => {
+      state.cart = [];
+    });
+
+    //  logout case to reset the cart
+    builder.addCase(logout, () => initialState);
   },
 });
 
-export const CartActions = cartSlice.actions;
 export const CartReducer = cartSlice.reducer;
