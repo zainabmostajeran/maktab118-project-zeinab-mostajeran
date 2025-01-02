@@ -26,7 +26,7 @@ const ShoppingCart: React.FC = () => {
   }, [cart]);
 
   const total = cart.reduce((acc, item) => {
-    return acc + item.price * item.quantity;
+    return acc + item.price * item.cartQuantity;
   }, 0);
 
   const handleQuantityChange = (id: string, newQuantity: number) => {

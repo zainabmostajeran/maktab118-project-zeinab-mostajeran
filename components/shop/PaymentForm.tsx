@@ -13,7 +13,7 @@ import { PaymentSchema, PaymentSchemaType } from "@/validation/payment";
 export const PaymentForm: React.FC = () => {
   const { cart, status } = useAppSelector((state) => state.cart);
   const total = cart.reduce((acc, item) => {
-    return acc + item.price * item.quantity;
+    return acc + item.price * item.cartQuantity;
   }, 0);
   const {
     control,
