@@ -8,6 +8,8 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useRouter } from "next/navigation";
+
 
 export const OrderDataForm: React.FC = () => {
   const {
@@ -27,8 +29,11 @@ export const OrderDataForm: React.FC = () => {
       deliveryDate: null,
     },
   });
+  const { push } = useRouter();
+
   const onSubmit = (data: OrderDataSchemaType) => {
     toast.success("اطلاعات با موفقیت ثبت شد!");
+    push("/shop/Payment");
     console.log("Form Data:", data);
   };
   return (
@@ -143,14 +148,12 @@ export const OrderDataForm: React.FC = () => {
           />
         </div>
       </div>
-      {/* <Link href="/shop/Payment"> */}
       <button
         type="submit"
         className="py-2 mt-3 px-1 w-full bg-textColor text-slate-600 text-sm rounded-md font-semibold hover:bg-slate-300"
       >
         ثبت
       </button>
-      {/* </Link> */}
     </form>
   );
 };

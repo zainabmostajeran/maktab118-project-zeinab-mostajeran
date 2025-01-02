@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-base px-6 fixed top-0 left-0 z-50 w-full shadow-lg">
+    <nav className="bg-base px-6">
       <div className="container mx-auto flex items-center justify-between max-w-[1400px]">
         <div className="flex flex-col items-center">
           <Image src="/logo_prev_ui.png" width={80} height={18} alt="Logo" />
@@ -93,6 +93,8 @@ const Navbar: React.FC = () => {
               {cartDropdown && (
                 <div className="absolute top-10 left-0 bg-white shadow-lg rounded-md z-50">
                   <ul className="px-10 py-8 space-y-4 w-full">
+                    {cart.length > 0 ?(
+                      <>
                     {cart.map((item) => (
                       <li
                         key={item._id}
@@ -111,7 +113,10 @@ const Navbar: React.FC = () => {
                       >
                         مشاهده سبد خرید
                       </Link>
+                     
                     </li>
+                    </>
+                    ):(<li className="text-center text-gray-800 text-nowrap text-sm">سبد خرید خالی است</li>)}
                   </ul>
                 </div>
               )}

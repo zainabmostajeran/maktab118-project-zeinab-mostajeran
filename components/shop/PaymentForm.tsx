@@ -4,9 +4,12 @@ import { Input } from "@/components/admin/Input";
 import { useForm, Controller } from "react-hook-form";
 import Link from "next/link";
 import { useAppSelector, useAppDispatch } from "@/redux/Hook";
-
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { clearCart } from "@/redux/slices/cartSlice";
 import { toast } from "react-toastify";
 import { PaymentSchema, PaymentSchemaType } from "@/validation/payment";
+
 export const PaymentForm: React.FC = () => {
   const { cart, status } = useAppSelector((state) => state.cart);
   const total = cart.reduce((acc, item) => {
@@ -27,7 +30,20 @@ export const PaymentForm: React.FC = () => {
       cvv2: "",
     },
   });
+
+  const dispatch = useDispatch();
+  const { push } = useRouter();
+
   const onSubmit = (data: PaymentSchemaType) => {
+    const error = false;
+    if (error) {
+      push("/shop/payment-failed");
+      toast.error("پرداخت ناموفق بود!");
+    } else {
+      dispatch(clearCart());
+      toast.success("پرداخت موفق بود!");
+      push("/shop/paymentSuccess");
+    } 
     console.log("Form Data:", data);
   };
   return (
