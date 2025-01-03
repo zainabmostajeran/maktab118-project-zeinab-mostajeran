@@ -6,10 +6,11 @@ import { OrderDataSchema, OrderDataSchemaType } from "@/validation/Order";
 import { Input } from "@/components/admin/Input";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/navigation";
-
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
 
 export const OrderDataForm: React.FC = () => {
   const {
@@ -17,7 +18,7 @@ export const OrderDataForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<OrderDataSchemaType>({
-    mode:"all",
+    mode: "all",
     resolver: zodResolver(OrderDataSchema),
     defaultValues: {
       firstName: "",
@@ -132,11 +133,15 @@ export const OrderDataForm: React.FC = () => {
                   زمان تحویل
                 </label>
                 <DatePicker
-                  selected={field.value}
-                  onChange={(date) => field.onChange(date)}
-                  dateFormat="yyyy-MM-dd"
-                  placeholderText="زمان تحویل"
-                  className="border rounded-md w-full text-sm py-1"
+                  value={field.value}
+                  onChange={(date) =>
+                    field.onChange(date?.format("YYYY-MM-DD"))
+                  }
+                  calendar={persian}
+                  locale={persian_fa}
+                  placeholder="زمان تحویل"
+                  className="border  rounded-md w-full text-sm  text-gray-800"
+                  inputClass="placeholder:text-gray-500 placeholder:text-sm placeholder:font-normal rounded-md py-1 px-3"
                 />
                 {errors.deliveryDate && (
                   <p className="text-red-500 text-xs mt-1">
