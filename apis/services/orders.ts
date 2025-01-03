@@ -24,7 +24,7 @@ export const updateOrderDeliveryStatus = async (
   status: boolean
 ): Promise<IOrders> => {
   const response = await axiosInstance.patch(
-    `${urls.orders.update}/${orderId}`,
+    `${urls.orders.update(orderId)}`,
     { deliveryStatus: status }
   );
   return response.data;

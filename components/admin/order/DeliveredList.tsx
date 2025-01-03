@@ -138,7 +138,7 @@ export const DeliveredList: React.FC<OrderListProps> = ({ page }) => {
                 <td className="h-12">
                   <button
                     onClick={() => handleReviewOrder(order)}
-                    className="px-2 py-1 bg-white hover:bg-textColor text-gray-900 rounded-lg"
+                    className="px-2 py-1 bg-white hover:bg-textColor text-base rounded-lg"
                   >
                      مشاهده شده
                   </button>

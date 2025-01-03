@@ -77,50 +77,71 @@ const Navbar: React.FC = () => {
                 </div>
               </>
             )}
-            <div className="flex items-center justify-start gap-x-1 relative">
-              <button
-                className="hover:underline flex items-center bg-transparent border-none cursor-pointer"
-                onClick={() => setCartDropdown(!cartDropdown)}
+<div className="relative flex items-center">
+  <button
+    onClick={() => setCartDropdown(!cartDropdown)}
+    className="hover:underline bg-transparent border-none cursor-pointer flex items-center"
+  >
+    سبد خرید
+    <FaShoppingCart className="ml-1" />
+  </button>
+  {cart.length > 0 && (
+    <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-red-600 rounded-full">
+      {cart.length}
+    </span>
+  )}
+
+  {/* Dropdown */}
+  {cartDropdown && (
+    <div className="absolute top-10 left-0 bg-white shadow-lg rounded-md z-50 w-80 max-h-96 overflow-y-auto">
+      <ul className="px-4 py-4 space-y-4 w-full">
+        {cart.length > 0 ? (
+          <>
+            {cart.map((item) => (
+              <li
+                key={item._id}
+                className="flex items-center gap-x-4 w-full justify-between"
               >
-                سبد خرید
-              </button>
-              <FaShoppingCart />
-              {cart.length > 0 && (
-                <span className="absolute top-[-10px] right-[-10px] inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                  {cart.length}
-                </span>
-              )}
-              {cartDropdown && (
-                <div className="absolute top-10 left-0 bg-white shadow-lg rounded-md z-50">
-                  <ul className="px-10 py-8 space-y-4 w-full">
-                    {cart.length > 0 ?(
-                      <>
-                    {cart.map((item) => (
-                      <li
-                        key={item._id}
-                        className="flex justify-between items-center gap-x-6 py-2 w-full"
-                      >
-                        <p className="text-gray-800 text-nowrap">{item.name}</p>
-                        <p className="text-red-600 text-nowrap">
-                          {item.cartQuantity.toLocaleString("ar-EG")} عدد
-                        </p>
-                      </li>
-                    ))}
-                    <li className="text-center">
-                      <Link
-                        href="/shop/checkout/cart"
-                        className="bg-textColor text-gray-800 hover:underline rounded-lg px-6 text-nowrap py-1"
-                      >
-                        مشاهده سبد خرید
-                      </Link>
-                     
-                    </li>
-                    </>
-                    ):(<li className="text-center text-gray-800 text-nowrap text-sm">سبد خرید خالی است</li>)}
-                  </ul>
+                <div className="w-16 h-16 flex-shrink-0">
+                  <Image
+                    className="p-2 object-cover rounded"
+                    src={`http://localhost:8000/images/products/images/${item.images[0]}`}
+                    width={60}
+                    height={60}
+                    alt={item.name}
+                  />
                 </div>
-              )}
-            </div>
+                <div className="flex flex-col gap-y-1 text-sm flex-grow">
+                  <p className="text-gray-800 truncate">{item.name}</p>
+                  <p className="text-gray-600">
+                    {item.price.toLocaleString("ar-EG")} تومان
+                  </p>
+                </div>
+                <div className="flex flex-col items-center justify-center text-sm text-red-600 w-12">
+                  <p>{item.cartQuantity.toLocaleString("ar-EG")}</p>
+                  <p>عدد</p>
+                </div>
+              </li>
+            ))}
+            <li className="text-center">
+              <Link
+                href="/shop/checkout/cart"
+                className="bg-textColor text-gray-800 hover:underline rounded-lg px-6 py-2 block"
+              >
+                مشاهده سبد خرید
+              </Link>
+            </li>
+          </>
+        ) : (
+          <li className="text-center text-gray-800 text-sm">
+            سبد خرید خالی است
+          </li>
+        )}
+      </ul>
+    </div>
+  )}
+</div>
+
           </div>
           <div
             onClick={() => setHiddenMenu(!hiddenMenu)}

@@ -29,7 +29,7 @@ export const urls = {
     add: "/orders",
     list: "/orders",
     byId: (id: number) => `/orders/${id}`,
-    update: (id: number) => `/orders/${id}`,
+    update: (id: string) => `/orders/${id}`,
     delete: (id: number) => `/orders/${id}`,
   },
   Users: {

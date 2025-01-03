@@ -35,7 +35,7 @@ export const DeliverModal: React.FC<DeliverModalProps> = ({
     queries: order.products.map((item) => ({
       queryKey: ["product", item.product],
       queryFn: () => fetchProductById(item.product),
-      staleTime: 1000 * 60 * 60, // 1 hour
+      staleTime: 1000 * 60 * 60, 
     })),
   });
 
@@ -107,45 +107,45 @@ export const DeliverModal: React.FC<DeliverModalProps> = ({
     <Modal isOpen={true} onClose={onClose}>
       <section className="flex flex-col items-center gap-y-8 py-12 px-4">
         <div className="flex flex-col gap-5 justify-start w-full">
-          <div className="flex gap-1 items-start justify-center w-full">
-            <p className="font-bold">نام مشتری:</p>
+          <div className="flex gap-1 items-start justify-center w-full text-textColor">
+            <p className="font-bold text-gry-800">نام مشتری:</p>
             <p>{`${user?.firstname} ${user?.lastname}` || "نامشخص"}</p>
           </div>
-          <div className="flex gap-1 items-start justify-center w-full">
-            <p className="font-bold">آدرس:</p>
-            <p>{user?.address || "نامشخص"}</p>
+          <div className="flex gap-1 items-start justify-center w-full text-textColor">
+            <p className="font-bold"> آدرس: </p>
+            <p >{user?.address || "نامشخص"}</p>
           </div>
-          <div className="flex gap-1 items-start justify-center w-full">
+          <div className="flex gap-1 items-start justify-center w-full text-textColor">
             <p className="font-bold">تلفن:</p>
             <p>
               {user?.phoneNumber ? toPersianDigits(user.phoneNumber) : "نامشخص"}
             </p>
           </div>
-          <div className="flex gap-1 items-start justify-center w-full">
+          <div className="flex gap-1 items-start justify-center w-full text-textColor">
             <p className="font-bold">زمان تحویل:</p>
             <p>{formattedDeliveryDate}</p>
           </div>
-          <div className="flex gap-1 items-start justify-center w-full">
+          <div className="flex gap-1 items-start justify-center w-full text-textColor">
             <p className="font-bold">زمان سفارش:</p>
             <p>{formattedCreatedAt}</p>
           </div>
         </div>
 
-        <table className="w-full text-center mt-4">
-          <thead className="text-center bg-gray-200">
+        <table className="w-full text-center mt-4 rounded-lg">
+          <thead className="text-center bg-textColor">
             <tr>
               <th>کالا</th>
               <th>قیمت</th>
               <th>موجودی</th>
             </tr>
           </thead>
-          <tbody className="bg-gray-500 text-white">
+          <tbody className="bg-white text-gray-950">
             {order.products.map((item, index) => {
               const productData = productQueries[index]?.data?.data?.product;
 
               return (
-                <tr key={item._id}>
-                  <td>{productData?.name || "نامشخص"}</td>
+                <tr  key={item._id}>
+                  <td className="py-2">{productData?.name || "نامشخص"}</td>
                   <td>
                     {productData?.price !== undefined &&
                     productData?.price !== null

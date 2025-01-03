@@ -57,10 +57,10 @@ const ShoppingCart: React.FC = () => {
                     alt={item.name}
                   />
                   <div className="flex-grow text-center md:text-right space-y-3 text-textColor">
-                    <p className="font-semibold text-sm md:text-base">
+                    <p className="font-semibold text-sm md:text-textColor">
                       {item.name}
                     </p>
-                    <p className="text-sm md:text-base">
+                    <p className="text-sm md:text-textColor">
                       {item.price.toLocaleString("ar-EG")} تومان
                     </p>
                   </div>
@@ -76,7 +76,7 @@ const ShoppingCart: React.FC = () => {
                     />
                     <button
                       onClick={() => handleRemoveItem(item._id)}
-                      className="text-red-500"
+                      className="text-textColor"
                     >
                       <FaTrash />
                     </button>

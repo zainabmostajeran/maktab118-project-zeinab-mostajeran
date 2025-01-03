@@ -136,11 +136,10 @@ export const AwaitingList: React.FC<OrderListProps> = ({ page }) => {
                   {order.totalPrice.toLocaleString("ar-EG")}
                 </td>
 
-                {/*  */}
                 <td className="h-12">
                   <button
                     onClick={() => handleReviewOrder(order)}
-                    className="px-2 py-1 bg-white hover:bg-textColor text-gray-900 rounded-lg"
+                    className="px-2 py-1 bg-white hover:bg-textColor text-base rounded-lg"
                   >
                     بررسی سفارش
                   </button>
