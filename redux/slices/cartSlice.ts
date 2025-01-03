@@ -98,7 +98,6 @@ export const updateItemQuantity = createAsyncThunk<
   }
 );
 
-
 export const removeItemFromCart = createAsyncThunk<
   string,
   string,
@@ -196,18 +195,15 @@ export const cartSlice = createSlice({
       }
     });
 
-    // removeItemFromCart
     builder.addCase(removeItemFromCart.fulfilled, (state, action) => {
       const productId = action.payload;
       state.cart = state.cart.filter((i) => i._id !== productId);
     });
 
-    // clearCart
     builder.addCase(clearCart.fulfilled, (state) => {
       state.cart = [];
     });
 
-    //  logout case to reset the cart
     builder.addCase(logout, () => initialState);
   },
 });

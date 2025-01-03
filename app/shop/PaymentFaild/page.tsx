@@ -9,10 +9,10 @@ const PaymentFaild: React.FC = () => {
           <div>
             <FaRegTimesCircle className="size-16 text-red-700" />
           </div>
-          <p className="font-bold text-3xl">پرداخت شما با موفقیت انجام نشد</p>
+          <p className="font-bold sm:text-3xl">پرداخت شما با موفقیت انجام نشد</p>
           {/* <p>مبلغ پرداخت شده:</p> */}
           <Link href="/">
-          <button className="bg-textColor px-4 py-1 hover:bg-base rounded-lg">متوجه شدم</button>
+          <button className="bg-textColor px-4 py-1 hover:bg-base rounded-lg text-nowrap">متوجه شدم</button>
           </Link>
         </div>
       </div>

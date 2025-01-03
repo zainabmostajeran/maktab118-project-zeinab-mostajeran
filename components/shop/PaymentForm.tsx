@@ -47,101 +47,99 @@ export const PaymentForm: React.FC = () => {
     console.log("Form Data:", data);
   };
   return (
-    <div className="flex gap-x-4">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-3 py-6 px-5 bg-base text-right rounded-md shadow-lg"
-      >
-        <p className="text-2xl font-semibold text-textColor text-center">
-          پرداخت
-        </p>
-        <div className="grid grid-cols-1 gap-6">
-          <div className="space-y-4">
-            <Controller
-              name="cardNumber"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  error={errors.cardNumber?.message}
-                  label="شماره کارت"
-                  placeholder="شماره کارت"
-                />
-              )}
+<div className="block space-y-5 sm:flex sm:gap-x-6 sm:space-y-0">
+  <form
+    onSubmit={handleSubmit(onSubmit)}
+    className="space-y-5 py-6 px-4 bg-base text-right rounded-md shadow-lg sm:w-2/3"
+  >
+    <p className="text-2xl font-semibold text-textColor text-center">پرداخت</p>
+    <div className="grid grid-cols-1 gap-x-4 gap-y-4">
+      <div className="space-y-4">
+        <Controller
+          name="cardNumber"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              error={errors.cardNumber?.message}
+              label="شماره کارت"
+              placeholder="شماره کارت"
             />
-            <Controller
-              name="internetPassword"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  error={errors.internetPassword?.message}
-                  label="رمزاینترنتی"
-                  placeholder="رمزاینترنتی"
-                />
-              )}
+          )}
+        />
+        <Controller
+          name="internetPassword"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              error={errors.internetPassword?.message}
+              label="رمز اینترنتی"
+              placeholder="رمز اینترنتی"
             />
-            <div className="grid sm:grid-cols-3 items-center justify-center sm:gap-x-4">
-              <Controller
-                name="Mounth"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    type="text"
-                    error={errors.Mounth?.message}
-                    label="ماه"
-                    placeholder="ماه"
-                  />
-                )}
+          )}
+        />
+        <div className="grid grid-cols-2 sm:grid-cols-3 items-center gap-4">
+          <Controller
+            name="Mounth"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                error={errors.Mounth?.message}
+                label="ماه"
+                placeholder="ماه"
               />
-              <Controller
-                name="year"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    type="text"
-                    error={errors.year?.message}
-                    label="سال"
-                    placeholder="سال"
-                  />
-                )}
+            )}
+          />
+          <Controller
+            name="year"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                error={errors.year?.message}
+                label="سال"
+                placeholder="سال"
               />
-              <Controller
-                name="cvv2"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    type="text"
-                    error={errors.cvv2?.message}
-                    label="cvv2"
-                    placeholder="cvv2"
-                  />
-                )}
+            )}
+          />
+          <Controller
+            name="cvv2"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                error={errors.cvv2?.message}
+                label="cvv2"
+                placeholder="cvv2"
               />
-            </div>
-          </div>
+            )}
+          />
         </div>
-        <button
-          type="submit"
-          className="py-2 px-1 w-full bg-textColor text-slate-600 text-sm rounded-md font-semibold hover:bg-slate-300"
-        >
-          پرداخت
-        </button>
-      </form>
-      <div className="bg-base rounded-lg p-8">
-        <div className="flex flex-col gap-y-4 text-textColor">
-          <p className="text-nowrap">
-            مبلغ قابل پرداخت : {total.toLocaleString("ar-EG")} تومان
-          </p>
-          <p>نام پذیرنده : کیف پول الکترونیک پارسیان</p>
-          <p>کد پذیرنده : 1253 </p>
-          <p>ادرس پذیرنده : Paypal.ir</p>
-        </div>
-        <p></p>
       </div>
     </div>
+    <button
+      type="submit"
+      className="py-2 px-4 w-full bg-textColor text-white text-sm rounded-md font-semibold hover:bg-slate-300 sm:text-base"
+    >
+      پرداخت
+    </button>
+  </form>
+  <div className="bg-base rounded-lg p-6 sm:p-8 sm:w-1/3">
+    <div className="flex flex-col gap-y-4 text-textColor">
+      <p className="text-sm sm:text-textColor">
+        مبلغ قابل پرداخت:{" "}
+        <span className="font-bold">{total.toLocaleString("ar-EG")} تومان</span>
+      </p>
+      <p className="text-sm sm:text-textColor">نام پذیرنده: کیف پول الکترونیک پارسیان</p>
+      <p className="text-sm sm:text-textColor">کد پذیرنده: 1253</p>
+      <p className="text-sm sm:text-textColor">آدرس پذیرنده: Paypal.ir</p>
+    </div>
+  </div>
+</div>
   );
 };

@@ -41,7 +41,7 @@ export const OrderDataForm: React.FC = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-3 py-6 px-5 bg-base text-right rounded-md shadow-lg"
     >
-      <p className="text-2xl font-semibold text-textColor text-center">
+      <p className=" sm:text-2xl font-semibold text-textColor text-center">
         اطلاعات تماس
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
