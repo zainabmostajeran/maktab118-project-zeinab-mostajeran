@@ -8,10 +8,8 @@ import { getAllProducts } from "@/apis/services/products";
 import { ProductCard } from "@/components/shop/productcard";
 import { SidebarCategory } from "@/components/shop/SidebarCategory";
 import { MdOutlineArrowLeft } from "react-icons/md";
-import { useUserGuard } from "@/hooks/useUserGuard";
 
-const SubcategoryPage: React.FC = () => {
-     useUserGuard();
+const SubcategoryPage: React.FC = () => {  
   const params = useParams();
   const { subcategorySlugname } = params;
 

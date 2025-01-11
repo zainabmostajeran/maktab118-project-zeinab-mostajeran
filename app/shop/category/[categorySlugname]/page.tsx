@@ -7,10 +7,8 @@ import { getCategoryBySlug } from "@/apis/services/categories";
 import SubcategoryList from "@/components/shop/SubcategoryList";
 import { MdOutlineArrowLeft } from "react-icons/md";
 import { SidebarCategory } from "@/components/shop/SidebarCategory";
-import { useUserGuard } from "@/hooks/useUserGuard";
 
 const CategoryPage: React.FC = () => {
-   useUserGuard();
   const params = useParams();
   const { categorySlugname } = params;
 

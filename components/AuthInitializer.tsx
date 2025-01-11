@@ -1,15 +1,17 @@
 "use client";
-
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { loginSuccess, logout } from "@/redux/slices/authSlice";
+import {
+  loginSuccess,
+  logout,
+  setAuthInitialized,
+} from "@/redux/slices/authSlice";
 import {
   getAccessToken,
   getRefreshToken,
   setTokens,
 } from "@/libs/session-manager";
 import axiosInstance from "@/apis/client";
-import { useLogout } from "@/apis/mutation/logout";
 
 interface DecodedToken {
   id: string;
@@ -22,9 +24,7 @@ const jwtDecode = (token: string): DecodedToken => {
   const jsonPayload = decodeURIComponent(
     atob(base64)
       .split("")
-      .map((c) => {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
+      .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
       .join("")
   );
   return JSON.parse(jsonPayload);
@@ -32,7 +32,6 @@ const jwtDecode = (token: string): DecodedToken => {
 
 const AuthInitializer: React.FC = () => {
   const dispatch = useDispatch();
-  const logoutMutation = useLogout();
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -40,7 +39,8 @@ const AuthInitializer: React.FC = () => {
       const refreshToken = getRefreshToken();
 
       if (!accessToken && !refreshToken) {
-        logoutMutation.mutate();
+        dispatch(logout());
+        dispatch(setAuthInitialized());
         return;
       }
 
@@ -49,7 +49,7 @@ const AuthInitializer: React.FC = () => {
           const decoded = jwtDecode(accessToken!);
           const currentTime = Date.now() / 1000;
           return decoded.exp > currentTime;
-        } catch (error) {
+        } catch {
           return false;
         }
       };
@@ -57,48 +57,42 @@ const AuthInitializer: React.FC = () => {
       if (accessToken && isAccessTokenValid()) {
         try {
           const decoded = jwtDecode(accessToken);
-
           const response = await axiosInstance.get(`/users/${decoded.id}`);
           const user = response.data.data.user;
-
           dispatch(
             loginSuccess({ tokens: { accessToken, refreshToken }, user })
           );
         } catch (error) {
           console.error("Failed to fetch user data:", error);
-          logoutMutation.mutate();
+          dispatch(logout());
         }
       } else if (refreshToken) {
         try {
-          const response = await axiosInstance.post("/auth/token", {
+          const resp = await axiosInstance.post("/auth/token", {
             refreshToken,
           });
+          const { accessToken: newAT, refreshToken: newRT } = resp.data.token;
+          setTokens(newAT, newRT);
 
-          const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-            response.data.token;
-
-          setTokens(newAccessToken, newRefreshToken);
-
-          const decoded = jwtDecode(newAccessToken);
+          const decoded = jwtDecode(newAT);
           const userResponse = await axiosInstance.get(`/users/${decoded.id}`);
           const user = userResponse.data.data.user;
 
           dispatch(
             loginSuccess({
-              tokens: {
-                accessToken: newAccessToken,
-                refreshToken: newRefreshToken,
-              },
+              tokens: { accessToken: newAT, refreshToken: newRT },
               user,
             })
           );
         } catch (error) {
           console.error("Failed to refresh token:", error);
-          logoutMutation.mutate();
+          dispatch(logout());
         }
       } else {
-        logoutMutation.mutate();
+        dispatch(logout());
       }
+
+      dispatch(setAuthInitialized());
     };
 
     initializeAuth();

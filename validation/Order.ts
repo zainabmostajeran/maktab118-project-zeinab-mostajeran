@@ -49,12 +49,22 @@ export const OrderDataSchema = z.object({
       message: "استان نامعتبر است.",
     }),
   deliveryDate: z
-    .date({
-      required_error: "زمان تحویل الزامی است.",
-      invalid_type_error: "زمان تحویل باید تاریخ معتبر باشد.",
+    .string()
+    .nullable()
+    .refine((val) => val !== null && val !== "", {
+      message: "زمان تحویل الزامی است",
     })
-    .refine((date) => date >= new Date(), {
-      message: "زمان تحویل نمی‌تواند در گذشته باشد.",
-    }),
+    // .refine(
+    //   (val) => {
+    //     if (!val) return false;
+    //     const selectedDate = new Date(val);
+    //     const today = new Date();
+    //     today.setHours(0, 0, 0, 0); 
+    //     return selectedDate >= today;
+    //   },
+    //   {
+    //     message: "زمان تحویل نمی‌تواند در گذشته باشد",
+    //   }
+    // ),
 });
 export type OrderDataSchemaType = z.infer<typeof OrderDataSchema>;

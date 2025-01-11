@@ -102,51 +102,53 @@ const ProductList: React.FC<ProductListProps> = ({
   }
 
   return (
-    <div>
-      <div className="grid grid-cols-1 sm:items-center sm:justify-center sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-4 border py-6 px-4 mb-4 rounded-md bg-[rgb(188,184,138)] ">
+    <div className="px-2 sm:px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 border py-6 px-4 mb-4 rounded-md bg-[rgb(188,184,138)]">
         {currentItems.map((product: any) => (
           <ProductCard key={product._id} {...product} />
         ))}
       </div>
       {isPaginationActive && totalPages > 1 && (
-        <div className="flex justify-center gap-x-2 items-center space-x-2">
+        <div className="flex flex-wrap justify-center items-center gap-2 mt-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`px-3 py-1 rounded ${
+            className={`px-4 py-2 text-sm rounded-md ${
               currentPage === 1
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-600"
+                ? "bg-gray-500 text-white cursor-not-allowed"
+                : "bg-base text-white hover:bg-[#BCB88A] hover:text-gray-700"
             }`}
           >
-            قبلی
+            صفحه قبلی
           </button>
 
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (page) => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === page
-                    ? "bg-blue-700 text-white"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-              >
-                {page}
-              </button>
-            )
-          )}
+          <div className="flex overflow-x-auto gap-2">
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+              (page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-4 py-2 text-sm rounded-md ${
+                    currentPage === page
+                      ? "bg-gray-300 font-bold"
+                      : "hover:bg-white"
+                  }`}
+                >
+                  {page.toLocaleString("ar-EG")}
+                </button>
+              )
+            )}
+          </div>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded ${
+            className={`px-4 py-2 text-sm rounded-md ${
               currentPage === totalPages
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-600"
+                ? "bg-gray-500 text-white cursor-not-allowed"
+                : "bg-base text-white hover:bg-[#BCB88A] hover:text-gray-700"
             }`}
           >
-            بعدی
+            صفحه بعدی
           </button>
         </div>
       )}

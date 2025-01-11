@@ -2,17 +2,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/admin/Input";
 import { useForm, Controller } from "react-hook-form";
-import Link from "next/link";
-import { useAppSelector, useAppDispatch } from "@/redux/Hook";
+import { useAppSelector } from "@/redux/Hook";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { clearCart } from "@/redux/slices/cartSlice";
 import { toast } from "react-toastify";
 import { PaymentSchema, PaymentSchemaType } from "@/validation/payment";
-import { error } from "console";
 
 export const PaymentForm: React.FC = () => {
-  const { cart, status } = useAppSelector((state) => state.cart);
+  const { cart } = useAppSelector((state) => state.cart);
   const total = cart.reduce((acc, item) => {
     return acc + item.price * item.cartQuantity;
   }, 0);
@@ -35,13 +33,12 @@ export const PaymentForm: React.FC = () => {
   const dispatch = useDispatch();
   const { push } = useRouter();
 
-  const onSubmit = (data: PaymentSchemaType, action: "submit" | "cancel") => {
-    if ((action = "cancel")) {
-      push("/shop/PaymentFaild");
-      toast.error("پرداخت ناموفق");
-      return;
-    }
-    //
+  const cancelPayment = () => {
+    push("/shop/PaymentFaild");
+    toast.error("پرداخت ناموفق");
+  };
+
+  const onSubmit = (data: PaymentSchemaType) => {
     const error = false;
     if (error) {
       push("/shop/PaymentFaild");
@@ -140,7 +137,7 @@ export const PaymentForm: React.FC = () => {
           </button>
           <button
             type="button"
-            onClick={() => handleSubmit((data) => onSubmit(data, "cancel"))()}
+            onClick={cancelPayment}
             className="py-2 px-4 w-full bg-slate-300  text-sm rounded-md font-semibold hover:bg-slate-400 sm:text-gray-800"
           >
             انصراف
@@ -152,7 +149,7 @@ export const PaymentForm: React.FC = () => {
           <p className="text-sm sm:text-textColor">
             مبلغ قابل پرداخت:{" "}
             <span className="font-bold">
-              {total.toLocaleString("ar-EG")} تومان
+            {total.toLocaleString("ar-EG")} تومان
             </span>
           </p>
           <p className="text-sm sm:text-textColor">

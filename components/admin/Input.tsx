@@ -26,17 +26,17 @@ export const Input: React.FC<IInput> = ({
       <input
         type="text"
         className={classNames(
-          "border  rounded-md py-1 text-gray-800  hover:outline focus:outline","text-right",
+          "border  rounded-md py-1  text-gray-800 placeholder:px-2  hover:outline focus:outline","text-right",
           "placeholder:text-xs placeholder:font-medium",
           !!error ? "border-red-500" : "border-slate-300",
           !!error ? "outline-red-500" : "outline-slate-200",
-          !!error ? "placeholder:text-red-500" : "placeholder:text-slate-400",
+          !!error ? "placeholder:text-red-900" : "placeholder:text-slate-400",
           className
         )}
         {...props}
       />
       {!!error && (
-        <p className="text-red-500 text-xs font-semibold capitalize">{error}</p>
+        <p className="text-red-900 text-xs font-semibold capitalize">{error}</p>
       )}
     </div>
   );

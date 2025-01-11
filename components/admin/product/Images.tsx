@@ -34,7 +34,6 @@ export const Images: React.FC<IImages> = ({
     if (value && value.length > 0) {
       const objectUrls = value.map((file) => URL.createObjectURL(file));
       setPreviews(objectUrls);
-
       return () => objectUrls.forEach((url) => URL.revokeObjectURL(url));
     } else {
       setPreviews([]);
@@ -56,24 +55,20 @@ export const Images: React.FC<IImages> = ({
           previews.map((preview, index) => (
             <div key={index} className="relative w-16 h-16 m-1">
               <Image
-              width={16}
-              height={30}
                 src={preview}
-                fill={true}
                 alt={`Selected Image ${index + 1}`}
+                fill
                 className="object-cover"
               />
             </div>
           ))
         ) : existingUrls.length > 0 ? (
-          existingUrls.map((url,index) => (
-            <div key={index} className="relative  m-1">
+          existingUrls.map((url, index) => (
+            <div key={index} className="relative w-16 h-16 m-1">
               <Image
-                   width={16}
-                   height={30}
                 src={url}
-                fill={true}
                 alt={`Existing Image ${index + 1}`}
+                fill
                 className="object-cover"
               />
             </div>
@@ -87,6 +82,7 @@ export const Images: React.FC<IImages> = ({
             انتخاب تصاویر محصول
           </p>
         )}
+
         <input
           type="file"
           accept="image/*"
@@ -97,7 +93,7 @@ export const Images: React.FC<IImages> = ({
         />
       </div>
       {error && (
-        <p className="text-red-500 text-xs capitalize font-semibold">
+        <p className="text-red-900 text-xs capitalize font-semibold">
           {error.message}
         </p>
       )}

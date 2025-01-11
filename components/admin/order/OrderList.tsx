@@ -8,7 +8,6 @@ import { getUser } from "@/apis/services/users";
 import { useQuery, useQueries } from "@tanstack/react-query";
 import Image from "next/image";
 import { classNames } from "@/utils/classname";
-import { IOrdersResponse, IOrder } from "@/types/orders";
 import Modal from "@/components/ui/Modal";
 import { DeliverModal } from "@/components/admin/order/DeliverModal";
 
@@ -166,13 +165,13 @@ export const OrderList: React.FC<OrderListProps> = ({ page }) => {
     return Math.ceil(Number(ordersData.total) / Number(productsLimit));
   }, [ordersData, productsLimit]);
 
-  const pageNumbers = React.useMemo(() => {
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i);
-    }
-    return pages;
-  }, [totalPages]);
+  // const pageNumbers = React.useMemo(() => {
+  //   const pages = [];
+  //   for (let i = 1; i <= totalPages; i++) {
+  //     pages.push(i);
+  //   }
+  //   return pages;
+  // }, [totalPages]);
 
   const isLoading =
     ordersLoading ||
@@ -203,7 +202,7 @@ export const OrderList: React.FC<OrderListProps> = ({ page }) => {
   }
 
   return (
-    <section className="flex flex-col items-center justify-center py-2">
+    <section className="flex flex-col items-center justify-center py-6">
       <div className="w-full px-4 md:px-0">
         <table className="w-full text-white shadow-lg rounded-lg">
           <thead className=" h-6">

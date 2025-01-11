@@ -11,7 +11,6 @@ import Image from "next/image";
 import { classNames } from "@/utils/classname";
 import Modal from "@/components/ui/Modal";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import EditProductForm from "@/components/admin/product/EditProductForm";
 import { useDeleteProduct } from "@/apis/mutation/useDeleteProduct";
 
@@ -285,6 +284,7 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
         </table>
 
         <Pagination currentPage={page} totalPages={totalPages} />
+        
         <Modal
           isOpen={isEditModalOpen}
           onClose={() => {
@@ -310,13 +310,13 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
           }}
         >
           <div className="p-4">
-            <h2 className="text-lg font-semibold text-gray-800 px-3 py-6">
+            <h2 className="text-lg font-semibold text-textColor px-3 py-6">
               آیا مطمئن هستید که می‌خواهید این کالا را حذف کنید؟
             </h2>
             <div className="flex justify-center gap-4 mt-4">
               <button
                 onClick={confirmDelete}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                className="bg-red-500 text-gray-800 px-4 py-2 rounded-lg hover:bg-white"
               >
                 حذف
               </button>
@@ -325,7 +325,7 @@ export const ProductList: React.FC<{ page: number }> = ({ page }) => {
                   setIsDeleteModalOpen(false);
                   setProductToDelete(null);
                 }}
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400"
+                className="bg-textColor text-gray-800 px-4 py-2 rounded-lg hover:bg-white"
               >
                 انصراف
               </button>

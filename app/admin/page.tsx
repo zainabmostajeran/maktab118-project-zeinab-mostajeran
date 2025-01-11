@@ -5,7 +5,8 @@ import PageTitle from "@/components/admin/PageTitle";
 import { OrderList } from "@/components/admin/order/OrderList";
 import { useSearchParams } from "next/navigation";
 import ToggleGroup from "@/components/admin/order/ToggleGroup";
-import {useAdminGuard} from "@/hooks/useAdminGuard"
+import {useAdminGuard} from "@/hooks/useAdminGuard";
+
 const OrdersPage: React.FC = () => {
   useAdminGuard()
   const searchParams = useSearchParams();
@@ -18,7 +19,7 @@ const OrdersPage: React.FC = () => {
 
   return (
     <section className="mx-auto">
-      <div className="block px-2  mx-auto sm:flex sm:items-center sm:justify-between sm:px-16">
+      <div className="sm:flex sm:items-center sm:justify-between sm:px-16">
         <PageTitle className="px-2" title="سفارش ها" />
         <ToggleGroup/>
       </div>

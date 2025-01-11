@@ -15,6 +15,109 @@ interface OrderListProps {
   page: number;
 }
 
+const Pagination: React.FC<{
+  currentPage: number;
+  totalPages: number;
+}> = ({ currentPage, totalPages }) => {
+  const generatePageNumbers = () => {
+    const pages: (number | string)[] = [];
+
+    pages.push(1);
+
+    const start = Math.max(currentPage - 2, 2);
+    const end = Math.min(currentPage + 2, totalPages - 1);
+
+    if (start > 2) {
+      pages.push("...");
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < totalPages - 1) {
+      pages.push("...");
+    }
+
+    if (totalPages > 1) {
+      pages.push(totalPages);
+    }
+
+    return pages;
+  };
+
+  const pageNumbers = generatePageNumbers();
+
+  return (
+    <div className="w-full flex justify-center items-center py-10 gap-2">
+      {/* Previous Button */}
+      <Link
+        href={`/admin/delivared?${new URLSearchParams({
+          page: String(currentPage - 1 < 1 ? 1 : currentPage - 1),
+        })}`}
+      >
+        <button
+          className={classNames(
+            "px-2 py-1 text-white disabled:bg-slate-500 text-nowrap text-sm",
+            "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
+          )}
+          disabled={currentPage - 1 < 1}
+        >
+          صفحه قبل
+        </button>
+      </Link>
+
+      {/* Page Numbers */}
+      {pageNumbers.map((el, index) => {
+        if (el === "...") {
+          return (
+            <span key={`ellipsis-${index}`} className="px-2 py-1">
+              ...
+            </span>
+          );
+        }
+
+        return (
+          <Link
+            key={el}
+            href={`/admin/delivared?${new URLSearchParams({
+              page: String(el),
+            })}`}
+          >
+            <span
+              className={classNames(
+                "cursor-pointer px-2 py-1 hover:bg-white",
+                el === currentPage ? "bg-gray-300 font-bold" : ""
+              )}
+            >
+              {el.toLocaleString("ar-EG")}
+            </span>
+          </Link>
+        );
+      })}
+
+      {/* Next Button */}
+      <Link
+        href={`/admin/delivared?${new URLSearchParams({
+          page: String(
+            currentPage + 1 > totalPages ? currentPage : currentPage + 1
+          ),
+        })}`}
+      >
+        <button
+          className={classNames(
+            "px-2 py-1 text-white disabled:bg-slate-500 text-nowrap text-sm",
+            "bg-base hover:bg-[#BCB88A] hover:text-gray-700 rounded-lg"
+          )}
+          disabled={currentPage + 1 > totalPages}
+        >
+          صفحه بعد
+        </button>
+      </Link>
+    </div>
+  );
+};
+
 export const DeliveredList: React.FC<OrderListProps> = ({ page }) => {
   const {
     data: ordersData,
@@ -102,114 +205,64 @@ export const DeliveredList: React.FC<OrderListProps> = ({ page }) => {
   }
 
   return (
-    <section className="flex flex-col items-center justify-center ">
-      <table className="w-full text-white border-collapse border-slate-300 shadow-md overflow-scroll rounded-lg">
-        <thead className="h-6">
-          <tr className="bg-textColor text-center text-gray-800">
-            <th>نام کاربر</th>
-            <th>زمان سفارش</th>
-            <th>مجموع مبلغ</th>
-            <th className="h-12">عملیات</th>
-          </tr>
-        </thead>
-        <tbody className="text-center bg-base text-gray-900 font-semibold">
-          {ordersData?.data?.orders
-            .filter((order: IOrder) => order.deliveryStatus)
-            .map((order: IOrder) => (
-              <tr
-                className="even:bg-[#BCB88A] hover:even:bg-white cursor-pointer text-center"
-                key={order._id}
-              >
-                <td className="h-12">
-                  {usersMap[order.user]
-                    ? `${usersMap[order.user].firstname} ${
-                        usersMap[order.user].lastname
-                      }`
-                    : "نامشخص"}
-                </td>
-                <td className="h-12">
-                  {new Date(order.createdAt).toLocaleString("fa-IR")}
-                </td>
-                <td className="h-12">
-                  {order.totalPrice.toLocaleString("ar-EG")}
-                </td>
+    <section className="flex flex-col items-center justify-center">
+      <div className="w-full px-4 md:px-0">
+        <table className="w-full text-white shadow-lg rounded-lg">
+          <thead className="h-6">
+            <tr className="bg-textColor text-center text-gray-800">
+              <th>نام کاربر</th>
+              <th>زمان سفارش</th>
+              <th>مجموع مبلغ</th>
+              <th className="h-12">عملیات</th>
+            </tr>
+          </thead>
+          <tbody className="text-center bg-base text-gray-900 font-semibold">
+            {ordersData?.data?.orders
+              .filter((order: IOrder) => order.deliveryStatus)
+              .map((order: IOrder) => (
+                <tr
+                  className="even:bg-[#BCB88A] hover:even:bg-white cursor-pointer text-center"
+                  key={order._id}
+                >
+                  <td className="h-12">
+                    {usersMap[order.user]
+                      ? `${usersMap[order.user].firstname} ${
+                          usersMap[order.user].lastname
+                        }`
+                      : "نامشخص"}
+                  </td>
+                  <td className="h-12">
+                    {new Date(order.createdAt).toLocaleString("fa-IR")}
+                  </td>
+                  <td className="h-12">
+                    {order.totalPrice.toLocaleString("ar-EG")}
+                  </td>
 
-                {/*  */}
-                <td className="h-12">
-                  <button
-                    onClick={() => handleReviewOrder(order)}
-                    className="px-2 py-1 bg-white hover:bg-textColor text-base rounded-lg"
-                  >
-                     مشاهده شده
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-
-      {/* Pagination Controls */}
-      <div className="w-full flex justify-center items-center pt-10 gap-3">
-        {/* Previous Button */}
-        <Link
-          href={`/admin/awaiting?${new URLSearchParams({
-            page: String(page - 1 < 1 ? 1 : page - 1),
-          })}`}
-        >
-          <button
-            className={classNames(
-              "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base hover:bg-white hover:text-gray-700 rounded-xl"
-            )}
-            disabled={page - 1 < 1}
-          >
-            قبلی
-          </button>
-        </Link>
-
-        {/* Page Numbers */}
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((el) => (
-          <Link
-            key={el}
-            href={`/admin/awaiting?${new URLSearchParams({
-              page: String(el),
-            })}`}
-          >
-            <span
-              className={`cursor-pointer px-2 py-1 hover:bg-white ${
-                el === page ? "bg-gray-300 font-bold" : ""
-              }`}
-            >
-              {el}
-            </span>
-          </Link>
-        ))}
-        {/* Next Button */}
-        <Link
-          href={`/admin/awaiting?${new URLSearchParams({
-            page: String(page + 1 > totalPages ? page : page + 1),
-          })}`}
-        >
-          <button
-            className={classNames(
-              "px-2 py-1 text-white disabled:bg-slate-500",
-              "bg-base hover:bg-white hover:text-gray-700 rounded-xl"
-            )}
-            disabled={page + 1 > totalPages}
-          >
-            بعدی
-          </button>
-        </Link>
+                  {/*  */}
+                  <td className="h-12 p-3">
+                    <button
+                      onClick={() => handleReviewOrder(order)}
+                      className="sm:px-2 py-1 bg-white hover:bg-textColor text-sm  sm:text-base rounded-lg"
+                    >
+                      مشاهده شده
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        <Pagination currentPage={page} totalPages={totalPages} />
+        
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          {selectedOrder && (
+            <DeliverModal
+              order={selectedOrder}
+              user={usersMap[selectedOrder.user]}
+              onClose={() => setIsModalOpen(false)}
+            />
+          )}
+        </Modal>
       </div>
-      {/* Modal for Reviewing Order */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        {selectedOrder && (
-          <DeliverModal
-            order={selectedOrder}
-            onClose={() => setIsModalOpen(false)}
-          />
-        )}
-      </Modal>
     </section>
   );
 };

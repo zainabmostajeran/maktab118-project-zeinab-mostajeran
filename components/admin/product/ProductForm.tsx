@@ -158,7 +158,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
             )}
           />
           {errors.category && (
-            <p className="text-red-500 text-xs font-semibold capitalize pt-1">
+            <p className="text-red-900 text-xs font-semibold capitalize pt-1">
               {errors.category.message}
             </p>
           )}
@@ -189,7 +189,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
             )}
           />
           {errors.subcategory && (
-            <p className="text-red-500 text-xs font-semibold capitalize pt-1">
+            <p className="text-red-900 text-xs font-semibold capitalize pt-1">
               {errors.subcategory.message}
             </p>
           )}
@@ -269,7 +269,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onClose }) => {
           )}
         />
         {errors.description && (
-          <p className="text-red-500 text-xs capitalize font-semibold pt-1">
+          <p className="text-red-900 text-xs capitalize font-semibold pt-1">
             {errors.description.message}
           </p>
         )}

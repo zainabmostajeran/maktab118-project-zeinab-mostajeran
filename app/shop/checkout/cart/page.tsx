@@ -13,6 +13,7 @@ import Link from "next/link";
 const ShoppingCart: React.FC = () => {
   const dispatch = useAppDispatch();
   const { cart, status } = useAppSelector((state) => state.cart);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (status === "idle") {
@@ -42,7 +43,9 @@ const ShoppingCart: React.FC = () => {
         <div className="flex flex-col">
           <div className="flex-grow bg-base rounded-lg p-5 lg:p-7">
             {cart.length === 0 ? (
-              <p className="text-textColor text-center">سبد خرید شما خالی است.</p>
+              <p className="text-textColor text-center">
+                سبد خرید شما خالی است.
+              </p>
             ) : (
               cart.map((item) => (
                 <div
@@ -50,21 +53,23 @@ const ShoppingCart: React.FC = () => {
                   className="flex flex-col md:flex-row items-center gap-6 md:gap-8 border-b py-4 justify-between"
                 >
                   <Image
-                    className="p-2 object-cover"
+                    className="p-2 object-cover  md:w-[150px] h-[150px] rounded-lg"
                     src={`http://localhost:8000/images/products/images/${item.images[0]}`}
-                    width={150}
-                    height={150}
+                    width={200}
+                    height={300}
                     alt={item.name}
                   />
+
                   <div className="flex-grow text-center md:text-right space-y-3 text-textColor">
-                    <p className="font-semibold text-sm md:text-textColor">
+                    <p className="font-semibold text-lg text-textColor md:text-2xl">
                       {item.name}
                     </p>
-                    <p className="text-sm md:text-textColor">
+                    <p className="text-lg md:text-textColor">
                       {item.price.toLocaleString("ar-EG")} تومان
                     </p>
                   </div>
-                  <div className="flex items-center gap-4">
+
+                  <div className="flex items-center gap-8 w-full sm:w-auto justify-center">
                     <input
                       type="number"
                       min="1"
@@ -72,11 +77,11 @@ const ShoppingCart: React.FC = () => {
                       onChange={(e) =>
                         handleQuantityChange(item._id, Number(e.target.value))
                       }
-                      className="w-16 border border-gray-300 rounded-md text-center text-sm md:text-base"
+                      className="w-16 md:w-16 border border-gray-300 rounded-md text-center text-sm md:text-base"
                     />
                     <button
                       onClick={() => handleRemoveItem(item._id)}
-                      className="text-textColor"
+                      className="text-textColor size-8"
                     >
                       <FaTrash />
                     </button>
@@ -86,6 +91,7 @@ const ShoppingCart: React.FC = () => {
             )}
           </div>
         </div>
+
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <p className="font-bold text-sm md:text-gray-800">جمع کل :</p>
@@ -93,8 +99,8 @@ const ShoppingCart: React.FC = () => {
               {total.toLocaleString("ar-EG")} تومان
             </p>
           </div>
-          <Link href="/shop/cart">
-            <button className="rounded-lg px-6 py-2 bg-textColor text-gray-800 font-bold text-sm md:text-gray-800 hover:bg-slate-300">
+          <Link href={isAuthenticated ? "/shop/cart" : "/auth/login"}>
+            <button className="rounded-lg px-6 py-2 bg-textColor text-gray-800 font-bold text-sm hover:bg-slate-300">
               نهایی کردن سبد خرید
             </button>
           </Link>

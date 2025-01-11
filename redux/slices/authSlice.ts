@@ -1,29 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { setTokens, removeTokens } from "@/libs/session-manager";
 
-interface Token {
-  accessToken: string;
-  refreshToken: string;
-}
-
-interface User {
-  _id: string;
-  firstname: string;
-  lastname: string;
-  username: string;
-  phoneNumber: string;
-  address: string;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 interface AuthState {
   user: User | null;
   tokens: Token | null;
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+  initialized: boolean;
 }
 
 const initialState: AuthState = {
@@ -32,6 +16,7 @@ const initialState: AuthState = {
   isAuthenticated: false,
   loading: false,
   error: null,
+  initialized: false,
 };
 
 const authSlice = createSlice({
@@ -42,14 +27,12 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-
     loginSuccess(state, action: PayloadAction<{ tokens: Token; user: User }>) {
       state.tokens = action.payload.tokens;
       state.user = action.payload.user;
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;
-
       setTokens(
         action.payload.tokens.accessToken,
         action.payload.tokens.refreshToken
@@ -71,10 +54,20 @@ const authSlice = createSlice({
       state.tokens = action.payload;
       setTokens(action.payload.accessToken, action.payload.refreshToken);
     },
+
+    setAuthInitialized(state) {
+      state.initialized = true;
+    },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout, updateTokens } =
-  authSlice.actions;
+export const {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  logout,
+  updateTokens,
+  setAuthInitialized,
+} = authSlice.actions;
 
 export default authSlice.reducer;

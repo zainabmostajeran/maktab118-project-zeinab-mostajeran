@@ -24,5 +24,4 @@ export const getSubCategoryBySlug: getSubcategoryBySlugType = async (slug) => {
   );
   console.log(response.data);
   return response.data.data.subcategories[0];
-  
 };

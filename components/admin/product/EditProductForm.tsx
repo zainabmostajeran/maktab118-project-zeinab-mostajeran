@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
-import { Input } from "@/components/admin/Input";
 import { ProductSchema, ProductSchemaType } from "@/validation/product";
+import { Input } from "@/components/admin/Input";
 import TinyMce from "@/components/admin/product/TinyMce";
 import { Thumbnail } from "@/components/admin/product/Thumbnail";
 import { Images } from "@/components/admin/product/Images";
@@ -25,7 +25,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
   onClose,
   product,
 }) => {
-  const [isPending, setIsPending] = React.useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   const {
     control,
@@ -52,20 +52,18 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     data: categoriesData,
     isLoading: categoriesLoading,
     isError: categoriesError,
-    error: categoriesErrorData,
   } = useQuery({
     queryKey: ["categories"],
-    queryFn: () => getCategories(),
+    queryFn: getCategories,
   });
 
   const {
     data: subCategoriesData,
     isLoading: subCategoriesLoading,
     isError: subCategoriesError,
-    error: subCategoriesErrorData,
   } = useQuery({
     queryKey: ["subcategories"],
-    queryFn: () => getSubCategories(),
+    queryFn: getSubCategories,
   });
 
   const selectedCategory = useWatch({
@@ -73,13 +71,24 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     name: "category",
   });
 
-  const filteredSubCategories = React.useMemo(() => {
+  const filteredSubCategories = useMemo(() => {
     if (!subCategoriesData?.data?.subcategories || !selectedCategory) return [];
-
     return subCategoriesData.data.subcategories.filter(
       (subcat: ISubcategory) => subcat.category === selectedCategory
     );
   }, [subCategoriesData, selectedCategory]);
+
+  useEffect(() => {
+    if (product) {
+      setValue("name", product.name || "");
+      setValue("price", product.price.toString() || "");
+      setValue("quantity", product.quantity.toString() || "");
+      setValue("category", product.category || "");
+      setValue("subcategory", product.subcategory || "");
+      setValue("brand", product.brand || "");
+      setValue("description", product.description || "");
+    }
+  }, [product, setValue]);
 
   const onSubmit: SubmitHandler<ProductSchemaType> = async (data) => {
     const formData = new FormData();
@@ -94,7 +103,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     if (data.thumbnail) {
       formData.append("thumbnail", data.thumbnail);
     }
-
     if (data.images && data.images.length > 0) {
       data.images.forEach((image) => {
         formData.append("images", image);
@@ -112,18 +120,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     }
     setIsPending(false);
   };
-
-  useEffect(() => {
-    if (product) {
-      setValue("name", product.name || "");
-      setValue("price", product.price.toString() || "");
-      setValue("quantity", product.quantity.toString() || "");
-      setValue("category", product.category || "");
-      setValue("subcategory", product.subcategory || "");
-      setValue("brand", product.brand || "");
-      setValue("description", product.description);
-    }
-  }, [product, setValue]);
 
   if (categoriesLoading || subCategoriesLoading) {
     return (
@@ -160,12 +156,12 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
             render={({ field }) => (
               <select
                 {...field}
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
               >
                 <option value="">انتخاب دسته‌بندی</option>
-                {categoriesData?.data?.categories.map((category: ICategory) => (
-                  <option key={category._id} value={category._id}>
-                    {category.name}
+                {categoriesData?.data?.categories.map((cat: ICategory) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
                   </option>
                 ))}
               </select>
@@ -177,6 +173,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
             </p>
           )}
         </div>
+
         <div className="flex flex-col w-full justify-center">
           <label
             htmlFor="subcategory"
@@ -191,7 +188,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
               <select
                 {...field}
                 disabled={!selectedCategory}
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               >
                 <option value="">انتخاب زیردسته‌بندی</option>
                 {filteredSubCategories.map((subcat: ISubcategory) => (
@@ -272,7 +269,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
         />
       </div>
 
-      {/* Description */}
       <div className="text-right">
         <label className="text-textColor font-semibold text-sm">
           توضیحات کالا

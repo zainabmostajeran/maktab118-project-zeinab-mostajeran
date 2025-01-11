@@ -1,21 +1,28 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { OrderDataSchema, OrderDataSchemaType } from "@/validation/Order";
 import { Input } from "@/components/admin/Input";
-import Link from "next/link";
 import { toast } from "react-toastify";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export const OrderDataForm: React.FC = () => {
+  const { isAuthenticated, initialized, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const router = useRouter();
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<OrderDataSchemaType>({
     mode: "all",
@@ -30,19 +37,37 @@ export const OrderDataForm: React.FC = () => {
       deliveryDate: null,
     },
   });
-  const { push } = useRouter();
+
+  useEffect(() => {
+    if (!initialized) return;
+
+    if (!isAuthenticated) {
+      router.replace("/auth/login");
+    } else if (user) {
+      reset({
+        firstName: user.firstname,
+        lastName: user.lastname,
+        address: user.address,
+        city: "",
+        province: "",
+        phoneNumber: user.phoneNumber,
+        deliveryDate: null,
+      });
+    }
+  }, [initialized, isAuthenticated, user, reset, router]);
 
   const onSubmit = (data: OrderDataSchemaType) => {
     toast.success("اطلاعات با موفقیت ثبت شد!");
-    push("/shop/Payment");
     console.log("Form Data:", data);
+    router.push("/shop/Payment");
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-3 py-6 px-5 bg-base text-right rounded-md shadow-lg"
     >
-      <p className=" sm:text-2xl font-semibold text-textColor text-center">
+      <p className="sm:text-2xl font-semibold text-textColor text-center">
         اطلاعات تماس
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -140,11 +165,17 @@ export const OrderDataForm: React.FC = () => {
                   calendar={persian}
                   locale={persian_fa}
                   placeholder="زمان تحویل"
-                  className="border  rounded-md w-full text-sm  text-gray-800"
-                  inputClass="placeholder:text-gray-500 placeholder:text-sm placeholder:font-normal rounded-md py-1 px-3"
+                  className="rounded-md w-full text-sm text-gray-800"
+                  inputClass={`placeholder:text-gray-500 outline-none placeholder:text-xs placeholder:font-semibold border rounded-md py-1 px-2 ${
+                    errors.deliveryDate ? "border-red-500" : "border-gray-300"
+                  } ${
+                    errors.deliveryDate
+                      ? "placeholder:text-red-900"
+                      : "placeholder:text-gray-300"
+                  }`}
                 />
                 {errors.deliveryDate && (
-                  <p className="text-red-500 text-xs mt-1">
+                  <p className="text-red-900 text-xs font-semibold mt-1">
                     {errors.deliveryDate.message}
                   </p>
                 )}

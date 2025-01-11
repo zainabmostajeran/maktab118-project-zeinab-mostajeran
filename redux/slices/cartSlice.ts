@@ -22,6 +22,19 @@ interface ICartState {
   error: string | null;
 }
 
+const getLocalCart = (): CartItem[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(localStorage.getItem("cart") || "[]");
+  } catch {
+    return [];
+  }
+};
+
+const setLocalCart = (cart: CartItem[]) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("cart", JSON.stringify(cart));
+};
 
 export const fetchCart = createAsyncThunk<
   CartItem[],
@@ -32,7 +45,8 @@ export const fetchCart = createAsyncThunk<
   const userId = state.auth.user?._id;
 
   if (!userId) {
-    return rejectWithValue("No user ID found; user not logged in.");
+    const localCart = getLocalCart();
+    return localCart;
   }
 
   const response = await fetch(`/api/cart?userId=${userId}`, { method: "GET" });
@@ -44,7 +58,6 @@ export const fetchCart = createAsyncThunk<
   return data as CartItem[];
 });
 
-
 export const addProductToCart = createAsyncThunk<
   Product,
   Product,
@@ -54,7 +67,15 @@ export const addProductToCart = createAsyncThunk<
   const userId = state.auth.user?._id;
 
   if (!userId) {
-    return rejectWithValue("No user ID found; user not logged in.");
+    const localCart = getLocalCart();
+    const existingItem = localCart.find((i) => i._id === product._id);
+    if (existingItem) {
+      existingItem.cartQuantity += 1;
+    } else {
+      localCart.push({ ...product, cartQuantity: 1 });
+    }
+    setLocalCart(localCart);
+    return product;
   }
 
   const response = await fetch(`/api/cart?userId=${userId}`, {
@@ -69,7 +90,6 @@ export const addProductToCart = createAsyncThunk<
   return product;
 });
 
-
 export const updateItemQuantity = createAsyncThunk<
   { productId: string; newQuantity: number },
   { productId: string; newQuantity: number },
@@ -81,7 +101,17 @@ export const updateItemQuantity = createAsyncThunk<
     const userId = state.auth.user?._id;
 
     if (!userId) {
-      return rejectWithValue("No user ID found; user not logged in.");
+      const localCart = getLocalCart();
+      const itemIndex = localCart.findIndex((i) => i._id === productId);
+      if (itemIndex !== -1) {
+        if (newQuantity <= 0) {
+          localCart.splice(itemIndex, 1);
+        } else {
+          localCart[itemIndex].cartQuantity = newQuantity;
+        }
+        setLocalCart(localCart);
+      }
+      return { productId, newQuantity };
     }
 
     const response = await fetch(`/api/cart/${productId}?userId=${userId}`, {
@@ -109,7 +139,10 @@ export const removeItemFromCart = createAsyncThunk<
     const userId = state.auth.user?._id;
 
     if (!userId) {
-      return rejectWithValue("No user ID found; user not logged in.");
+      let localCart = getLocalCart();
+      localCart = localCart.filter((i) => i._id !== productId);
+      setLocalCart(localCart);
+      return productId;
     }
 
     const response = await fetch(`/api/cart/${productId}?userId=${userId}`, {
@@ -124,7 +157,6 @@ export const removeItemFromCart = createAsyncThunk<
   }
 );
 
-
 export const clearCart = createAsyncThunk<boolean, void, { state: RootState }>(
   "cart/clearCart",
   async (_, { getState, rejectWithValue }) => {
@@ -132,7 +164,8 @@ export const clearCart = createAsyncThunk<boolean, void, { state: RootState }>(
     const userId = state.auth.user?._id;
 
     if (!userId) {
-      return rejectWithValue("No user ID found; user not logged in.");
+      localStorage.removeItem("cart");
+      return true;
     }
 
     const response = await fetch(`/api/cart?userId=${userId}`, {
@@ -157,7 +190,6 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // fetchCart
     builder.addCase(fetchCart.pending, (state) => {
       state.status = "loading";
     });
@@ -170,7 +202,6 @@ export const cartSlice = createSlice({
       state.error = action.error.message || "Failed to fetch cart";
     });
 
-    // addProductToCart
     builder.addCase(addProductToCart.fulfilled, (state, action) => {
       const product = action.payload;
       const existingItem = state.cart.find((i) => i._id === product._id);
@@ -181,13 +212,11 @@ export const cartSlice = createSlice({
       }
     });
 
-    // updateItemQuantity
     builder.addCase(updateItemQuantity.fulfilled, (state, action) => {
       const { productId, newQuantity } = action.payload;
       const item = state.cart.find((i) => i._id === productId);
       if (item) {
         if (newQuantity <= 0) {
-          // remove from cart if quantity <= 0
           state.cart = state.cart.filter((i) => i._id !== productId);
         } else {
           item.cartQuantity = newQuantity;
